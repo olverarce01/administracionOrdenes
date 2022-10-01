@@ -6,8 +6,8 @@
         $categoria = $_POST['categoria'];
 
         
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, categoria) VALUES (?, ?)");
-        mysqli_stmt_bind_param($stmt, 'ss',$nombre, $categoria);
+        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria) VALUES (?, ?)");
+        mysqli_stmt_bind_param($stmt, 'si',$nombre, $categoria);
         echo "Se agrego correctamente: ".$nombre." a la base de datos";
         
         mysqli_stmt_execute($stmt);
@@ -28,29 +28,45 @@
      
     }
 
-    if(isset($_GET['eliminar'])){
-        $id= $_GET['eliminar'];
-        $sql = "DELETE FROM ordenes WHERE id='".$id."'";
+    if(isset($_GET['terminar'])){
+        $id= $_GET['terminar'];
+
+
+        $sql = "UPDATE ordenes SET terminada= NOT terminada  WHERE id=".$id."";
+
         if (mysqli_query($conn, $sql)) {
-            echo "Orden eliminada";
+            echo "Orden Terminada";
           } else {
-            echo "Error al eliminar: " . mysqli_error($conn);
+            echo "Error al Terminar: " . mysqli_error($conn);
           }
+        
+        if($_GET['fechaTermino']){
+            $sql = "UPDATE ordenes SET fechaTermino= CURRENT_TIMESTAMP  WHERE id=".$id."";
+
+        }else{
+            $sql = "UPDATE ordenes SET fechaTermino= NULL   WHERE id=".$id."";
+        }
+        if (mysqli_query($conn, $sql)) {
+          echo "Orden Terminada";
+        } else {
+          echo "Error al Terminar: " . mysqli_error($conn);
+        }
     }
     $nombre='';
     $categoria='';
     $id=-1;
     if(isset($_GET['editar'])){
         $id= $_GET['editar'];
-        $sql = "SELECT nombre,categoria FROM ordenes WHERE id='".$id."'";
+        $sql = "SELECT ordenes.nombre as nombre,categorias.categoria as categoria FROM ordenes, categorias WHERE ordenes.id='".$id."'  AND ordenes.idCategoria=categorias.id";
         $result = mysqli_query($conn, $sql);
         
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
+              //captura de valores para agregarlos al form de editar orden
               $nombre=$row["nombre"];
               $categoria=$row["categoria"];
             }
-          }
+        }
     }
 ?>
 
@@ -73,35 +89,115 @@
         echo "<p>Editando orden de trabajo: ".$id."</p>";    
     ?>
     <?php endif; ?>
-    <form action="./" method="post">
+    <form action="./" method="post" id="formOrdenes">
         <?php if(!isset($_GET['editar'])) : ?>
         <input type="hidden" name="accion" value="crearOrden">
+        <br>
+        <label for="">Nombre Orden: </label>
         <input type="text" name="nombre" placeholder="nombre">
-        <input type="text" name="categoria" placeholder="categoria">
+        <br>
+        <label for="">Categoria: </label>
+        <select name="categoria" id="categoria">
+            <?php
+            $sql = "SELECT id, categoria FROM categorias";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        </select>
+        <img src="./recursos/mas.png" width="20" id="btnOpcionesCategorias">
+        <div id="opcionesCategorias">
+          <br>
+          <input type="text" name="nombreCategoria" id="nombreCategoria" placeholder="agrega una categoria"><button type="button" onclick="agregarCategoria()">Agregar Categoria</button>
+          <?php
+            $sql = "SELECT id, categoria FROM categorias";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<div class='categorias'>".$row["categoria"]." <button type='button' onclick='eliminarCategoria(".$row["id"].")'>Eliminar</button> </div>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+            <br>
+        </div>
+        <br>
+        <label for="">Materiales: </label>
+
+
+        <br>
         <input type="submit" value="Crear Orden">
         <?php else : ?>
 
         <input type="hidden" name="accion" value="editarOrden">
+        
         <?php
+            
+
             echo '<input type="hidden" name="id" value="'.$id.'">';
-            echo '<input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
-            echo '<input type="text" name="categoria" placeholder="categoria" value="'.$categoria.'">';
+            echo '<br> <label for="">Nombre Orden: </label> <input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
+            echo '<br> <label for="">Categoria: </label>';
+            
         ?>
+        <select name="categoria" id="categoria">
+        <?php
+            $sql = "SELECT id, categoria FROM categorias";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  if($categoria==$row["categoria"]){
+                    echo "<option value='".$row["id"]."' selected>".$row["categoria"]."</option>";
+                  }else{
+                    echo "<option value='".$row["id"]."'>".$row["categoria"]."</option>";
+                  }
+                }
+              } else {
+                echo "0 resultados";
+              }
+        ?>
+        </select>  
+        <br>
         <input type="submit" value="Guardar edición">
         <a href="index.php"><button type="button">Anular edicion</button></a>
         <?php endif; ?>
 
     </form>    
     <p>LISTA DE ORDENES DE TRABAJO</p>
+    <p>PENDIENTES</p>
 
     <?php
-        //listar ordenes
-        $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes";
+        //listar ordenes no terminadas
+        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE terminada=0 && categorias.id=idCategoria";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
 
             while($row = mysqli_fetch_assoc($result)) {
-              echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]." <a href='index.php?eliminar=".$row["id"]."'><button>Eliminar</button></a> <a href='index.php?editar=".$row["id"]."'><button>Editar</button></a></div> <br>";
+              echo "<div id='".$row["id"]."'> <a href='./recursos/verOrden.php?ver=".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]."</a> <a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='index.php?editar=".$row["id"]."'><button>Editar</button></a></div> <br>";
+            }
+          } else {
+            echo "0 resultados";
+          }
+         
+    ?>
+    <p>FINALIZADAS</p>
+    <?php
+        //listar ordenes terminadas
+        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE terminada=1 && categorias.id=idCategoria";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+            echo "<div id='".$row["id"]."'> <a href='./recursos/verOrden.php?ver=".$row["id"]."'>Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. " Termino:" . $row["fechaTermino"]." </a> <a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dejar pendiente</button></a> <a href='index.php?editar=".$row["id"]."'><button>Editar</button></a></div> <br>";
+
             }
           } else {
             echo "0 resultados";
@@ -112,15 +208,25 @@
     <form action="./recursos/reporte.php" method="POST">
             Opciones Filtro:
           <br>
+
           <label for="">Categoria: </label>
           <select name="categoriaFiltro" id="categoriaFiltro">
             <option selected="selected" value="todas">todas</option>
-            <option value="limpiar ventanas">limpiar ventanas</option>
-            <option value="revisar camara">revisar camara</option>
-            <option value="prender wifi">prender wifi</option>
-            
-            
+            <?php
+            $sql = "SELECT id, categoria FROM categorias";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
           </select>
+
+
           <br>
           <input type='hidden' value='' name='porFecha'>
           <input type="checkbox" id="porFecha" name="porFecha" value="Activado">
@@ -154,7 +260,7 @@
    <?php
        
         //listar ordenes
-        $sql = "SELECT categoria, count(*) FROM ordenes GROUP BY categoria";
+        $sql = "SELECT categorias.categoria, rs.contador as contador FROM (SELECT idCategoria, count(*) as contador FROM ordenes GROUP BY idCategoria) rs, categorias WHERE rs.idCategoria=categorias.id";
         $result = mysqli_query($conn, $sql);
         $labels =[];
         $cantidades= [];
@@ -164,7 +270,7 @@
 
             while($row = mysqli_fetch_assoc($result)) {
               array_push($labels, "".$row["categoria"]."");
-              array_push($cantidades, "".$row["count(*)"]."");
+              array_push($cantidades, "".$row["contador"]."");
               
               $rgbColor= array();
               foreach(array('r', 'g', 'b') as $color){
@@ -216,10 +322,68 @@
           var o = Math.round, r = Math.random, s = 255;
           return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + '0.7' + ')';
       }
+      async function actualizarGrafico() {
+          await $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
+                    
+          console.log(mensaje);
+          if(mensaje === []){
+            return;
+          }
+
+          var categorias=[];
+          var contadores=[];
+          var colores= [];
+
+            JSON.parse(mensaje).forEach(element => {
+                categorias.push(element.categoria);
+                contadores.push(element.contador);
+                colores.push(random_rgba());
+           });
+
+         
+            myChart.destroy();
+            myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                    labels: categorias,
+                    datasets: [{
+                    label: 'categorias',
+                    data: contadores,
+                    backgroundColor: colores, 
+                    borderWidth: 1
+                    }]
+          },
+            options: {
+              scales: {
+                yAxes: {
+                  ticks: {
+                     stepSize: 1,
+                  }
+                }
+              }
+            }
+          });   
+
+          
+          });
+      
+        
+        }
+
+
+
+
+
+
+
+
+
+
         $("#rangoFecha").hide();
 
         $(function() {    
 
+        $("#formOrdenes").css('background-color','#DAF7A6')
         $('#<?php echo $id; ?>').css('color','blue');
         $( "#porFecha" ).click(function() {
           $("#rangoFecha").toggle();
@@ -227,7 +391,7 @@
         
 
         $("input[type='date'], input[type='time'], #fechaFiltro").on('change', function() {
-          $.get(`./recursos/ordenes.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
+          $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
                     
           console.log(mensaje);
           if(mensaje === []){
@@ -277,6 +441,129 @@
         });  
 
 
+    </script>
+    <script>
+      $("#opcionesCategorias").hide();
+      $(function() {
+        $( "#btnOpcionesCategorias" ).click(function() {
+          $("#opcionesCategorias").toggle();
+        });
+      });
+      async function  eliminarCategoria(id){
+         await $.get(`./recursos/categorias.php?modo=eliminar&id=${id}`, function(mensaje, estado){   
+        $("div").remove(".categorias");  
+        $("option").remove(".categorias");            
+          
+        JSON.parse(mensaje).forEach(element => {
+                $("#opcionesCategorias").append(`<div class='categorias'>${element.categoria} <button type='button' onclick='eliminarCategoria(${element.id})'>Eliminar</button> </div>`);
+                $("#categoria").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
+                $("#categoriaFiltro").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
+        });
+        });
+        $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
+                    
+                    console.log(mensaje);
+                    if(mensaje === []){
+                      return;
+                    }
+          
+                    var categorias=[];
+                    var contadores=[];
+                    var colores= [];
+          
+                      JSON.parse(mensaje).forEach(element => {
+                          categorias.push(element.categoria);
+                          contadores.push(element.contador);
+                          colores.push(random_rgba());
+                     });
+          
+                   
+                      myChart.destroy();
+                      myChart = new Chart(ctx, {
+                              type: 'bar',
+                              data: {
+                              labels: categorias,
+                              datasets: [{
+                              label: 'categorias',
+                              data: contadores,
+                              backgroundColor: colores, 
+                              borderWidth: 1
+                              }]
+                    },
+                      options: {
+                        scales: {
+                          yAxes: {
+                            ticks: {
+                               stepSize: 1,
+                            }
+                          }
+                        }
+                      }
+                    });   
+          
+                    
+                    });
+      }
+      async function agregarCategoria(){
+        var Nombrecategoria=$("#nombreCategoria").val();
+        await $.get(`./recursos/categorias.php?modo=agregar&nombre=${Nombrecategoria}`, function(mensaje, estado){   
+        
+        $("div").remove(".categorias");    
+        $("option").remove(".categorias");            
+        
+        JSON.parse(mensaje).forEach(element => {
+                $("#opcionesCategorias").append(`<div class='categorias'>${element.categoria} <button type='button' onclick='eliminarCategoria(${element.id})'>Eliminar</button> </div>`);
+                $("#categoria").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
+                $("#categoriaFiltro").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
+
+
+        });
+        });
+        $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
+                    
+                    console.log(mensaje);
+                    if(mensaje === []){
+                      return;
+                    }
+          
+                    var categorias=[];
+                    var contadores=[];
+                    var colores= [];
+          
+                      JSON.parse(mensaje).forEach(element => {
+                          categorias.push(element.categoria);
+                          contadores.push(element.contador);
+                          colores.push(random_rgba());
+                     });
+          
+                   
+                      myChart.destroy();
+                      myChart = new Chart(ctx, {
+                              type: 'bar',
+                              data: {
+                              labels: categorias,
+                              datasets: [{
+                              label: 'categorias',
+                              data: contadores,
+                              backgroundColor: colores, 
+                              borderWidth: 1
+                              }]
+                    },
+                      options: {
+                        scales: {
+                          yAxes: {
+                            ticks: {
+                               stepSize: 1,
+                            }
+                          }
+                        }
+                      }
+                    });   
+          
+                    
+                    });
+        $("#nombreCategoria").val("");
+      }
     </script>
 </body>
 </html>

@@ -1,0 +1,80 @@
+/* line 32, ../scss/estilos.scss */
+.bg-primary {
+  background-color: #2e29b3 !important; }
+
+/* line 36, ../scss/estilos.scss */
+.text-primary {
+  color: white !important; }
+
+/* line 40, ../scss/estilos.scss */
+.btn-primary {
+  background-color: #7987c0 !important;
+  border-color: #435290 !important; }
+
+/* line 45, ../scss/estilos.scss */
+.btn-outline-success {
+  color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+/* line 50, ../scss/estilos.scss */
+.btn-outline-success:hover {
+  color: white !important;
+  background-color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+/* line 56, ../scss/estilos.scss */
+.nav-link:hover {
+  background-color: #7987c0;
+  border-bottom: 4px;
+  border-bottom-color: #2e29b3;
+  border-bottom-style: solid;
+  color: #2e29b3 !important;
+  font-weight: bold; }
+
+/* line 65, ../scss/estilos.scss */
+.nav-item {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content; }
+
+/* line 69, ../scss/estilos.scss */
+.card-title {
+  font-size: xx-large;
+  text-align: center;
+  border-bottom: 4px solid #2e29b3; }
+
+/* line 75, ../scss/estilos.scss */
+.card-body {
+  border-top: dotted 6px #243238; }
+
+/* line 79, ../scss/estilos.scss */
+.card-body:hover {
+  background: #eafdfd;
+  opacity: 0.8; }
+
+/* line 84, ../scss/estilos.scss */
+.card-text {
+  text-align: justify;
+  font-size: medium; }
+
+/* line 93, ../scss/estilos.scss */
+.juego {
+  background-color: #7987c0; }
+
+/* line 97, ../scss/estilos.scss */
+body {
+  background-color: #D8D8D8; }
+
+/* line 100, ../scss/estilos.scss */
+.nav-color {
+  background-color: #17286B !important; }
+
+/* line 103, ../scss/estilos.scss */
+.color-footer {
+  background-color: #17286B !important; }
+
+/* line 106, ../scss/estilos.scss */
+.color-texto {
+  color: white; }
+
+/*# sourceMappingURL=estilos.css.map */

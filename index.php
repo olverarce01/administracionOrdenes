@@ -61,12 +61,47 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <link Type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" rel="stylesheet" href="./css/estilos.css">
+    <script src="jquery/bootstrap.min.js"></script>
+
     <title>administracionOrdenes</title>
 </head>
 <body>
-    <p>FORMULARIO</p>
+
+<header>
+  <nav class="navbar navbar-light bg-light nav-color">
+    <!-- Logo UTA -->
+    <a class="navbar-brand" href="#">
+      <img src="./img/utalogo.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+    </a>
+
+    <!-- Formulario para iniciar sesion -->
+    <div class="form-login">
+      <form class="form-inline my-1 mr-md-2 mt-sm-0" action="index.php" method="post" autocomplete="off">
+        <div class="row">
+          <div class="col">
+            <i class="bi bi-file-earmark-person icono"></i>
+            <input type="email" class="form-control my-1 w-md-25 w-sm-50" placeholder="Correo" name="correo">
+            <i class="bi bi-lock-fill icono"></i>
+            <input type="password" class="form-control my-1 w-md-25 w-sm-50" placeholder="Contraseña" name="contrasena">
+            <button class="btn btn-outline-success my-1 mr-sm-2" type="submit">Acceder</button>
+          </div>
+        </div>
+      </form>
+    </div> 
+
+  </nav>
+</header>
+
+<!-- contenido principal de la pagina -->
+<main>
+
+    <h2>FORMULARIO</h2>
     <?php if(!isset($_GET['editar'])) : ?>
-    <p>¡Crea una orden de trabajo!</p>
+    <br>
+    <h2>¡Crea una orden de trabajo!</h2>
     <?php else : ?>
     
     <?php 
@@ -75,25 +110,88 @@
     <?php endif; ?>
     <form action="./" method="post">
         <?php if(!isset($_GET['editar'])) : ?>
+        <!-- campos a rellenar para el formulario 
         <input type="hidden" name="accion" value="crearOrden">
         <input type="text" name="nombre" placeholder="nombre">
         <input type="text" name="categoria" placeholder="categoria">
         <input type="submit" value="Crear Orden">
+        -->
+
+
+        <!--Formulario con boostrap-->
+
+        <form class="form-inline">
+          <div class="form-group">
+            <input type="hidden" name="accion" value="crearOrden">
+          </div>
+          <div class="form-group">
+            <label for="inputPassword6" class="pl-3">Nombre</label>
+            <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
+          </div>
+          <div class="form-group">
+            <label for="inputPassword6" class="pl-3">Categoria</label>
+            <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
+          </div>
+          <button type="submit" class="btn btn-primary ml-3" value="Crear Orden">Crear Orden</button>
+        </form>
+
+
         <?php else : ?>
 
-        <input type="hidden" name="accion" value="editarOrden">
+        <!--<input type="hidden" name="accion" value="editarOrden">-->
+
+        <div class="form-group">
+            <input type="hidden" name="accion" value="editarOrden">
+        </div>
+
         <?php
-            echo '<input type="hidden" name="id" value="'.$id.'">';
+            /*echo '<input type="hidden" name="id" value="'.$id.'">';
             echo '<input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
-            echo '<input type="text" name="categoria" placeholder="categoria" value="'.$categoria.'">';
+            echo '<input type="text" name="categoria" placeholder="categoria" value="'.$categoria.'">';*/
+
+            echo '
+            <div class="form-group">
+            <input value="'.$id.'" type="hidden" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="id" placeholder="id">
+            </div>';
+            echo '<div class="form-group">
+            <label for="inputPassword6" class="pl-3">Nombre</label>
+            <input value="'.$nombre.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
+            </div>';
+            echo '<div class="form-group">
+            <label for="inputPassword6" class="pl-3">Categoria</label>
+            <input value="'.$categoria.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
+            </div>';
         ?>
-        <input type="submit" value="Guardar edición">
+        <!--<input type="submit" value="Guardar edición">
         <a href="index.php"><button type="button">Anular edicion</button></a>
+        -->
+
+        <button type="submit" class="btn btn-primary ml-3" value="Guardar edición">Guardar edición</button>
+        <a href="index.php">
+          <button type="button" class="btn btn-primary ml-3">Anular edicion</button>
+        </a>
+
         <?php endif; ?>
 
     </form>    
-    <p>LISTA DE ORDENES DE TRABAJO</p>
+    <br>
+    <h2>LISTA DE ORDENES DE TRABAJO</h2>
+    <br>
+    <table class="table table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Creacion</th>
+          <th scope="col">Edicion</th>
+          <th scope="col">--</th>
+          <th scope="col">--</th>
+        </tr>
+      </thead>
 
+      <tbody>
+      
     <?php
         //listar ordenes
         $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes";
@@ -101,41 +199,67 @@
         if (mysqli_num_rows($result) > 0) {
 
             while($row = mysqli_fetch_assoc($result)) {
-              echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]." <a href='index.php?eliminar=".$row["id"]."'><button>Eliminar</button></a> <a href='index.php?editar=".$row["id"]."'><button>Editar</button></a></div> <br>";
+              //echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]." <a href='index.php?eliminar=".$row["id"]."'><button>Eliminar</button></a> <a href='index.php?editar=".$row["id"]."'><button>Editar</button></a></div> <br>";
+
+              echo "
+            <tr>
+              <th scope='row' id='".$row["id"]."'> Id: " . $row["id"]. " </th>
+              <td> " . $row["nombre"]. " </td>
+              <td> " . $row["categoria"]. " </td>
+              <td> " . $row["fechaCreacion"]. " </td>
+              <td> " . $row["fechaEdicion"]." </td>
+              <td> <a href='index.php?eliminar=".$row["id"]."' class='btn btn-primary ml-3'>Eliminar</a> </td>
+              <td> <a href='index.php?editar=".$row["id"]."' class='btn btn-primary ml-3'>Editar</a> </td>
+            </tr>";
             }
           } else {
             echo "0 resultados";
           }
          
     ?>
-    <p>REPORTE</p>
+
+        </tbody>
+      </table>
+    <br>
+    <h2>REPORTE</h2>
+    <br>
+
+    <!--
     <form action="./recursos/reporte.php" method="POST">
-            Opciones Filtro:
+          <h3>Opciones Filtro:</h3>
           <br>
+
+           Formulario normal
           <label for="">Categoria: </label>
           <select name="categoriaFiltro" id="categoriaFiltro">
             <option selected="selected" value="todas">todas</option>
             <option value="limpiar ventanas">limpiar ventanas</option>
             <option value="revisar camara">revisar camara</option>
             <option value="prender wifi">prender wifi</option>
-            
-            
           </select>
+
           <br>
+
           <input type='hidden' value='' name='porFecha'>
           <input type="checkbox" id="porFecha" name="porFecha" value="Activado">
-
+          
           <select name="fechaFiltro" id="fechaFiltro">
             <option selected="selected" value="fechaCreacion">fechaCreacion</option>
             <option value="fechaEdicion">fechaEdicion</option>
           </select>
+
           <br>
+
           <label for="" id="rangoFecha">
               Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
               <br>
               Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
           </label>
+
+          
+
           <br>
+
           <label for="">
             Opcion reporte:
             <select name="reporte" id="reporte">
@@ -143,12 +267,85 @@
             <option value="descargar">Descargar</option>
             </select>
           </label>
+          
           <br>
           <button>Obtener reporte</button>
+          
+          <br>
+          <br>
+
+          </div>
     </form>
 
-    <div id="chart-container" style="position: relative; height:20vh; width:40vw;">
+    -->
+
+    <br>
+    <form action="./recursos/reporte.php" method="POST">
+      <div class="pl-3">
+        <div class="my-1">
+          <label class="sr-only" for="inlineFormCustomSelect">Categoria:</label>
+          <select class="custom-select " style="width: 300px;" name="categoriaFiltro" id="categoriaFiltro">
+            <option selected="selected" value="todas">todas</option>
+            <option value="limpiar ventanas">limpiar ventanas</option>
+            <option value="revisar camara">revisar camara</option>
+            <option value="prender wifi">prender wifi</option>
+          </select>
+        </div>
+
+        <br>
+
+
+
+        <div class="my-1">
+          <div class="custom-control custom-checkbox mr-sm-2">
+            <input type='hidden' value='' name='porFecha'>
+            <input type="checkbox" class="custom-control-input" id="porFecha" name="porFecha" value="Activado">
+            <label class="custom-control-label" for="porFecha"></label>
+          </div>
+        </div>
+
+
+        <div class="my-1">
+          <label class="sr-only" for="inlineFormCustomSelect">Categoria:</label>
+          <select class="custom-select " style="width: 300px;" name="fechaFiltro" id="fechaFiltro">
+            <option selected="selected" value="fechaCreacion">fechaCreacion</option>
+            <option value="fechaEdicion">fechaEdicion</option>
+          </select>
+        </div>
+
+        <br>
+        <label for="" id="rangoFecha">
+              Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
+              <br>
+              Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
+        </label>
+        <br>
+
+        <div class="my-1">
+          <label class="sr-only" for="">Opcion reporte:</label>
+          <select class="custom-select " style="width: 300px;" name="reporte" id="reporte">
+            <option selected="selected" value="ver">Ver</option>
+            <option value="descargar">Descargar</option>
+          </select>
+        </div>
+
+
+        <br>
+
+        <div class=" my-1">
+          <button type="submit" class="btn btn-primary">Obtener reporte</button>
+        </div>
+        
+      </div>
+    </form>
+    <br>
+
+    <div id="chart-container" style="height:20vh; width:40vw;" >
       <canvas id="graphCanvas"></canvas>
+    </div>
+
+    <!-- Espacio para que el grafico no se sobrepase de su limite -->
+    <div style="height:20vh; width:40vw;">   
     </div>
 
    <?php
@@ -278,6 +475,18 @@
 
 
     </script>
+
+</main>
+<!-- footer de la pagina -->
+<footer class="mt-5 py-5  text-muted text-center text-small color-footer">
+    <p class="mb-1 color-texto">Universidad de Tarapacá – Universidad del Estado de Chile</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</footer>
+
 </body>
 </html>
 

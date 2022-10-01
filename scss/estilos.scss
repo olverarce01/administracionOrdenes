@@ -38,8 +38,12 @@ $--e-global-color-2f2826d: #1F4DA0;
 }
 
 .btn-primary {
-	background-color:$secundario !important;
-	border-color: darken($secundario,20%) !important;
+	background-color:$--e-global-color-2f2826d !important;
+	border-color: darken($--e-global-color-2f2826d,20%) !important;
+}
+.btn-primary:hover {
+    background-color:$--e-global-color-accent !important;
+	border-color: darken($--e-global-color-2f2826d,20%) !important;
 }
 
 .btn-outline-success{
@@ -93,7 +97,6 @@ $--e-global-color-2f2826d: #1F4DA0;
 .juego{
     background-color: $secundario;
 }
-
 body{
     background-color: $--e-global-color-4f5bceb6;
 }
@@ -106,6 +109,13 @@ body{
 .color-texto{
     color: $texto;
 }
+
+.color-orden{
+    background-color: $--e-global-color-primary !important;
+    opacity: 0.8 !important;
+}
+
+
 
 
 

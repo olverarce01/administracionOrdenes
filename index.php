@@ -120,69 +120,70 @@
 
         <!--Formulario con boostrap-->
 
-        <form class="form-inline">
-          <div class="color-orden container py-3 shadow-lg border border-dark rounded-lg">
-            <h2 class="color-texto">¡Crea una orden de trabajo!</h2>
+        
+        <div class="color-orden container py-3 shadow-lg border border-dark rounded-lg">
+          <h2 class="color-texto">¡Crea una orden de trabajo!</h2>
 
-            <div class="form-group">
-              <input type="hidden" name="accion" value="crearOrden">
-            </div>
-            <div class="form-group">
-              <label for="inputPassword6" class="pl-3 color-texto">Nombre</label>
-              <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
-            </div>
-            <div class="form-group">
-              <label for="inputPassword6" class="pl-3 color-texto">Categoria</label>
-              <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
-            </div>
-            <button type="submit" class="btn btn-primary ml-3" value="Crear Orden">Crear Orden</button>
+          <div class="form-group">
+            <input type="hidden" name="accion" value="crearOrden">
           </div>
-        </form>
+          <div class="form-group">
+            <label for="inputPassword6" class="pl-3 color-texto">Nombre</label>
+            <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
+          </div>
+          <div class="form-group">
+            <label for="inputPassword6" class="pl-3 color-texto">Categoria</label>
+            <input type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
+          </div>
+          <button type="submit" class="btn btn-primary ml-3" value="Crear Orden">Crear Orden</button>
+        </div>
+        
         
         <br>
         
         <?php else : ?>
 
         <!--<input type="hidden" name="accion" value="editarOrden">-->
-        <form class="form-inline">
-          <div class="color-orden container py-3 shadow-lg border border-dark rounded-lg">
-            <div class="form-group">
-                <input type="hidden" name="accion" value="editarOrden">
-            </div>
-            
-            <?php
-                echo "<h2 class='color-texto'>Editando orden de trabajo: ".$id."</h2>"; 
-                /*echo '<input type="hidden" name="id" value="'.$id.'">';
-                echo '<input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
-                echo '<input type="text" name="categoria" placeholder="categoria" value="'.$categoria.'">';*/
-            
-                echo '
-                <div class="form-group">
-                <input value="'.$id.'" type="hidden" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="id" placeholder="id">
-                </div>';
-                echo '<div class="form-group">
-                <label for="inputPassword6" class="pl-3">Nombre</label>
-                <input value="'.$nombre.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
-                </div>';
-                echo '<div class="form-group">
-                <label for="inputPassword6" class="pl-3">Categoria</label>
-                <input value="'.$categoria.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
-                </div>';
-            ?>
-            <!--<input type="submit" value="Guardar edición">
-            <a href="index.php"><button type="button">Anular edicion</button></a>
-            -->
-            
-            <button type="submit" class="btn btn-primary ml-3" value="Guardar edición">Guardar edición</button>
-            <a href="index.php">
-              <button type="button" class="btn btn-primary ml-3">Anular edicion</button>
-            </a>
+      
+        <div class="color-orden container py-3 shadow-lg border border-dark rounded-lg">
+          <div class="form-group">
+              <input type="hidden" name="accion" value="editarOrden">
           </div>
-        </form>
+          
+          <?php
+              echo "<h2 class='color-texto'>Editando orden de trabajo: ".$id."</h2>"; 
+              /*echo '<input type="hidden" name="id" value="'.$id.'">';
+              echo '<input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
+              echo '<input type="text" name="categoria" placeholder="categoria" value="'.$categoria.'">';*/
+          
+              echo '
+              <div class="form-group">
+              <input value="'.$id.'" type="hidden" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="id" placeholder="id">
+              </div>';
+              echo '<div class="form-group">
+              <label for="inputPassword6" class="pl-3">Nombre</label>
+              <input value="'.$nombre.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="nombre" placeholder="nombre">
+              </div>';
+              echo '<div class="form-group">
+              <label for="inputPassword6" class="pl-3">Categoria</label>
+              <input value="'.$categoria.'" type="text" id="inputPassword6" class="form-control mx-sm-3" style="width: 500px;" aria-describedby="passwordHelpInline" name="categoria" placeholder="categoria">
+              </div>';
+          ?>
+          <!--<input type="submit" value="Guardar edición">
+          <a href="index.php"><button type="button">Anular edicion</button></a>
+          -->
+          
+          <button type="submit" class="btn btn-primary ml-3" value="Guardar edición">Guardar edición</button>
+          <a href="index.php">
+            <button type="button" class="btn btn-primary ml-3">Anular edicion</button>
+          </a>
+        </div>
+      
 
         <?php endif; ?>
 
-    </form>    
+    </form>
+        
     <br>
     <h2 class="pl-3">LISTA DE ORDENES DE TRABAJO</h2>
     <br>
@@ -293,7 +294,7 @@
     <br>
     <form action="./recursos/reporte.php" method="POST">
       <div class="pl-3 color-orden container py-3 shadow-lg border border-dark rounded-lg">
-        <div class="my-1">
+        <div class="my-1 pl-3">
           <p class="color-texto">Categoria</p>
           <label class="sr-only" for="inlineFormCustomSelect">Categoria:</label>
           <select class="custom-select " style="width: 300px;" name="categoriaFiltro" id="categoriaFiltro">
@@ -304,7 +305,7 @@
           </select>
         </div>
         <br>
-        <div class="my-1">
+        <div class="my-1 pl-3">
           <p class="color-texto">Fecha/Creacion/Edicion</p>
           <div class="custom-control custom-checkbox mr-sm-2">
             <input type='hidden' value='' name='porFecha'>
@@ -313,7 +314,7 @@
           </div>
         </div>
 
-        <div class="my-1">
+        <div class="my-1 pl-3">
           <label class="sr-only" for="inlineFormCustomSelect">Categoria:</label>
           <select class="custom-select " style="width: 300px;" name="fechaFiltro" id="fechaFiltro">
             <option selected="selected" value="fechaCreacion">fechaCreacion</option>
@@ -321,13 +322,13 @@
           </select>
         </div>
         <br>
-        <label for="" id="rangoFecha">
+        <label for="" id="rangoFecha" class="pl-3">
               Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
               <br>
               Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
         </label>
         <br>
-        <div class="my-1">
+        <div class="my-1 pl-3">
           <p class="color-texto">Opcion reporte</p>
           <label class="sr-only" for="">Opcion reporte:</label>
           <select class="custom-select " style="width: 300px;" name="reporte" id="reporte">
@@ -338,7 +339,7 @@
 
         <br>
 
-        <div class=" my-1">
+        <div class=" my-1 pl-3">
           <button type="submit" class="btn btn-primary">Obtener reporte</button>
         </div>
         

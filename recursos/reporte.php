@@ -43,7 +43,7 @@ ob_start();
     
       $fechaFiltro = $_POST['fechaFiltro'];
       
-      $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes where ".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."'";
+      $sql = "SELECT ordenes.id, nombre, categorias.categoria, fechaCreacion, fechaEdicion FROM ordenes, categorias where ordenes.idCategoria=categorias.id and ".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."'";
       
       $categoriaFiltro = $_POST['categoriaFiltro'];
       echo "categoria: ".$categoriaFiltro." <br>";
@@ -52,14 +52,14 @@ ob_start();
 
       if($categoriaFiltro == 'todas'){
         if($checkboxPorFecha==''){
-          $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes";
+          $sql = "SELECT ordenes.id, nombre, categorias.categoria, fechaCreacion, fechaEdicion FROM ordenes, categorias WHERE ordenes.idCategoria=categorias.id";
         }
 
       }
       else{
-        $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes where ".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."' and categoria='".$categoriaFiltro."'";
+        $sql = "SELECT ordenes.id, nombre, categorias.categoria, fechaCreacion, fechaEdicion FROM ordenes, categorias where ordenes.idCategoria=categorias.id and ".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."' and categoria='".$categoriaFiltro."'";
         if($checkboxPorFecha==''){
-          $sql = "SELECT id, nombre, categoria, fechaCreacion, fechaEdicion FROM ordenes where  categoria='".$categoriaFiltro."'";
+          $sql = "SELECT ordenes.id, nombre, categorias.categoria, fechaCreacion, fechaEdicion FROM ordenes, categorias where ordenes.idCategoria=categorias.id and categoria='".$categoriaFiltro."'";
         }
       }
 

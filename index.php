@@ -76,6 +76,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <title>administracionOrdenes</title>
 </head>
@@ -252,6 +254,9 @@
           <br>
           <button>Obtener reporte</button>
     </form>
+    <button id="descargarCanvas">
+      Descargar PDF
+    </button>
 
     <div id="chart-container" style="position: relative; height:20vh; width:40vw;">
       <canvas id="graphCanvas"></canvas>
@@ -285,6 +290,7 @@
          
     ?>
 
+   
     <script>
     const ctx = document.getElementById('graphCanvas').getContext('2d');
     var myChart = new Chart(ctx, {
@@ -444,11 +450,25 @@
 
     </script>
     <script>
+       $("#descargarCanvas").click(function(){
+        var canvas=$("#graphCanvas");
+        
+      var canvasImg = canvas[0].toDataURL("image/png", 1.0);
+      var doc = new jsPDF();
+      doc.setFillColor(0, 0,0,0);
+      doc.rect(10, 10, 150, 160, "F");
+      doc.addImage(canvasImg, 'png', 10, 10, 150, 100);
+      doc.save('sample.pdf');
+
+        });
       $("#opcionesCategorias").hide();
       $(function() {
         $( "#btnOpcionesCategorias" ).click(function() {
           $("#opcionesCategorias").toggle();
         });
+
+       
+
       });
       async function  eliminarCategoria(id){
          await $.get(`./recursos/categorias.php?modo=eliminar&id=${id}`, function(mensaje, estado){   

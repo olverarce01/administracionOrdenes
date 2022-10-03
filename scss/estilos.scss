@@ -1,0 +1,116 @@
+//-----------------------------------
+//          PATRON DE COLORES
+//-----------------------------------
+
+//$texto: rgb(236, 220, 220);
+$texto: white;
+$principal: #2e29b3;
+$secundario: #7987c0;
+// $terciario: rgb(214, 229, 143);
+$terciario:rgb(234, 253, 253);
+
+
+$--e-global-color-primary: #232323;
+$--e-global-color-secondary: #3C4044;
+$--e-global-color-text: #636363;
+$--e-global-color-accent: #E59252;
+$--e-global-color-68e3392d: #54595F;
+$--e-global-color-4f5bceb6: #D8D8D8;
+$--e-global-color-22ee4aea: #4EBFD8;
+$--e-global-color-74cd5ead: #DD8039;
+$--e-global-color-4ee1b827: #17286B;
+$--e-global-color-2423f002: #EFEFEF;
+$--e-global-color-37362f60: RGBA(14, 27, 77, 0.89);
+$--e-global-color-3d999ee1: #D8872F;
+$--e-global-color-60408a88: #FFCE47;
+$--e-global-color-2f2826d: #1F4DA0;
+
+//----------------------------------------------
+//          ESTILOS SOBRE ESCRITOS DE BOOTSTRAP
+//----------------------------------------------
+
+.bg-primary{
+    background-color: $principal !important;
+}
+
+.text-primary {
+	color: $texto!important;
+}
+
+.btn-primary {
+	background-color:$--e-global-color-2f2826d !important;
+	border-color: darken($--e-global-color-2f2826d,20%) !important;
+}
+.btn-primary:hover {
+    background-color:$--e-global-color-accent !important;
+	border-color: darken($--e-global-color-2f2826d,20%) !important;
+}
+
+.btn-outline-success{
+    color: $--e-global-color-74cd5ead !important;
+    border-color: $--e-global-color-74cd5ead !important;
+}
+
+.btn-outline-success:hover{
+    color: $texto !important;
+    background-color:$--e-global-color-74cd5ead !important;
+    border-color:$--e-global-color-74cd5ead !important;
+}
+
+.nav-link:hover{
+    background-color: $secundario;
+    border-bottom:4px;
+    border-bottom-color: $principal;
+    border-bottom-style:solid;
+    color: $principal!important;
+    font-weight: bold;
+}
+
+.nav-item{
+    width: max-content;
+}
+
+.card-title{
+    font-size: xx-large;
+    text-align: center;
+    border-bottom: 4px solid $principal;
+}
+
+.card-body{
+    border-top: dotted 6px #243238;
+}
+
+.card-body:hover{
+    background: $terciario;
+    opacity: 0.8;
+}
+
+.card-text{
+    text-align: justify;
+    font-size: medium;
+}
+
+//----------------------------------------------
+//          ESTILOS PERSONALIZADOS
+//----------------------------------------------
+
+.juego{
+    background-color: $secundario;
+}
+body{
+    background-color: $--e-global-color-4f5bceb6;
+}
+.nav-color{
+    background-color: $--e-global-color-4ee1b827 !important;
+}
+.color-footer{
+    background-color: $--e-global-color-4ee1b827 !important;
+}
+.color-texto{
+    color: $texto;
+}
+
+.color-orden{
+    background-color: $--e-global-color-primary !important;
+    opacity: 0.8 !important;
+}

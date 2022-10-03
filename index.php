@@ -393,7 +393,8 @@
         $("input[type='date'], input[type='time'], #fechaFiltro").on('change', function() {
           $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
                     
-          console.log(mensaje);
+            console.log(mensaje);
+          
           if(mensaje === []){
             return;
           }

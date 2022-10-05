@@ -7,9 +7,9 @@
 
             while($row = mysqli_fetch_assoc($result)) {
             if($row["terminada"]==0){
-                echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. "</div> <br>";
+                echo "<div id='".$row["id"]."'> NºSolicitud: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Fecha Solicitud:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. "</div> <br>";
             }else{
-                echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. " Termino:" . $row["fechaTermino"]."</div> <br>";
+                echo "<div id='".$row["id"]."'> NºSolicitud: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Fecha Solicitud:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. " Fecha de Termino:" . $row["fechaTermino"]."</div> <br>";
             }
 
             }

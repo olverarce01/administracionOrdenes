@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-10-2022 a las 13:56:04
+-- Tiempo de generación: 05-10-2022 a las 20:49:54
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -37,11 +37,34 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `categoria`) VALUES
-(46, 'electrónicas'),
-(47, 'labores de construcción'),
-(45, 'producción de piezas'),
+(46, 'electronicas'),
+(47, 'labores de construccion'),
+(45, 'produccion de piezas'),
 (44, 'servicios de limpieza'),
-(43, 'talleres mecánicos');
+(43, 'talleres mecanicos');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `funcionarios`
+--
+
+CREATE TABLE `funcionarios` (
+  `id` int(11) NOT NULL,
+  `rut` varchar(150) NOT NULL,
+  `nombre` varchar(150) NOT NULL,
+  `cargo` varchar(150) NOT NULL,
+  `precioHora` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `funcionarios`
+--
+
+INSERT INTO `funcionarios` (`id`, `rut`, `nombre`, `cargo`, `precioHora`) VALUES
+(1, '20.901.445-9', 'luis perez', 'electricista', 1000),
+(2, '20.421.446-9', 'matias fernandez', 'mecanico', 2000),
+(3, '10.331.225-9', 'pedro picapiedra', 'informatico', 3000);
 
 -- --------------------------------------------------------
 
@@ -74,18 +97,6 @@ INSERT INTO `materiales` (`id`, `nombre`, `precioUnitario`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `materialesordenes`
---
-
-CREATE TABLE `materialesordenes` (
-  `id` int(11) NOT NULL,
-  `idMaterial` int(11) NOT NULL,
-  `idOrden` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `ordenes`
 --
 
@@ -96,23 +107,19 @@ CREATE TABLE `ordenes` (
   `fechaCreacion` datetime NOT NULL DEFAULT current_timestamp(),
   `fechaEdicion` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `terminada` tinyint(1) NOT NULL,
-  `fechaTermino` datetime DEFAULT NULL
+  `fechaTermino` datetime DEFAULT NULL,
+  `materiales` text DEFAULT NULL,
+  `precioMateriales` int(11) DEFAULT NULL,
+  `funcionariosEjecutores` text DEFAULT NULL,
+  `precioFuncionariosEjecutores` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ordenes`
 --
 
-INSERT INTO `ordenes` (`id`, `nombre`, `idCategoria`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`) VALUES
-(49, 'orden 1', 46, '2022-10-01 08:10:49', '2022-10-01 08:25:58', 1, '2022-10-01 08:25:58'),
-(50, 'orden 2', 47, '2022-10-01 08:10:57', '2022-10-01 08:10:57', 0, NULL),
-(51, 'orden 3', 46, '2022-10-01 08:11:03', '2022-10-01 08:11:03', 0, NULL),
-(52, 'orden 4', 44, '2022-10-01 08:11:16', '2022-10-01 08:11:16', 0, NULL),
-(53, 'orden 5', 43, '2022-10-01 08:11:27', '2022-10-01 08:11:27', 0, NULL),
-(54, 'orden 6', 46, '2022-10-01 08:11:47', '2022-10-01 08:11:47', 0, NULL),
-(55, 'orden 7', 47, '2022-10-01 08:11:58', '2022-10-01 08:11:58', 0, NULL),
-(56, 'orden 8', 43, '2022-10-01 08:12:10', '2022-10-01 08:12:10', 0, NULL),
-(57, 'orden 9', 43, '2022-10-01 08:12:29', '2022-10-01 08:31:35', 1, '2022-10-01 08:31:35');
+INSERT INTO `ordenes` (`id`, `nombre`, `idCategoria`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`) VALUES
+(103, 'orden 1', 46, '2022-10-05 15:45:39', '2022-10-05 15:45:39', 0, NULL, 'foco, detector de voltaje, multímetro, ', 9000, '20.901.445-9, 20.421.446-9, ', 3000);
 
 --
 -- Índices para tablas volcadas
@@ -126,19 +133,17 @@ ALTER TABLE `categorias`
   ADD UNIQUE KEY `categoria` (`categoria`);
 
 --
+-- Indices de la tabla `funcionarios`
+--
+ALTER TABLE `funcionarios`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `materiales`
 --
 ALTER TABLE `materiales`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `nombre` (`nombre`);
-
---
--- Indices de la tabla `materialesordenes`
---
-ALTER TABLE `materialesordenes`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `idMaterial` (`idMaterial`),
-  ADD KEY `idOrden` (`idOrden`);
 
 --
 -- Indices de la tabla `ordenes`
@@ -155,7 +160,13 @@ ALTER TABLE `ordenes`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+
+--
+-- AUTO_INCREMENT de la tabla `funcionarios`
+--
+ALTER TABLE `funcionarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `materiales`
@@ -164,27 +175,14 @@ ALTER TABLE `materiales`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT de la tabla `materialesordenes`
---
-ALTER TABLE `materialesordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- Restricciones para tablas volcadas
 --
-
---
--- Filtros para la tabla `materialesordenes`
---
-ALTER TABLE `materialesordenes`
-  ADD CONSTRAINT `materialesordenes_ibfk_1` FOREIGN KEY (`idMaterial`) REFERENCES `materiales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `materialesordenes_ibfk_2` FOREIGN KEY (`idOrden`) REFERENCES `ordenes` (`id`);
 
 --
 -- Filtros para la tabla `ordenes`

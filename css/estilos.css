@@ -1,0 +1,90 @@
+@charset "UTF-8";
+/* line 32, ../scss/estilos.scss */
+.bg-primary {
+  background-color: #2e29b3 !important; }
+
+/* line 35, ../scss/estilos.scss */
+.bg-light {
+  background-color: #17286B !important; }
+
+/* line 39, ../scss/estilos.scss */
+.text-primary {
+  color: white !important; }
+
+/* line 43, ../scss/estilos.scss */
+.btn-primary {
+  background-color: #1F4DA0 !important;
+  border-color: #0e244b !important; }
+
+/* line 47, ../scss/estilos.scss */
+.btn-primary:hover {
+  background-color: #E59252 !important;
+  border-color: #0e244b !important; }
+
+/* line 52, ../scss/estilos.scss */
+.btn-outline-success {
+  color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+/* line 57, ../scss/estilos.scss */
+.btn-outline-success:hover {
+  color: white !important;
+  background-color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+/* line 63, ../scss/estilos.scss */
+.nav-link:hover {
+  background-color: #7987c0;
+  border-bottom: 4px;
+  border-bottom-color: #2e29b3;
+  border-bottom-style: solid;
+  color: #2e29b3 !important;
+  font-weight: bold; }
+
+/* line 72, ../scss/estilos.scss */
+.nav-item {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content; }
+
+/* line 76, ../scss/estilos.scss */
+.card-title {
+  font-size: xx-large;
+  text-align: center;
+  border-bottom: 4px solid #2e29b3; }
+
+/* line 82, ../scss/estilos.scss */
+.card-body {
+  border-top: dotted 6px #243238; }
+
+/* line 86, ../scss/estilos.scss */
+.card-body:hover {
+  background: #eafdfd;
+  opacity: 0.8; }
+
+/* line 91, ../scss/estilos.scss */
+.card-text {
+  text-align: justify;
+  font-size: medium; }
+
+/* line 100, ../scss/estilos.scss */
+.tamaño-form-login {
+  height: 420px;
+  width: 300px;
+  color: white; }
+
+/* line 105, ../scss/estilos.scss */
+.form-login {
+  background-color: #232323 !important;
+  opacity: 0.9; }
+
+/* line 109, ../scss/estilos.scss */
+.fondo {
+  background-image: url(../img/fondo.jpg), url(../img/fondo.jpg);
+  background-position: right bottom, left top;
+  background-repeat: no-repeat, repeat;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content; }
+
+/*# sourceMappingURL=estilos.css.map */

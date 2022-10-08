@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-10-2022 a las 20:49:54
+-- Tiempo de generación: 08-10-2022 a las 22:12:35
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -37,11 +37,11 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `categoria`) VALUES
-(46, 'electronicas'),
-(47, 'labores de construccion'),
 (45, 'produccion de piezas'),
+(53, 'regar plantas'),
 (44, 'servicios de limpieza'),
-(43, 'talleres mecanicos');
+(43, 'talleres mecanicos'),
+(52, 'ver camara');
 
 -- --------------------------------------------------------
 
@@ -110,16 +110,31 @@ CREATE TABLE `ordenes` (
   `fechaTermino` datetime DEFAULT NULL,
   `materiales` text DEFAULT NULL,
   `precioMateriales` int(11) DEFAULT NULL,
+  `tipoTrabajo` varchar(150) NOT NULL,
+  `observacion` text NOT NULL,
+  `solicitudCompra` text NOT NULL,
+  `funcionarioEncargado` varchar(150) NOT NULL,
+  `fechaAsignacion` datetime NOT NULL,
   `funcionariosEjecutores` text DEFAULT NULL,
-  `precioFuncionariosEjecutores` int(11) NOT NULL
+  `precioFuncionariosEjecutores` int(11) NOT NULL,
+  `horasHombre` int(11) NOT NULL,
+  `cantidadPersonasInvolucradas` int(11) NOT NULL,
+  `costoTotal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ordenes`
 --
 
-INSERT INTO `ordenes` (`id`, `nombre`, `idCategoria`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`) VALUES
-(103, 'orden 1', 46, '2022-10-05 15:45:39', '2022-10-05 15:45:39', 0, NULL, 'foco, detector de voltaje, multímetro, ', 9000, '20.901.445-9, 20.421.446-9, ', 3000);
+INSERT INTO `ordenes` (`id`, `nombre`, `idCategoria`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
+(114, 'orden 1', 45, '2022-10-07 20:49:25', '2022-10-08 16:16:20', 1, '2022-10-08 16:16:20', 'foco, detector de voltaje, ', 6000, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-09-30 12:02:00', '20.901.445-9, 20.421.446-9, ', 3000, 10, 2, 36000),
+(115, 'orden 2', 44, '2022-10-07 23:31:20', '2022-10-07 23:31:20', 0, NULL, 'foco, multímetro, ', 3500, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-07 23:31:00', '20.901.445-9, ', 1000, 2, 1, 5500),
+(116, 'orden 3', 43, '2022-10-08 07:55:52', '2022-10-08 07:55:52', 0, NULL, 'foco, ', 6000, 'interno', 'se observa la orden', 'se solicita la compra', '20.421.446-9', '2022-10-08 07:55:00', '20.901.445-9, ', 1000, 1, 1, 7000),
+(117, 'orden 4', 52, '2022-10-08 07:56:41', '2022-10-08 09:15:36', 1, '2022-10-08 09:15:36', 'foco, ', 2000, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 07:56:00', '10.331.225-9, ', 3000, 1, 1, 5000),
+(118, 'orden 5', 52, '2022-10-08 10:22:45', '2022-10-08 16:46:08', 1, '2022-10-08 16:46:08', 'foco, detector de voltaje, cámara térmica, cinta eléctrica líquida, ', 9200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 12:00:00', '20.901.445-9, ', 1000, 2, 1, 11200),
+(119, 'orden 6', 53, '2022-10-08 14:41:11', '2022-10-08 16:45:59', 1, '2022-10-08 16:45:59', 'destornillador, Adhesivos para reparaciones, ', 12200, 'interno', 'se observa la orden', 'se solicita la compra', '10.331.225-9', '2022-10-08 14:01:00', '20.901.445-9, ', 1000, 2, 1, 14200),
+(120, 'orden 7', 53, '2022-10-08 14:41:54', '2022-10-08 16:45:55', 1, '2022-10-08 16:45:55', 'cinta eléctrica líquida, ', 2200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 19:41:54', '20.421.446-9, ', 2000, 3, 1, 8200),
+(121, 'orden 8', 53, '2022-10-08 14:42:43', '2022-10-08 14:42:43', 0, NULL, 'pinzas, Adhesivos para reparaciones, ', 11200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 19:42:43', '10.331.225-9, ', 3000, 3, 1, 20200);
 
 --
 -- Índices para tablas volcadas
@@ -160,7 +175,7 @@ ALTER TABLE `ordenes`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT de la tabla `funcionarios`
@@ -178,7 +193,7 @@ ALTER TABLE `materiales`
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=122;
 
 --
 -- Restricciones para tablas volcadas

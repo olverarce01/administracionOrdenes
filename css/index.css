@@ -1,0 +1,79 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* 
+#frecuenciaCategorias,#costoMaterialesCategorias,#costoFuncionariosEjecutivosCategorias,#costoTotalCategorias,#frecuenciaOrdenesPorHoras{
+
+} */
+#divFrecuenciaCategorias,#divCostoMaterialesCategorias,#divCostoFuncionariosEjecutivosCategorias,#divCostoTotalCategorias,#divFrecuenciaOrdenesPorHoras{
+    color: lightseagreen;
+    font-weight: bolder;
+    font-size: 25px;
+    font-family: monospace;
+
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    width: 100%;
+    box-shadow: 0 7px 25px rgb(0,0,0,0.08);
+    border-radius: 20px;
+}
+/* #divFrecuenciaCategorias{
+    width: 50%;
+}
+#divCostoMaterialesCategorias{
+    width: 50%;
+}
+#divCostoFuncionariosEjecutivosCategorias{
+    width: 50%;
+}
+#divCostoTotalCategorias{
+    width: 50%;
+}
+#divFrecuenciaOrdenesPorHoras{
+    width: 50%;
+} */
+.tdOrdenes{
+    margin: 0 10px;
+    padding: 10px;
+    font-size: 20px;
+    background-color: lightslategray;
+}
+.container-ordenes{
+    background-color: rgb(88, 100, 113);
+    color: white;
+}
+
+#chart-container{
+    position: relative;
+    width: 100%;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    min-height: 200px;
+
+}
+.btn-light{
+    background-color: lightslategray;
+}
+
+@media (max-width: 1000px) {
+    #divFrecuenciaCategorias{
+        width: 100%;
+    }
+    #divCostoMaterialesCategorias{
+        width: 100%;
+    }
+    #divCostoFuncionariosEjecutivosCategorias{
+        width: 100%;
+    }
+    #divCostoTotalCategorias{
+        width: 100%;
+    }
+    #divFrecuenciaOrdenesPorHoras{
+        width: 100%;
+    }
+  }

@@ -12,15 +12,11 @@
   
         $fechaFiltro = $_GET['fechaFiltro'];
 
-        $sql = "SELECT rss.categoria as categoria, count(*) as contador FROM (SELECT categorias.categoria as categoria FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."')) as rs, categorias WHERE rs.idCategoria=categorias.id) as rss GROUP BY rss.categoria";
+        $sql = "SELECT r.horasHombre as horasHombre , count(*) as frecuenciaHoras FROM (SELECT horasHombre FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."')) as r GROUP BY r.horasHombre";
+       
         $result = mysqli_query($conn, $sql);
         $datos = mysqli_fetch_all($result,MYSQLI_ASSOC); 
         echo json_encode($datos);
         
     }
-   /*  if(empty($datos)){
-        $sql = "SELECT r.categoria as categoria, count(*) as contador FROM(SELECT categorias.categoria as categoria FROM ordenes, categorias WHERE ordenes.idCategoria=categorias.id) as r GROUP BY r.categoria";
-        $result = mysqli_query($conn, $sql);
-        $datos = mysqli_fetch_all($result,MYSQLI_ASSOC);
-    } */
 ?>

@@ -5,9 +5,23 @@
         $nombre = $_POST['nombre'];
         $categoria = $_POST['categoria'];
         $precioMateriales=$_POST['precioMateriales'];
+        $tipoTrabajo=$_POST['tipoTrabajo'];
+        $observacion=$_POST['observacion'];
+        $solicitudCompra=$_POST['solicitudCompra'];
+        $funcionarioEncargado=$_POST['funcionarioEncargado'];
+
+        $dateAsignacion=$_POST['dateAsignacion'];
+        $timeAsignacion=$_POST['timeAsignacion'];
+        $fechaAsignacion= date('Y-m-d H:i:s', strtotime("$dateAsignacion $timeAsignacion"));
+
+
         $precioFuncionariosEjecutores=$_POST['precioFuncionariosEjecutores'];
         $materiales="";
         $funcionariosEjecutores="";
+        $horasHombre=$_POST['horasHombre'];
+        $cantidadPersonasInvolucradas=$_POST['cantidadPersonasInvolucradas'];
+
+        $costoTotal=$precioMateriales+($precioFuncionariosEjecutores*$horasHombre);
 
         foreach ($_POST['materiales'] as $selectedOption)
         {
@@ -18,8 +32,8 @@
           $funcionariosEjecutores .=$selectedOption.", ";
         }
         
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, materiales, precioMateriales, funcionariosEjecutores, precioFuncionariosEjecutores) VALUES (?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'sisisi',$nombre, $categoria, $materiales, $precioMateriales,$funcionariosEjecutores,$precioFuncionariosEjecutores);
+        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, materiales, precioMateriales, tipoTrabajo, observacion, solicitudCompra,funcionarioEncargado, fechaAsignacion,funcionariosEjecutores,precioFuncionariosEjecutores, horasHombre, cantidadPersonasInvolucradas, costoTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, 'sisissssssiiii',$nombre, $categoria, $materiales, $precioMateriales, $tipoTrabajo, $observacion, $solicitudCompra, $funcionarioEncargado, $fechaAsignacion,$funcionariosEjecutores,$precioFuncionariosEjecutores, $horasHombre, $cantidadPersonasInvolucradas, $costoTotal);
         echo "Se agrego correctamente: ".$nombre." a la base de datos";
         
         mysqli_stmt_execute($stmt);
@@ -58,30 +72,102 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script>
-    <script src="multiselect-dropdown.js" ></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+
+   
+    <script src="multiselect-dropdown.js" ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.1/chart.min.js" integrity="sha512-ymysWHuTOgC1h8/MdSMcEyWmmjtfSh/7PYIDCZYIjW9sfS5Lfs5VBGbkPYZSM11L+JzJ3+id+gXDF4ImKcnxgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- fancyTable Js -->
+    <script src="./js/fancyTable.js"></script>
+
+    <script src="./js/actualizarGrafico.js"></script> 
+    <script src="./js/categorias.js"></script> 
+    <script src="./js/selectsDinamicos.js"></script> 
+    
+    <link rel="stylesheet" href="./css/index.css">
+
     <title>administracionOrdenes</title>
 </head>
 <body>
+<p>REPORTE</p>
+    <form>
+            Opciones Filtro:
+          <br>
+          <input type='hidden' value='' name='porFecha'>
+
+          <select name="fechaFiltro" id="fechaFiltro">
+            <option selected="selected" value="fechaCreacion">fechaCreacion</option>
+            <option value="fechaEdicion">fechaEdicion</option>
+          </select>
+          <br>
+          <label for="" id="rangoFecha">
+              Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
+              <br>
+              Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
+          </label>
+          <br>
+
+          <br>
+          <button id="descargarCanvas" type="button">
+            Descargar PDF
+          </button>
+          <button id="verCanvas" type="button">
+            Ver PDF
+          </button>
+    </form>
+    <div id="chart-container">
+      <div id="divFrecuenciaCategorias">
+        <p>Cantidad de ordenes por categoria</p>
+        <canvas id="frecuenciaCategorias"></canvas>
+      </div>
+      <div id="divCostoMaterialesCategorias">
+      <p>Costo materiales por categoria</p>
+      <canvas id="costoMaterialesCategorias"></canvas>
+      </div>
+      <div id="divCostoFuncionariosEjecutivosCategorias">
+      <p>Costo funcionarios ejecutivos por categoria</p>
+      <canvas id="costoFuncionariosEjecutivosCategorias"></canvas>
+      </div>
+      <div id="divCostoTotalCategorias">
+      <p>Costo Total por categoria</p>
+      <canvas id="costoTotalCategorias"></canvas>
+      </div>
+      <div id="divFrecuenciaOrdenesPorHoras">
+      <p>Frecuencia de ordenes por Horas de trabajo</p>
+      <canvas id="frecuenciaOrdenesPorHoras"></canvas>
+      </div>
+    </div>
+
+
+
+
     <p>FORMULARIO</p>
-    <?php if(!isset($_GET['editar'])) : ?>
     <p>¡Crea una orden de trabajo!</p>
-    <?php else : ?>
-    
-    <?php 
-        echo "<p>Editando orden de trabajo: ".$id."</p>";    
-    ?>
-    <?php endif; ?>
+  
     <form action="./" method="post" id="formOrdenes">
-        <?php if(!isset($_GET['editar'])) : ?>
         <input type="hidden" name="accion" value="crearOrden">
         <br>
         <label for="">Nombre Orden: </label>
         <input type="text" name="nombre" placeholder="nombre">
         <br>
-        <label for="">Categoria: </label>
+        <label for="">Tipo de Servicio: </label>
         <select name="categoria" id="categoria">
             <?php
             $sql = "SELECT id, categoria FROM categorias";
@@ -142,6 +228,51 @@
 
         </label>
         <br>
+        <label for="">
+        Tipo de trabajo:
+          <select name="tipoTrabajo" id="tipoTrabajo">
+            <option value="interno">Interno</option>
+            <option value="externo">Externo</option>
+          </select> 
+              
+        </label>
+        <br>
+        <label for="">
+        Observacion: 
+              <input type="text" name="observacion" id="observacion">
+        </label>
+        <br>
+        <label for="">
+        Solicitud de compra: 
+              <input type="text" name="solicitudCompra" id="solicitudCompra">
+        </label>
+        <br>
+        <label for="">
+          Funcionario encargado:
+          <select name="funcionarioEncargado" id="funcionarioEncargado" class="js-example-basic-single">
+          <?php
+            $sql = "SELECT * FROM funcionarios";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<option value='".$row['rut']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."</option>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+          </select>
+        </label>
+        <br>
+
+        <label for="">
+        Fecha de asignacion del trabajo:
+          <input type="date" name="dateAsignacion" id="dateAsignacion">
+          <input type="time" name="timeAsignacion" id="timeAsignacion">
+        </label>
+
+        <br>
         <label for="">Funcionarios Ejecutores:    
         <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
         <?php
@@ -158,183 +289,220 @@
           ?>
         </select>
         </label>
-        <div id="cantidadFuncionariosEjecutores">
-
-        </div>
         <label for="">
         Total precioHora Ejecutores:
         <input type="number" name="precioFuncionariosEjecutores" id="precioFuncionariosEjecutores" value="" readonly>
 
         </label>
+
+        <br>
+        <label for="">
+        Nº Horas Hombre: 
+              <input type="number" name="horasHombre" id="horasHombre">
+        </label>
+        <label for="">
+        Cantidad de personas involucradas: 
+              <input type="number" name="cantidadPersonasInvolucradas" id="cantidadPersonasInvolucradas" value="" readonly>
+        </label>
         <br>
         <input type="submit" value="Crear Orden">
-        <?php else : ?>
-
-        <input type="hidden" name="accion" value="editarOrden">
         
-        <?php
-            
-
-            echo '<input type="hidden" name="id" value="'.$id.'">';
-            echo '<br> <label for="">Nombre Orden: </label> <input type="text" name="nombre" placeholder="nombre" value="'.$nombre.'">';
-            echo '<br> <label for="">Categoria: </label>';
-            
-        ?>
-        <select name="categoria" id="categoria">
-        <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  if($categoria==$row["categoria"]){
-                    echo "<option value='".$row["id"]."' selected>".$row["categoria"]."</option>";
-                  }else{
-                    echo "<option value='".$row["id"]."'>".$row["categoria"]."</option>";
-                  }
-                }
-              } else {
-                echo "0 resultados";
-              }
-        ?>
-        </select>  
-        <br>
-        <input type="submit" value="Guardar edición">
-        <a href="index.php"><button type="button">Anular edicion</button></a>
-        <?php endif; ?>
 
     </form>    
     <p>LISTA DE ORDENES DE TRABAJO</p>
     <p>PENDIENTES</p>
 
+    <table id="tablaOrdenes" class="container-ordenes" class="table table-striped sampleTable">
+    <thead>
+    <tr>
+      <th>NºOrden</th>
+      <th>Tipo de trabajo</th>
+      <th>Fecha de creacion</th>
+      <th>Estado</th>
+      <th>Accion</th>
+
+    </tr>
+    </thead>
+    <tbody>
     <?php
         //listar ordenes no terminadas
-        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE terminada=0 && categorias.id=idCategoria";
+        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE categorias.id=idCategoria";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
 
             while($row = mysqli_fetch_assoc($result)) {
-              echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]." <a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></div> <br>";
-            }
-          } else {
-            echo "0 resultados";
-          }
-         
-    ?>
-    <p>FINALIZADAS</p>
-    <?php
-        //listar ordenes terminadas
-        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE terminada=1 && categorias.id=idCategoria";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
+              echo "<tr>";
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["id"]. "</td>";
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaCreacion"]. "</td>";
+              if($row["terminada"]==0){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
 
-            while($row = mysqli_fetch_assoc($result)) {
-            echo "<div id='".$row["id"]."'> Id: " . $row["id"]. " Nombre: " . $row["nombre"]. " Categoria:" . $row["categoria"]. " Creacion:" . $row["fechaCreacion"]. " Edicion:" . $row["fechaEdicion"]. " Termino:" . $row["fechaTermino"]." <a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dejar pendiente</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></div> <br>";
-
-            }
-          } else {
-            echo "0 resultados";
-          }
-         
-    ?>
-    <p>REPORTE</p>
-    <form action="./recursos/reporte.php" method="POST">
-            Opciones Filtro:
-          <br>
-
-          <label for="">Categoria: </label>
-          <select name="categoriaFiltro" id="categoriaFiltro">
-            <option selected="selected" value="todas">todas</option>
-            <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
-                }
-              } else {
-                echo "0 resultados";
               }
-            ?>
-          </select>
+              else{
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dejar pendiente</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
+
+              }
 
 
-          <br>
-          <input type='hidden' value='' name='porFecha'>
-          <input type="checkbox" id="porFecha" name="porFecha" value="Activado">
-
-          <select name="fechaFiltro" id="fechaFiltro">
-            <option selected="selected" value="fechaCreacion">fechaCreacion</option>
-            <option value="fechaEdicion">fechaEdicion</option>
-          </select>
-          <br>
-          <label for="" id="rangoFecha">
-              Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
-              <br>
-              Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
-          </label>
-          <br>
-          <label for="">
-            Opcion reporte:
-            <select name="reporte" id="reporte">
-            <option selected="selected" value="ver">Ver</option>
-            <option value="descargar">Descargar</option>
-            </select>
-          </label>
-          <br>
-          <button>Obtener reporte</button>
-    </form>
-    <button id="descargarCanvas">
-      Descargar PDF
-    </button>
-    <button id="verCanvas">
-      Ver PDF
-    </button>
-
-    <div id="chart-container" style="position: relative; height:20vh; width:40vw;">
-      <canvas id="graphCanvas"></canvas>
-    </div>
-
-   <?php
-       
-        //listar ordenes
+              echo "</tr>";
+            }
+          } else {
+            echo "0 resultados";
+          }
+         
+    ?>
+    </tbody>
+    </table>
+   
+   <?php    
+        //listar ordenes frecuenciaCategorias
         $sql = "SELECT categorias.categoria, rs.contador as contador FROM (SELECT idCategoria, count(*) as contador FROM ordenes GROUP BY idCategoria) rs, categorias WHERE rs.idCategoria=categorias.id";
         $result = mysqli_query($conn, $sql);
-        $labels =[];
-        $cantidades= [];
-        $colores= [];
+        $labels_frecuenciaCategorias =[];
+        $cantidades_frecuenciaCategorias= [];
+        $colores_frecuenciaCategorias= [];
 
         if (mysqli_num_rows($result) > 0) {
 
             while($row = mysqli_fetch_assoc($result)) {
-              array_push($labels, "".$row["categoria"]."");
-              array_push($cantidades, "".$row["contador"]."");
+              array_push($labels_frecuenciaCategorias, "".$row["categoria"]."");
+              array_push($cantidades_frecuenciaCategorias, "".$row["contador"]."");
               
               $rgbColor= array();
               foreach(array('r', 'g', 'b') as $color){
                 $rgbColor[$color] = mt_rand(0, 255);
               }
-              array_push($colores, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+              array_push($colores_frecuenciaCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
 
             }
           } else {
             echo "0 resultados";
-          }
-         
+          } 
     ?>
+   <?php    
+        //listar ordenes costoMaterialesCategorias
+        $sql = "SELECT categorias.categoria, rs.precioMateriales as precioMateriales FROM (SELECT idCategoria, sum(precioMateriales) as precioMateriales FROM ordenes GROUP BY idCategoria) rs, categorias WHERE rs.idCategoria=categorias.id";
+        $result = mysqli_query($conn, $sql);
+        $labels_costoMaterialesCategorias =[];
+        $cantidades_costoMaterialesCategorias= [];
+        $colores_costoMaterialesCategorias= [];
 
-   
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+              array_push($labels_costoMaterialesCategorias, "".$row["categoria"]."");
+              array_push($cantidades_costoMaterialesCategorias, "".$row["precioMateriales"]."");
+              
+              $rgbColor= array();
+              foreach(array('r', 'g', 'b') as $color){
+                $rgbColor[$color] = mt_rand(0, 255);
+              }
+              array_push($colores_costoMaterialesCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+
+            }
+          } else {
+            echo "0 resultados";
+          } 
+    ?>
+<?php    
+        //listar ordenes costoFuncionariosEjecutivosCategorias
+        $sql = "SELECT categorias.categoria, precioFuncionariosEjecutores FROM (SELECT idCategoria, sum(precioFuncionariosEjecutores*horasHombre) as precioFuncionariosEjecutores FROM ordenes GROUP BY idCategoria) rs, categorias WHERE rs.idCategoria=categorias.id";
+        $result = mysqli_query($conn, $sql);
+        $labels_costoFuncionariosEjecutivosCategorias =[];
+        $cantidades_costoFuncionariosEjecutivosCategorias= [];
+        $colores_costoFuncionariosEjecutivosCategorias= [];
+
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+              array_push($labels_costoFuncionariosEjecutivosCategorias, "".$row["categoria"]."");
+              array_push($cantidades_costoFuncionariosEjecutivosCategorias, "".$row["precioFuncionariosEjecutores"]."");
+              
+              $rgbColor= array();
+              foreach(array('r', 'g', 'b') as $color){
+                $rgbColor[$color] = mt_rand(0, 255);
+              }
+              array_push($colores_costoFuncionariosEjecutivosCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+
+            }
+          } else {
+            echo "0 resultados";
+          } 
+?>
+<?php    
+        //listar ordenes costoTotalCategorias
+        $sql = "SELECT categorias.categoria, costosTotal FROM (SELECT idCategoria, sum(costoTotal) as costosTotal FROM ordenes GROUP BY idCategoria) rs, categorias WHERE rs.idCategoria=categorias.id";
+        $result = mysqli_query($conn, $sql);
+        $labels_costoTotalCategorias =[];
+        $cantidades_costoTotalCategorias= [];
+        $colores_costoTotalCategorias= [];
+
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+              array_push($labels_costoTotalCategorias, "".$row["categoria"]."");
+              array_push($cantidades_costoTotalCategorias, "".$row["costosTotal"]."");
+              
+              $rgbColor= array();
+              foreach(array('r', 'g', 'b') as $color){
+                $rgbColor[$color] = mt_rand(0, 255);
+              }
+              array_push($colores_costoTotalCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+
+            }
+          } else {
+            echo "0 resultados";
+          } 
+?>
+<?php    
+        //listar ordenes frecuenciaOrdenesPorHoras
+        $sql = "SELECT horasHombre, count(*) as frecuenciaHoras FROM ordenes GROUP BY horasHombre";
+        $result = mysqli_query($conn, $sql);
+        $labels_frecuenciaOrdenesPorHoras =[];
+        $cantidades_frecuenciaOrdenesPorHoras= [];
+        $colores_frecuenciaOrdenesPorHoras= [];
+
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+              array_push($labels_frecuenciaOrdenesPorHoras, "".$row["horasHombre"]."");
+              array_push($cantidades_frecuenciaOrdenesPorHoras, "".$row["frecuenciaHoras"]."");
+              
+              $rgbColor= array();
+              foreach(array('r', 'g', 'b') as $color){
+                $rgbColor[$color] = mt_rand(0, 255);
+              }
+              array_push($colores_frecuenciaOrdenesPorHoras, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+
+            }
+          } else {
+            echo "0 resultados";
+          } 
+?>
     <script>
-    const ctx = document.getElementById('graphCanvas').getContext('2d');
-    var myChart = new Chart(ctx, {
+    window.jsPDF = window.jspdf.jsPDF;
+    const bgColor ={
+      id: 'bgColor',
+      beforeDraw: (chart, options)=>{
+        const {ctx, width, height} = chart;
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0,0 ,width, height);
+        ctx.restore();
+      }
+    }
+
+    const frecuenciaCategorias = document.getElementById('frecuenciaCategorias').getContext('2d');
+    var ChartfrecuenciaCategorias = new Chart(frecuenciaCategorias, {
         type: 'bar',
         data: {
-            labels: <?php echo json_encode($labels); ?>,
+            labels: <?php echo json_encode($labels_frecuenciaCategorias); ?>,
             datasets: [{
                 label: 'Categorias',
-                data: <?php echo json_encode($cantidades); ?>,
-                backgroundColor: <?php echo json_encode($colores); ?>,
+                data: <?php echo json_encode($cantidades_frecuenciaCategorias); ?>,
+                backgroundColor: <?php echo json_encode($colores_frecuenciaCategorias); ?>,
               
                 borderWidth: 1
             }]
@@ -348,176 +516,132 @@
               }
             }
         }
+        ,plugins: [bgColor]
     });
-
-    </script>
-
-
-
-
-    <script src="./jquery/jquery-3.6.1.min.js">
-    </script>
-    <script>
-      function random_rgba() {
-          var o = Math.round, r = Math.random, s = 255;
-          return 'rgba(' + o(r()*s) + ',' + o(r()*s) + ',' + o(r()*s) + ',' + '0.7' + ')';
-      }
-      async function actualizarGrafico() {
-          await $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
-                    
-          console.log(mensaje);
-          if(mensaje === []){
-            return;
-          }
-
-          var categorias=[];
-          var contadores=[];
-          var colores= [];
-
-            JSON.parse(mensaje).forEach(element => {
-                categorias.push(element.categoria);
-                contadores.push(element.contador);
-                colores.push(random_rgba());
-           });
-
-         
-            myChart.destroy();
-            myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                    labels: categorias,
-                    datasets: [{
-                    label: 'categorias',
-                    data: contadores,
-                    backgroundColor: colores, 
-                    borderWidth: 1
-                    }]
-          },
-            options: {
-              scales: {
-                yAxes: {
+    const costoMaterialesCategorias = document.getElementById('costoMaterialesCategorias').getContext('2d');
+    var ChartcostoMaterialesCategorias = new Chart(costoMaterialesCategorias, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labels_costoMaterialesCategorias); ?>,
+            datasets: [{
+                label: 'Categorias',
+                data: <?php echo json_encode($cantidades_costoMaterialesCategorias); ?>,
+                backgroundColor: <?php echo json_encode($colores_costoMaterialesCategorias); ?>,
+              
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+              yAxes: {
                   ticks: {
                      stepSize: 1,
                   }
-                }
               }
             }
-          });   
-
-          
-          });
-      
-        
         }
-
-
-
-
-
-
-
-
-
-
-        $("#rangoFecha").hide();
-
-        $(function() {    
-
-        $("#formOrdenes").css('background-color','#DAF7A6')
-        $('#<?php echo $id; ?>').css('color','blue');
-        $( "#porFecha" ).click(function() {
-          $("#rangoFecha").toggle();
-        });
-        
-
-        $("input[type='date'], input[type='time'], #fechaFiltro").on('change', function() {
-          $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
-                    
-            console.log(mensaje);
-          
-          if(mensaje === []){
-            return;
-          }
-
-          var categorias=[];
-          var contadores=[];
-          var colores= [];
-
-            JSON.parse(mensaje).forEach(element => {
-                categorias.push(element.categoria);
-                contadores.push(element.contador);
-                colores.push(random_rgba());
-           });
-
-         
-            myChart.destroy();
-            myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                    labels: categorias,
-                    datasets: [{
-                    label: 'categorias',
-                    data: contadores,
-                    backgroundColor: colores, 
-                    borderWidth: 1
-                    }]
-          },
-            options: {
-              scales: {
-                yAxes: {
+        ,plugins: [bgColor]
+    });
+    const costoFuncionariosEjecutivosCategorias = document.getElementById('costoFuncionariosEjecutivosCategorias').getContext('2d');
+    var ChartcostoFuncionariosEjecutivosCategorias = new Chart(costoFuncionariosEjecutivosCategorias, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labels_costoFuncionariosEjecutivosCategorias); ?>,
+            datasets: [{
+                label: 'Categorias',
+                data: <?php echo json_encode($cantidades_costoFuncionariosEjecutivosCategorias); ?>,
+                backgroundColor: <?php echo json_encode($colores_costoFuncionariosEjecutivosCategorias); ?>,
+              
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+              yAxes: {
                   ticks: {
                      stepSize: 1,
                   }
-                }
               }
             }
-          });   
+        }
+        ,plugins: [bgColor]
+    });
+    const costoTotalCategorias = document.getElementById('costoTotalCategorias').getContext('2d');
+    var ChartcostoTotalCategorias = new Chart(costoTotalCategorias, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labels_costoTotalCategorias); ?>,
+            datasets: [{
+                label: 'Categorias',
+                data: <?php echo json_encode($cantidades_costoTotalCategorias); ?>,
+                backgroundColor: <?php echo json_encode($colores_costoTotalCategorias); ?>,
+              
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+              yAxes: {
+                  ticks: {
+                     stepSize: 1,
+                  }
+              }
+            }
+        }
+        ,plugins: [bgColor]
+    });
+    const frecuenciaOrdenesPorHoras = document.getElementById('frecuenciaOrdenesPorHoras').getContext('2d');
+    var ChartfrecuenciaOrdenesPorHoras = new Chart(frecuenciaOrdenesPorHoras, {
+        type: 'line',
+        data: {
+            labels: <?php echo json_encode($labels_frecuenciaOrdenesPorHoras); ?>,
+            datasets: [{
+                label: 'Frecuencia',
+                data: <?php echo json_encode($cantidades_frecuenciaOrdenesPorHoras); ?>,
+                backgroundColor: <?php echo json_encode($colores_frecuenciaOrdenesPorHoras); ?>,
+                fill: {
+                target: 'origin',
+                above: 'rgb(173,216,230)',   // Area will be red above the origin
+                below: 'rgb(255, 0, 255)'    // And blue below the origin
+                },
+                borderWidth: 1,
+                pointRadius: 5
 
-          
-          });
-      
+            }]
+        },
+        options: {
+              yAxes: {
+                  ticks: {
+                     stepSize: 1,
+                  }
+              }
+        }
         
-        });
-
-        });  
-
-
+        ,plugins: [bgColor]
+    });
     </script>
+
+
+
+    
     <script>
+    $(function(){
+      $("#formOrdenes").css('background-color','#DAF7A6')
+      $('#<?php echo $id; ?>').css('color','blue');
+     
+    })
+    </script>
+
+
+    <script>
+      $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+      });
+
+
       let materiales = new Map();
       let funcionariosEjecutores = new Map();
       
-
-       $("#descargarCanvas").click(function(){
-        var canvas=$("#graphCanvas");
-        
-      var canvasImg = canvas[0].toDataURL("image/png", 1.0);
-      var doc = new jsPDF();
-      doc.setFillColor(0, 0,0,0);
-      doc.rect(10, 10, 150, 160, "F");
-      doc.addImage(canvasImg, 'png', 10, 10, 150, 100);
-      doc.save('sample.pdf');
-
-
-
-        });
-        $("#verCanvas").click(function(){
-        var canvas=$("#graphCanvas");
-        
-      var canvasImg = canvas[0].toDataURL("image/png", 1.0);
-      var doc = new jsPDF();
-
-      doc.setFillColor(0, 0,0,0);
-      doc.rect(10, 10, 150, 160, "F");
-      doc.addImage(canvasImg, 'png', 10, 10, 150, 100);
-      var string = doc.output('datauristring');
-      var embed = "<embed width='100%' height='100%' src='" + string + "'/>"
-      var x = window.open();
-      x.document.open();
-      x.document.write(embed);
-      x.document.close();
-
-        });
       $("#opcionesCategorias").hide();
 
       function cantidadMaterial(value,precio,nombre){
@@ -529,179 +653,22 @@
 
         $("#precioMateriales").val(precioTotal);
         }
-  /*       function cantidadFuncionariosEjecutores(value,rut){
-        funcionariosEjecutores.set(rut,value);
-        precioTotal=0;
-        funcionariosEjecutores.forEach((values,keys)=>{
-          precioTotal+=parseInt(values);
+
+        $(document).ready(function() {
+        $("#tablaOrdenes").fancyTable({
+          inputPlaceholder: 'Buscar',
+          inputStyle: 'color:black;',
+          pagination: true,
+          perPage: 10,
+          sortable: true
+
+
+        });	
         });
-
-        $("#precioFuncionariosEjecutores").val(precioTotal);
-        } */
-
-      $(function() {
-        $( "#btnOpcionesCategorias" ).click(function() {
-          $("#opcionesCategorias").toggle();          
-        });
-
-
-        $("#selectMateriales").on("change",function(e){
-            var optionsSelected=$("#selectMateriales option:selected",this);
-
-            precioTotal=0;
-            $("#cantidadMateriales").empty();
-            materiales.clear();
-            for (let index = 0; index < optionsSelected.prevObject[0].options.length; index++) {
-              if(optionsSelected.prevObject[0].options[index].selected){
-
-                materiales.set(optionsSelected.prevObject[0].options[index].value, optionsSelected.prevObject[0].options[index].attributes.precio.value);
-                $("#cantidadMateriales").append( `material: ${optionsSelected.prevObject[0].options[index].value} cantidad : <input type='number' value='1' onChange='cantidadMaterial(value,${optionsSelected.prevObject[0].options[index].attributes.precio.value},"${optionsSelected.prevObject[0].options[index].value}")'/> <br>` );
-              }
-            }
-            materiales.forEach((values,keys)=>{
-                  precioTotal+=parseInt(values);
-                });
-            $("#precioMateriales").val(precioTotal);
-
-
-          });
-          $("#selectFuncionariosEjecutores").on("change",function(e){
-            var optionsSelected=$("#selectFuncionariosEjecutores option:selected",this);
-
-            precioTotal=0;
-            $("#cantidadFuncionariosEjecutores").empty();
-            funcionariosEjecutores.clear();
-            for (let index = 0; index < optionsSelected.prevObject[0].options.length; index++) {
-              if(optionsSelected.prevObject[0].options[index].selected){
-                funcionariosEjecutores.set(optionsSelected.prevObject[0].options[index].value, optionsSelected.prevObject[0].options[index].attributes.precioHora.value);
-
-                $("#cantidadFuncionariosEjecutores").append( `funcionario: ${optionsSelected.prevObject[0].options[index].value} precioHora : ${optionsSelected.prevObject[0].options[index].attributes.precioHora.value} <br>` );
-              }
-            }
-            funcionariosEjecutores.forEach((values,keys)=>{
-                  precioTotal+=parseInt(values);
-                });
-            $("#precioFuncionariosEjecutores").val(precioTotal);
-
-          });
-
-      });
-      async function  eliminarCategoria(id){
-         await $.get(`./recursos/categorias.php?modo=eliminar&id=${id}`, function(mensaje, estado){   
-        $("div").remove(".categorias");  
-        $("option").remove(".categorias");            
-          
-        JSON.parse(mensaje).forEach(element => {
-                $("#opcionesCategorias").append(`<div class='categorias'>${element.categoria} <button type='button' onclick='eliminarCategoria(${element.id})'>Eliminar</button> </div>`);
-                $("#categoria").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
-                $("#categoriaFiltro").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
-        });
-        });
-        $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
-                    
-                    console.log(mensaje);
-                    if(mensaje === []){
-                      return;
-                    }
-          
-                    var categorias=[];
-                    var contadores=[];
-                    var colores= [];
-          
-                      JSON.parse(mensaje).forEach(element => {
-                          categorias.push(element.categoria);
-                          contadores.push(element.contador);
-                          colores.push(random_rgba());
-                     });
-          
-                   
-                      myChart.destroy();
-                      myChart = new Chart(ctx, {
-                              type: 'bar',
-                              data: {
-                              labels: categorias,
-                              datasets: [{
-                              label: 'categorias',
-                              data: contadores,
-                              backgroundColor: colores, 
-                              borderWidth: 1
-                              }]
-                    },
-                      options: {
-                        scales: {
-                          yAxes: {
-                            ticks: {
-                               stepSize: 1,
-                            }
-                          }
-                        }
-                      }
-                    });   
-          
-                    
-                    });
-      }
-      async function agregarCategoria(){
-        var Nombrecategoria=$("#nombreCategoria").val();
-        await $.get(`./recursos/categorias.php?modo=agregar&nombre=${Nombrecategoria}`, function(mensaje, estado){   
-        
-        $("div").remove(".categorias");    
-        $("option").remove(".categorias");            
-        
-        JSON.parse(mensaje).forEach(element => {
-                $("#opcionesCategorias").append(`<div class='categorias'>${element.categoria} <button type='button' onclick='eliminarCategoria(${element.id})'>Eliminar</button> </div>`);
-                $("#categoria").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
-                $("#categoriaFiltro").append(`<option value='${element.id}' class='categorias'>${element.categoria}</option>`);
-
-
-        });
-        });
-        $.get(`./recursos/ordenesGrafico.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
-                    
-                    console.log(mensaje);
-                    if(mensaje === []){
-                      return;
-                    }
-          
-                    var categorias=[];
-                    var contadores=[];
-                    var colores= [];
-          
-                      JSON.parse(mensaje).forEach(element => {
-                          categorias.push(element.categoria);
-                          contadores.push(element.contador);
-                          colores.push(random_rgba());
-                     });
-          
-                   
-                      myChart.destroy();
-                      myChart = new Chart(ctx, {
-                              type: 'bar',
-                              data: {
-                              labels: categorias,
-                              datasets: [{
-                              label: 'categorias',
-                              data: contadores,
-                              backgroundColor: colores, 
-                              borderWidth: 1
-                              }]
-                    },
-                      options: {
-                        scales: {
-                          yAxes: {
-                            ticks: {
-                               stepSize: 1,
-                            }
-                          }
-                        }
-                      }
-                    });   
-          
-                    
-                    });
-        $("#nombreCategoria").val("");
-      }
+       
+      
     </script>
+    <script src="./js/generacionPDF.js"></script> 
 </body>
 </html>
 

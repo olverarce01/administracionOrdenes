@@ -39,11 +39,45 @@
     margin: 0 10px;
     padding: 10px;
     font-size: 20px;
-    background-color: lightslategray;
-}
-.container-ordenes{
+/*     background-color: lightslategray;
+ */}
+/* .container-ordenes{
     background-color: rgb(88, 100, 113);
     color: white;
+} */
+.cardDashboard{
+    margin: 20px;
+    border-radius: 15px;
+    transition: all 0.3s;
+}
+
+.cardDashboard:hover{
+    background-color: rgb(229, 238, 254);
+}
+
+#container-cards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: baseline;
+}
+
+.cardDash{
+    display: flex;
+    flex-wrap: wrap;
+}
+.pDash{
+    font-weight: bolder;
+    font-size: 25px;
+    margin: auto;
+}
+
+img{
+    margin: auto;
+}
+
+#tablaOrdenes{
+    width: 60%;
+    margin: 0 auto;
 }
 
 #chart-container{
@@ -58,6 +92,14 @@
 }
 .btn-light{
     background-color: lightslategray;
+}
+button{
+    color: white;
+    border-style: none;
+    border-radius: 5px;
+    background-color: lightslategray;
+    padding: 5px;
+    margin: 5px;
 }
 
 @media (max-width: 1000px) {

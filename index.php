@@ -4,6 +4,7 @@
     if (isset($_POST['accion']) && $_POST['accion']=='crearOrden') {
         $nombre = $_POST['nombre'];
         $categoria = $_POST['categoria'];
+        $prioridad = $_POST['prioridad'];
         $precioMateriales=$_POST['precioMateriales'];
         $tipoTrabajo=$_POST['tipoTrabajo'];
         $observacion=$_POST['observacion'];
@@ -32,8 +33,8 @@
           $funcionariosEjecutores .=$selectedOption.", ";
         }
         
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, materiales, precioMateriales, tipoTrabajo, observacion, solicitudCompra,funcionarioEncargado, fechaAsignacion,funcionariosEjecutores,precioFuncionariosEjecutores, horasHombre, cantidadPersonasInvolucradas, costoTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'sisissssssiiii',$nombre, $categoria, $materiales, $precioMateriales, $tipoTrabajo, $observacion, $solicitudCompra, $funcionarioEncargado, $fechaAsignacion,$funcionariosEjecutores,$precioFuncionariosEjecutores, $horasHombre, $cantidadPersonasInvolucradas, $costoTotal);
+        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, prioridad, materiales, precioMateriales, tipoTrabajo, observacion, solicitudCompra,funcionarioEncargado, fechaAsignacion,funcionariosEjecutores,precioFuncionariosEjecutores, horasHombre, cantidadPersonasInvolucradas, costoTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, 'siisissssssiiii',$nombre, $categoria, $prioridad, $materiales, $precioMateriales, $tipoTrabajo, $observacion, $solicitudCompra, $funcionarioEncargado, $fechaAsignacion,$funcionariosEjecutores,$precioFuncionariosEjecutores, $horasHombre, $cantidadPersonasInvolucradas, $costoTotal);
         echo "Se agrego correctamente: ".$nombre." a la base de datos";
         
         mysqli_stmt_execute($stmt);
@@ -106,6 +107,7 @@
     <title>administracionOrdenes</title>
 </head>
 <body>
+
 <p>REPORTE</p>
     <form>
             Opciones Filtro:
@@ -155,6 +157,173 @@
       </div>
     </div>
 
+  <div id="container-cards">
+    <div class="card cardDashboard" style="width: 18rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=1";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-success'>".$row["contador"]." Terminadas</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+      </div>
+    </div>
+
+
+    <div class="card cardDashboard" style="width: 18rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=0";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-warning'>".$row["contador"]." Pendientes</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509817.png" alt="" width="45" height="45">
+      </div>
+    </div>
+
+    <div class="card cardDashboard" style="width: 18rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT count(*) as contador FROM ordenes WHERE prioridad=0";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-danger'>".$row["contador"]." Urgentes</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+      </div>
+    </div>
+
+    <div class="card cardDashboard" style="width: 30rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT sum(costoTotal) as total FROM ordenes";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Ordenes</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/781/781902.png" alt="" width="45" height="45">
+      </div>
+    </div>
+    <div class="card cardDashboard" style="width: 30rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT sum(precioMateriales) as total FROM ordenes";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Materiales</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/3371/3371713.png" alt="" width="45" height="45">
+      </div>
+    </div>
+    <div class="card cardDashboard" style="width: 30rem;">
+      <div class="card-body cardDash">
+        <?php
+            $sql = "SELECT sum(precioFuncionariosEjecutores*horasHombre) as total FROM ordenes";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+    
+                while($row = mysqli_fetch_assoc($result)) {
+                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>ManoObra</p>";
+                }
+              } else {
+                echo "0 resultados";
+              }
+            ?>
+        <img src="https://cdn-icons-png.flaticon.com/512/7424/7424725.png" alt="" width="45" height="45">
+      </div>
+    </div>
+  </div>
+    <table id="tablaOrdenes" class="container-ordenes" class="table table-striped sampleTable">
+    <thead>
+    <tr>
+      <th>NºOrden</th>
+      <th>Prioridad</th>
+      <th>Tipo de trabajo</th>
+      <th>Fecha de Asignacion</th>
+      <th>Estado</th>
+      <th>Accion</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+        //listar ordenes no terminadas
+        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaAsignacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+
+            while($row = mysqli_fetch_assoc($result)) {
+              echo "<tr>";
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["id"]. "</td>";
+              if($row["prioridad"]==0){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-danger'>Alta</span> </td>";
+              }
+              else if($row["prioridad"]==1){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-warning'>Media Alta</span> </td>";
+              }
+              else if($row["prioridad"]==2){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-primary'>Media</span> </td>";
+              }
+              else if($row["prioridad"]==3){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-info'>Media Baja</span> </td>";
+              }else{
+                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-success'>Baja</span> </td>";
+              }
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
+              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaAsignacion"]. "</td>";
+              if($row["terminada"]==0){
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
+
+              }
+              else{
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
+                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dar pendiente</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
+
+              }
+
+
+              echo "</tr>";
+            }
+          } else {
+            echo "0 resultados";
+          }
+         
+    ?>
+    </tbody>
+</table>
 
 
 
@@ -166,6 +335,19 @@
         <br>
         <label for="">Nombre Orden: </label>
         <input type="text" name="nombre" placeholder="nombre">
+        <br>
+        <label for="">
+        Prioridad:
+          <select name="prioridad" id="prioridad">
+            <option value=0>Alta</option>
+            <option value=1>Media Alta</option>
+            <option value=2>Media</option>
+            <option value=3>Media Baja</option>
+            <option value=4>Baja</option>
+            
+          </select> 
+              
+        </label>
         <br>
         <label for="">Tipo de Servicio: </label>
         <select name="categoria" id="categoria">
@@ -308,54 +490,8 @@
         <input type="submit" value="Crear Orden">
         
 
-    </form>    
-    <p>LISTA DE ORDENES DE TRABAJO</p>
-    <p>PENDIENTES</p>
-
-    <table id="tablaOrdenes" class="container-ordenes" class="table table-striped sampleTable">
-    <thead>
-    <tr>
-      <th>NºOrden</th>
-      <th>Tipo de trabajo</th>
-      <th>Fecha de creacion</th>
-      <th>Estado</th>
-      <th>Accion</th>
-
-    </tr>
-    </thead>
-    <tbody>
-    <?php
-        //listar ordenes no terminadas
-        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino FROM ordenes, categorias WHERE categorias.id=idCategoria";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
-
-            while($row = mysqli_fetch_assoc($result)) {
-              echo "<tr>";
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["id"]. "</td>";
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaCreacion"]. "</td>";
-              if($row["terminada"]==0){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
-
-              }
-              else{
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dejar pendiente</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
-
-              }
-
-
-              echo "</tr>";
-            }
-          } else {
-            echo "0 resultados";
-          }
-         
-    ?>
-    </tbody>
-    </table>
+    </form>        
+   
    
    <?php    
         //listar ordenes frecuenciaCategorias

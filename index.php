@@ -1,69 +1,5 @@
 <?php 
-    include "./recursos/conexion.php";
-    //agregar orden
-    if (isset($_POST['accion']) && $_POST['accion']=='crearOrden') {
-        $nombre = $_POST['nombre'];
-        $categoria = $_POST['categoria'];
-        $prioridad = $_POST['prioridad'];
-        $precioMateriales=$_POST['precioMateriales'];
-        $tipoTrabajo=$_POST['tipoTrabajo'];
-        $observacion=$_POST['observacion'];
-        $solicitudCompra=$_POST['solicitudCompra'];
-        $funcionarioEncargado=$_POST['funcionarioEncargado'];
-
-        $dateAsignacion=$_POST['dateAsignacion'];
-        $timeAsignacion=$_POST['timeAsignacion'];
-        $fechaAsignacion= date('Y-m-d H:i:s', strtotime("$dateAsignacion $timeAsignacion"));
-
-
-        $precioFuncionariosEjecutores=$_POST['precioFuncionariosEjecutores'];
-        $materiales="";
-        $funcionariosEjecutores="";
-        $horasHombre=$_POST['horasHombre'];
-        $cantidadPersonasInvolucradas=$_POST['cantidadPersonasInvolucradas'];
-
-        $costoTotal=$precioMateriales+($precioFuncionariosEjecutores*$horasHombre);
-
-        foreach ($_POST['materiales'] as $selectedOption)
-        {
-          $materiales .=$selectedOption.", ";
-        }
-        foreach ($_POST['funcionariosEjecutores'] as $selectedOption)
-        {
-          $funcionariosEjecutores .=$selectedOption.", ";
-        }
-        
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, prioridad, materiales, precioMateriales, tipoTrabajo, observacion, solicitudCompra,funcionarioEncargado, fechaAsignacion,funcionariosEjecutores,precioFuncionariosEjecutores, horasHombre, cantidadPersonasInvolucradas, costoTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'siisissssssiiii',$nombre, $categoria, $prioridad, $materiales, $precioMateriales, $tipoTrabajo, $observacion, $solicitudCompra, $funcionarioEncargado, $fechaAsignacion,$funcionariosEjecutores,$precioFuncionariosEjecutores, $horasHombre, $cantidadPersonasInvolucradas, $costoTotal);
-        echo "Se agrego correctamente: ".$nombre." a la base de datos";
-        
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
-    }
-    if(isset($_GET['terminar'])){
-        $id= $_GET['terminar'];
-
-
-        $sql = "UPDATE ordenes SET terminada= NOT terminada  WHERE id=".$id."";
-
-        if (mysqli_query($conn, $sql)) {
-            echo "Orden Terminada";
-          } else {
-            echo "Error al Terminar: " . mysqli_error($conn);
-          }
-        
-        if($_GET['fechaTermino']){
-            $sql = "UPDATE ordenes SET fechaTermino= CURRENT_TIMESTAMP  WHERE id=".$id."";
-
-        }else{
-            $sql = "UPDATE ordenes SET fechaTermino= NULL   WHERE id=".$id."";
-        }
-        if (mysqli_query($conn, $sql)) {
-          echo "Orden Terminada";
-        } else {
-          echo "Error al Terminar: " . mysqli_error($conn);
-        }
-    }
+    include "./recursos/conexion.php";   
     $id=-1;
 ?>
 
@@ -305,12 +241,12 @@
               echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaAsignacion"]. "</td>";
               if($row["terminada"]==0){
                 echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=1'><button>Terminar</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
+                echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
 
               }
               else{
                 echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><a href='index.php?terminar=".$row["id"]."&fechaTermino=0'><button>Dar pendiente</button></a> <a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
+                echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
 
               }
 
@@ -325,173 +261,6 @@
     </tbody>
 </table>
 
-
-
-    <p>FORMULARIO</p>
-    <p>¡Crea una orden de trabajo!</p>
-  
-    <form action="./" method="post" id="formOrdenes">
-        <input type="hidden" name="accion" value="crearOrden">
-        <br>
-        <label for="">Nombre Orden: </label>
-        <input type="text" name="nombre" placeholder="nombre">
-        <br>
-        <label for="">
-        Prioridad:
-          <select name="prioridad" id="prioridad">
-            <option value=0>Alta</option>
-            <option value=1>Media Alta</option>
-            <option value=2>Media</option>
-            <option value=3>Media Baja</option>
-            <option value=4>Baja</option>
-            
-          </select> 
-              
-        </label>
-        <br>
-        <label for="">Tipo de Servicio: </label>
-        <select name="categoria" id="categoria">
-            <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        </select>
-        <img src="./recursos/mas.png" width="20" id="btnOpcionesCategorias">
-        <div id="opcionesCategorias">
-          <br>
-          <input type="text" name="nombreCategoria" id="nombreCategoria" placeholder="agrega una categoria"><button type="button" onclick="agregarCategoria()">Agregar Categoria</button>
-          <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<div class='categorias'>".$row["categoria"]." <button type='button' onclick='eliminarCategoria(".$row["id"].")'>Eliminar</button> </div>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-            <br>
-        </div>
-        <br>
-        <label for="">Materiales: 
-
-        
-          <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
-          <?php
-            $sql = "SELECT * FROM materiales";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row['nombre']."' precio='".$row['precioUnitario']."'>".$row['nombre']." precioUnitario: ".$row['precioUnitario']."</option>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-          </select>
-        </label>
-        <div id="cantidadMateriales">
-
-        </div>
-        <label for="">
-        Total precio material:
-        <input type="number" name="precioMateriales" id="precioMateriales" value="" readonly>
-
-        </label>
-        <br>
-        <label for="">
-        Tipo de trabajo:
-          <select name="tipoTrabajo" id="tipoTrabajo">
-            <option value="interno">Interno</option>
-            <option value="externo">Externo</option>
-          </select> 
-              
-        </label>
-        <br>
-        <label for="">
-        Observacion: 
-              <input type="text" name="observacion" id="observacion">
-        </label>
-        <br>
-        <label for="">
-        Solicitud de compra: 
-              <input type="text" name="solicitudCompra" id="solicitudCompra">
-        </label>
-        <br>
-        <label for="">
-          Funcionario encargado:
-          <select name="funcionarioEncargado" id="funcionarioEncargado" class="js-example-basic-single">
-          <?php
-            $sql = "SELECT * FROM funcionarios";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row['rut']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."</option>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-          </select>
-        </label>
-        <br>
-
-        <label for="">
-        Fecha de asignacion del trabajo:
-          <input type="date" name="dateAsignacion" id="dateAsignacion">
-          <input type="time" name="timeAsignacion" id="timeAsignacion">
-        </label>
-
-        <br>
-        <label for="">Funcionarios Ejecutores:    
-        <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
-        <?php
-          $sql = "SELECT * FROM funcionarios";
-          $result = mysqli_query($conn, $sql);
-          if (mysqli_num_rows($result) > 0) {
-
-              while($row = mysqli_fetch_assoc($result)) {
-                echo "<option value='".$row['rut']."' cargo='".$row['cargo']."' precioHora='".$row['precioHora']."'>rut: ".$row['rut']." nombre: ".$row['nombre']." cargo: ".$row['cargo']." precioHora: ".$row['precioHora']."</option>";
-              }
-            } else {
-              echo "0 resultados";
-            }
-          ?>
-        </select>
-        </label>
-        <label for="">
-        Total precioHora Ejecutores:
-        <input type="number" name="precioFuncionariosEjecutores" id="precioFuncionariosEjecutores" value="" readonly>
-
-        </label>
-
-        <br>
-        <label for="">
-        Nº Horas Hombre: 
-              <input type="number" name="horasHombre" id="horasHombre">
-        </label>
-        <label for="">
-        Cantidad de personas involucradas: 
-              <input type="number" name="cantidadPersonasInvolucradas" id="cantidadPersonasInvolucradas" value="" readonly>
-        </label>
-        <br>
-        <input type="submit" value="Crear Orden">
-        
-
-    </form>        
-   
    
    <?php    
         //listar ordenes frecuenciaCategorias
@@ -795,7 +564,7 @@
           inputPlaceholder: 'Buscar',
           inputStyle: 'color:black;',
           pagination: true,
-          perPage: 10,
+          perPage: 6,
           sortable: true
 
 

@@ -1,40 +1,24 @@
 <?php
     include "./recursos/conexion.php";
     if (isset($_POST['accion']) && $_POST['accion']=='crearOrden') {
-        $nombre = $_POST['nombre'];
+        $ubicacion = $_POST['ubicacion'];
+        if(isset($_POST['anexo'])){
+          $anexo = $_POST['anexo'];
+        }else{
+          $anexo = 0;
+        }
         $categoria = $_POST['categoria'];
         $prioridad = $_POST['prioridad'];
-        $precioMateriales=$_POST['precioMateriales'];
-        $tipoTrabajo=$_POST['tipoTrabajo'];
-        $observacion=$_POST['observacion'];
-        $solicitudCompra=$_POST['solicitudCompra'];
-        $funcionarioEncargado=$_POST['funcionarioEncargado'];
-
-        $dateAsignacion=$_POST['dateAsignacion'];
-        $timeAsignacion=$_POST['timeAsignacion'];
-        $fechaAsignacion= date('Y-m-d H:i:s', strtotime("$dateAsignacion $timeAsignacion"));
+        $centroCosto = $_POST['centroCosto'];
+        $funcionarioEncargado=$_POST['funcionarioContacto'];
+        $resumen = $_POST['resumen'];
+        $detalle = $_POST['detalle'];
 
 
-        $precioFuncionariosEjecutores=$_POST['precioFuncionariosEjecutores'];
-        $materiales="";
-        $funcionariosEjecutores="";
-        $horasHombre=$_POST['horasHombre'];
-        $cantidadPersonasInvolucradas=$_POST['cantidadPersonasInvolucradas'];
 
-        $costoTotal=$precioMateriales+($precioFuncionariosEjecutores*$horasHombre);
-
-        foreach ($_POST['materiales'] as $selectedOption)
-        {
-          $materiales .=$selectedOption.", ";
-        }
-        foreach ($_POST['funcionariosEjecutores'] as $selectedOption)
-        {
-          $funcionariosEjecutores .=$selectedOption.", ";
-        }
-        
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (nombre, idCategoria, prioridad, materiales, precioMateriales, tipoTrabajo, observacion, solicitudCompra,funcionarioEncargado, fechaAsignacion,funcionariosEjecutores,precioFuncionariosEjecutores, horasHombre, cantidadPersonasInvolucradas, costoTotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'siisissssssiiii',$nombre, $categoria, $prioridad, $materiales, $precioMateriales, $tipoTrabajo, $observacion, $solicitudCompra, $funcionarioEncargado, $fechaAsignacion,$funcionariosEjecutores,$precioFuncionariosEjecutores, $horasHombre, $cantidadPersonasInvolucradas, $costoTotal);
-        echo "Se agrego correctamente: ".$nombre." a la base de datos";
+        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (ubicacion, anexo,idCategoria, prioridad, centroCosto, funcionarioContacto, resumen, detalle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        mysqli_stmt_bind_param($stmt, 'siiissss',$ubicacion, $anexo,$categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle);
+        echo "Se agrego correctamente: la orden a la base de datos";
         
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
@@ -76,195 +60,151 @@
     <script src="./js/actualizarGrafico.js"></script> 
     <script src="./js/categorias.js"></script> 
     <script src="./js/selectsDinamicos.js"></script> 
+
+    <link rel="stylesheet" href="./css/gestionGenerador.css">
+
     <title>Document</title>
 </head>
-<body>
-<p>FORMULARIO</p>
-    <p>Gestion generador de ordenes</p>
-  
-    <form action="./gestionGenerador.php" method="post" id="formOrdenes">
+<body>    
+    <p id="tituloForm" class="text-info">GESTION GENERADOR DE ORDENES</p>
+    <form action="./gestionGenerador.php" method="post" id="formOrdenes" class="m-5 p-3">
         <input type="hidden" name="accion" value="crearOrden">
-        <br>
-        <label for="">Nombre Orden: </label>
-        <input type="text" name="nombre" placeholder="nombre">
-        <br>
-        <label for="">
-        Prioridad:
-          <select name="prioridad" id="prioridad">
-            <option value=0>Alta</option>
-            <option value=1>Media Alta</option>
-            <option value=2>Media</option>
-            <option value=3>Media Baja</option>
-            <option value=4>Baja</option>
-            
-          </select> 
-              
-        </label>
-        <br>
-        <label for="">Tipo de Servicio: </label>
-        <select name="categoria" id="categoria">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="">UBICACION: </label>
+            <select name="ubicacion" id="ubicacion" class="w-50">
+                <?php
+                $sql = "SELECT id, nombre FROM ubicacion";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row["id"]."'> ".$row["id"]." ".$row["nombre"]."</option>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            </select>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="">ANEXO: </label>
+            <select name="anexo" id="anexo">
+                <?php
+                $sql = "SELECT id FROM ordenes";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row["id"]."'> ".$row["id"]." ".$row["nombre"]."</option>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="">CENTRO DE COSTOS: </label>
+            <select name="centroCosto" id="centroCosto" class="w-50">
+                <?php
+                $sql = "SELECT id, nombre FROM centro";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row["id"]."'> ".$row["id"]." ".$row["nombre"]."</option>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col-md-4 my-3">
+          <label for="">FUNCIONARIO CONTACTO: </label>
+            <select name="funcionarioContacto" id="funcionarioContacto" class="js-example-basic-single">
             <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        </select>
-        <img src="./recursos/mas.png" width="20" id="btnOpcionesCategorias">
-        <div id="opcionesCategorias">
-          <br>
-          <input type="text" name="nombreCategoria" id="nombreCategoria" placeholder="agrega una categoria"><button type="button" onclick="agregarCategoria()">Agregar Categoria</button>
-          <?php
-            $sql = "SELECT id, categoria FROM categorias";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<div class='categorias'>".$row["categoria"]." <button type='button' onclick='eliminarCategoria(".$row["id"].")'>Eliminar</button> </div>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-            <br>
-        </div>
-        <br>
-        <label for="">Materiales: 
+              $sql = "SELECT * FROM funcionarios";
+              $result = mysqli_query($conn, $sql);
+              if (mysqli_num_rows($result) > 0) {
 
-        
-          <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
-          <?php
-            $sql = "SELECT * FROM materiales";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row['nombre']."' precio='".$row['precioUnitario']."'>".$row['nombre']." precioUnitario: ".$row['precioUnitario']."</option>";
+                  while($row = mysqli_fetch_assoc($result)) {
+                    echo "<option value='".$row['rut']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."</option>";
+                  }
+                } else {
+                  echo "0 resultados";
                 }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
+              ?>
           </select>
-        </label>
-        <div id="cantidadMateriales">
-
-        </div>
-        <label for="">
-        Total precio material:
-        <input type="number" name="precioMateriales" id="precioMateriales" value="" readonly>
-
-        </label>
-        <br>
-        <label for="">
-        Tipo de trabajo:
-          <select name="tipoTrabajo" id="tipoTrabajo">
-            <option value="interno">Interno</option>
-            <option value="externo">Externo</option>
-          </select> 
-              
-        </label>
-        <br>
-        <label for="">
-        Observacion: 
-              <input type="text" name="observacion" id="observacion">
-        </label>
-        <br>
-        <label for="">
-        Solicitud de compra: 
-              <input type="text" name="solicitudCompra" id="solicitudCompra">
-        </label>
-        <br>
-        <label for="">
-          Funcionario encargado:
-          <select name="funcionarioEncargado" id="funcionarioEncargado" class="js-example-basic-single">
-          <?php
-            $sql = "SELECT * FROM funcionarios";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<option value='".$row['rut']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."</option>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-          </select>
-        </label>
-        <br>
-
-        <label for="">
-        Fecha de asignacion del trabajo:
-          <input type="date" name="dateAsignacion" id="dateAsignacion">
-          <input type="time" name="timeAsignacion" id="timeAsignacion">
-        </label>
-
-        <br>
-        <label for="">Funcionarios Ejecutores:    
-        <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
-        <?php
-          $sql = "SELECT * FROM funcionarios";
-          $result = mysqli_query($conn, $sql);
-          if (mysqli_num_rows($result) > 0) {
-
-              while($row = mysqli_fetch_assoc($result)) {
-                echo "<option value='".$row['rut']."' cargo='".$row['cargo']."' precioHora='".$row['precioHora']."'>rut: ".$row['rut']." nombre: ".$row['nombre']." cargo: ".$row['cargo']." precioHora: ".$row['precioHora']."</option>";
-              }
-            } else {
-              echo "0 resultados";
-            }
-          ?>
-        </select>
-        </label>
-        <label for="">
-        Total precioHora Ejecutores:
-        <input type="number" name="precioFuncionariosEjecutores" id="precioFuncionariosEjecutores" value="" readonly>
-
-        </label>
-
-        <br>
-        <label for="">
-        Nº Horas Hombre: 
-              <input type="number" name="horasHombre" id="horasHombre">
-        </label>
-        <label for="">
-        Cantidad de personas involucradas: 
-              <input type="number" name="cantidadPersonasInvolucradas" id="cantidadPersonasInvolucradas" value="" readonly>
-        </label>
-        <br>
-        <input type="submit" value="Crear Orden">
+          </div>
+          <div class="col-md-4 my-3">
+            <label for="">PRIORIDAD:</label>
+            <select name="prioridad" id="prioridad">
+              <option value=0>Alta</option>
+              <option value=1>Media Alta</option>
+              <option value=2>Media</option>
+              <option value=3>Media Baja</option>
+              <option value=4>Baja</option> 
+            </select> 
+          </div>
+          <div class="col-md-4">
+            <label for="">TIPO DE SERVICIO: </label>
+            <select name="categoria" id="categoria">
+                <?php
+                $sql = "SELECT id, categoria FROM categorias";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
         
-
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row["id"]."' class='categorias'>".$row["categoria"]."</option>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            </select>
+            <img src="./recursos/mas.png" width="20" id="btnOpcionesCategorias" class="crossRotate">
+            <div id="opcionesCategorias" class="p-2">
+              <input type="text" name="nombreCategoria" id="nombreCategoria" placeholder="agrega una categoria"><button type="button" onclick="agregarCategoria()">Agregar Categoria</button>
+              <?php
+                $sql = "SELECT id, categoria FROM categorias";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<div class='categorias'>".$row["categoria"]." <button type='button' onclick='eliminarCategoria(".$row["id"].")'>Eliminar</button> </div>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+                <br>
+            </div>
+          
+          </div>
+        </div>
+        
+      <div class="form-row">
+        <div class="col-md-4">
+          <label for="">RESUMEN: </label>
+          <input type="text" name="resumen" placeholder="resumen" required autocomplete="off">
+        </div>
+        <div class="col-md-4">
+          <label for="">DETALLE: </label>
+          <input type="text" name="detalle" placeholder="detalle" required autocomplete="off">
+        </div>
+      </div>
+        <input type="submit" value="CREAR ORDEN" class="btn btn-info">
     </form>   
 
     <script>
-      $(document).ready(function() {
-        $('.js-example-basic-single').select2();
-      });
-
-
-      let materiales = new Map();
-      let funcionariosEjecutores = new Map();
-      
+     
       $("#opcionesCategorias").hide();
 
-      function cantidadMaterial(value,precio,nombre){
-        materiales.set(nombre,value*precio);
-        precioTotal=0;
-        materiales.forEach((values,keys)=>{
-          precioTotal+=parseInt(values);
-        });
-
-        $("#precioMateriales").val(precioTotal);
-        }
-      
     </script>
 </body>
 </html>

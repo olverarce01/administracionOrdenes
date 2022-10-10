@@ -1,0 +1,16 @@
+p{
+    font-size: 30px;
+    text-align: center;
+}
+.orden{
+    border: 1px solid black;
+    margin: 10px;
+    padding: 20px;
+}
+.editando, #Cancelar, #Guardar{
+    display: none;
+    visibility: hidden;
+}
+.multiselect-dropdown{
+    width: 100px !important;
+}

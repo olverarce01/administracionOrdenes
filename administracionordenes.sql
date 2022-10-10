@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 09-10-2022 a las 20:28:51
+-- Tiempo de generación: 10-10-2022 a las 02:48:44
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -37,11 +37,35 @@ CREATE TABLE `categorias` (
 --
 
 INSERT INTO `categorias` (`id`, `categoria`) VALUES
-(45, 'produccion de piezas'),
-(53, 'regar plantas'),
-(44, 'servicios de limpieza'),
-(43, 'talleres mecanicos'),
-(52, 'ver camara');
+(45, 'PRODUCCION DE PIEZAS'),
+(44, 'SERVICIOS DE LIMPIEZA'),
+(43, 'TALLERES MECANICOS');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `centro`
+--
+
+CREATE TABLE `centro` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `centro`
+--
+
+INSERT INTO `centro` (`id`, `nombre`) VALUES
+(3794, 'ACADEMIA DE BASQUETBALL 2022'),
+(3796, 'ACADEMIA DE FUTBOL 2022'),
+(3792, 'ACADEMIA DE INFORMATICA 2022'),
+(3799, 'ACADEMIA DE INGLES: CURSO INGLES ADOLESCENTES 2021'),
+(3798, 'ACADEMIA DE LENGUAJE 2022'),
+(3791, 'ACADEMIA DE MECATRONICA 2022'),
+(3790, 'ACADEMIA DE OFIMATICA 2022'),
+(3793, 'ACADEMIA DE TECNOLOGIA 2022'),
+(3795, 'ACADEMIA DE TENIS 2022');
 
 -- --------------------------------------------------------
 
@@ -102,9 +126,15 @@ INSERT INTO `materiales` (`id`, `nombre`, `precioUnitario`) VALUES
 
 CREATE TABLE `ordenes` (
   `id` int(11) NOT NULL,
+  `anexo` int(11) NOT NULL,
+  `ubicacion` varchar(150) NOT NULL,
   `nombre` varchar(150) NOT NULL,
   `prioridad` int(11) NOT NULL,
   `idCategoria` int(11) NOT NULL,
+  `centroCosto` varchar(150) NOT NULL,
+  `funcionarioContacto` varchar(150) NOT NULL,
+  `resumen` varchar(150) NOT NULL,
+  `detalle` varchar(150) NOT NULL,
   `fechaCreacion` datetime NOT NULL DEFAULT current_timestamp(),
   `fechaEdicion` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `terminada` tinyint(1) NOT NULL,
@@ -112,31 +142,52 @@ CREATE TABLE `ordenes` (
   `materiales` text DEFAULT NULL,
   `precioMateriales` int(11) DEFAULT NULL,
   `tipoTrabajo` varchar(150) NOT NULL,
-  `observacion` text NOT NULL,
-  `solicitudCompra` text NOT NULL,
-  `funcionarioEncargado` varchar(150) NOT NULL,
-  `fechaAsignacion` datetime NOT NULL,
+  `observacion` text DEFAULT NULL,
+  `solicitudCompra` text DEFAULT NULL,
+  `funcionarioEncargado` varchar(150) DEFAULT NULL,
+  `fechaAsignacion` datetime DEFAULT NULL,
   `funcionariosEjecutores` text DEFAULT NULL,
-  `precioFuncionariosEjecutores` int(11) NOT NULL,
-  `horasHombre` int(11) NOT NULL,
-  `cantidadPersonasInvolucradas` int(11) NOT NULL,
-  `costoTotal` int(11) NOT NULL
+  `precioFuncionariosEjecutores` int(11) DEFAULT NULL,
+  `horasHombre` int(11) DEFAULT NULL,
+  `cantidadPersonasInvolucradas` int(11) DEFAULT NULL,
+  `costoTotal` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `ordenes`
 --
 
-INSERT INTO `ordenes` (`id`, `nombre`, `prioridad`, `idCategoria`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
-(114, 'orden 1', 0, 45, '2022-10-07 20:49:25', '2022-10-08 16:16:20', 1, '2022-10-08 16:16:20', 'foco, detector de voltaje, ', 6000, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-09-30 12:02:00', '20.901.445-9, 20.421.446-9, ', 3000, 10, 2, 36000),
-(115, 'orden 2', 4, 44, '2022-10-07 23:31:20', '2022-10-08 23:17:33', 0, NULL, 'foco, multímetro, ', 3500, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-07 23:31:00', '20.901.445-9, ', 1000, 2, 1, 5500),
-(116, 'orden 3', 2, 43, '2022-10-08 07:55:52', '2022-10-08 23:17:37', 0, NULL, 'foco, ', 6000, 'interno', 'se observa la orden', 'se solicita la compra', '20.421.446-9', '2022-10-08 07:55:00', '20.901.445-9, ', 1000, 1, 1, 7000),
-(117, 'orden 4', 1, 52, '2022-10-08 07:56:41', '2022-10-08 23:17:41', 1, '2022-10-08 09:15:36', 'foco, ', 2000, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 07:56:00', '10.331.225-9, ', 3000, 1, 1, 5000),
-(118, 'orden 5', 3, 52, '2022-10-08 10:22:45', '2022-10-08 23:17:57', 1, '2022-10-08 16:46:08', 'foco, detector de voltaje, cámara térmica, cinta eléctrica líquida, ', 9200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 12:00:00', '20.901.445-9, ', 1000, 2, 1, 11200),
-(119, 'orden 6', 1, 53, '2022-10-08 14:41:11', '2022-10-08 23:17:52', 1, '2022-10-08 16:45:59', 'destornillador, Adhesivos para reparaciones, ', 12200, 'interno', 'se observa la orden', 'se solicita la compra', '10.331.225-9', '2022-10-08 14:01:00', '20.901.445-9, ', 1000, 2, 1, 14200),
-(120, 'orden 7', 4, 53, '2022-10-08 14:41:54', '2022-10-08 23:17:48', 1, '2022-10-08 16:45:55', 'cinta eléctrica líquida, ', 2200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 19:41:54', '20.421.446-9, ', 2000, 3, 1, 8200),
-(121, 'orden 8', 0, 53, '2022-10-08 14:42:43', '2022-10-08 14:42:43', 0, NULL, 'pinzas, Adhesivos para reparaciones, ', 11200, 'interno', 'se observa la orden', 'se solicita la compra', '20.901.445-9', '2022-10-08 19:42:43', '10.331.225-9, ', 3000, 3, 1, 20200),
-(122, 'orden 9', 2, 45, '2022-10-08 23:07:53', '2022-10-08 23:07:53', 0, NULL, 'foco, ', 4000, 'interno', 'sin obervacion', 'sin solicitud', '20.901.445-9', '2022-10-08 12:00:00', '20.421.446-9, ', 2000, 2, 1, 8000);
+INSERT INTO `ordenes` (`id`, `anexo`, `ubicacion`, `nombre`, `prioridad`, `idCategoria`, `centroCosto`, `funcionarioContacto`, `resumen`, `detalle`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
+(132, 0, '5', '', 2, 44, '3792', '20.901.445-9', 'se solicita limpieza en departamento de informatica', 'dentro de esta semana', '2022-10-09 19:21:44', '2022-10-09 19:21:44', 0, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ubicacion`
+--
+
+CREATE TABLE `ubicacion` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `ubicacion`
+--
+
+INSERT INTO `ubicacion` (`id`, `nombre`) VALUES
+(1, 'DEPARTAMENTO DE FISICA'),
+(2, 'DEPARTAMENTO DE INGLES'),
+(3, 'DEPARTAMENTO DE AGRONOMIA'),
+(4, 'DEPARTAMENTO DE INDUSTRIAL'),
+(5, 'DEPARTAMENTO DE INFORMATICA'),
+(6, 'DEPARTAMENTO DE ELECTRONICA'),
+(7, 'DEPARTAMENTO DE DERECHO'),
+(8, 'DEPARTAMENTO DE SALUD'),
+(9, 'DEPARTAMENTO DE TRABAJO SOCIAL'),
+(10, 'DEPARTAMENTO DE ADMINISTRACION'),
+(11, 'DEPARTAMENTO DE MATEMATICA'),
+(12, 'BIBLIOTECA CENTRAL');
 
 --
 -- Índices para tablas volcadas
@@ -148,6 +199,13 @@ INSERT INTO `ordenes` (`id`, `nombre`, `prioridad`, `idCategoria`, `fechaCreacio
 ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `categoria` (`categoria`);
+
+--
+-- Indices de la tabla `centro`
+--
+ALTER TABLE `centro`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `nombre` (`nombre`);
 
 --
 -- Indices de la tabla `funcionarios`
@@ -170,6 +228,12 @@ ALTER TABLE `ordenes`
   ADD KEY `ordenes_ibfk_1` (`idCategoria`);
 
 --
+-- Indices de la tabla `ubicacion`
+--
+ALTER TABLE `ubicacion`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -178,6 +242,12 @@ ALTER TABLE `ordenes`
 --
 ALTER TABLE `categorias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT de la tabla `centro`
+--
+ALTER TABLE `centro`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3800;
 
 --
 -- AUTO_INCREMENT de la tabla `funcionarios`
@@ -195,7 +265,13 @@ ALTER TABLE `materiales`
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=126;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+
+--
+-- AUTO_INCREMENT de la tabla `ubicacion`
+--
+ALTER TABLE `ubicacion`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Restricciones para tablas volcadas

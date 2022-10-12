@@ -1,7 +1,5 @@
 $(function() {
-    $( "#btnOpcionesCategorias" ).click(function() {
-      $("#opcionesCategorias").toggle();          
-    });
+  
 
 
     $("#selectMateriales").on("change",function(e){
@@ -24,6 +22,8 @@ $(function() {
 
 
       });
+
+
       $("#selectFuncionariosEjecutores").on("change",function(e){
         var optionsSelected=$("#selectFuncionariosEjecutores option:selected",this);
 
@@ -40,7 +40,7 @@ $(function() {
         funcionariosEjecutores.forEach((values,keys)=>{
               precioTotal+=parseInt(values);
             });
-        $("#cantidadPersonasInvolucradas").val(funcionariosEjecutores.size);
+        $("#cantidadPersonas").val(funcionariosEjecutores.size);
         $("#precioFuncionariosEjecutores").val(precioTotal);
 
       });

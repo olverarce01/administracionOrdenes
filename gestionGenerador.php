@@ -90,6 +90,7 @@
           <div class="form-group col-md-4">
             <label for="">ANEXO: </label>
             <select name="anexo" id="anexo">
+                <option value="0">-</option>
                 <?php
                 $sql = "SELECT id FROM ordenes";
                 $result = mysqli_query($conn, $sql);

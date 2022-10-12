@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 10-10-2022 a las 02:48:44
+-- Tiempo de generación: 12-10-2022 a las 05:14:53
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -145,6 +145,7 @@ CREATE TABLE `ordenes` (
   `observacion` text DEFAULT NULL,
   `solicitudCompra` text DEFAULT NULL,
   `funcionarioEncargado` varchar(150) DEFAULT NULL,
+  `fechaRecepcion` datetime DEFAULT NULL,
   `fechaAsignacion` datetime DEFAULT NULL,
   `funcionariosEjecutores` text DEFAULT NULL,
   `precioFuncionariosEjecutores` int(11) DEFAULT NULL,
@@ -157,8 +158,8 @@ CREATE TABLE `ordenes` (
 -- Volcado de datos para la tabla `ordenes`
 --
 
-INSERT INTO `ordenes` (`id`, `anexo`, `ubicacion`, `nombre`, `prioridad`, `idCategoria`, `centroCosto`, `funcionarioContacto`, `resumen`, `detalle`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
-(132, 0, '5', '', 2, 44, '3792', '20.901.445-9', 'se solicita limpieza en departamento de informatica', 'dentro de esta semana', '2022-10-09 19:21:44', '2022-10-09 19:21:44', 0, NULL, NULL, NULL, '', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `ordenes` (`id`, `anexo`, `ubicacion`, `nombre`, `prioridad`, `idCategoria`, `centroCosto`, `funcionarioContacto`, `resumen`, `detalle`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaRecepcion`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
+(133, 0, '2', '', 2, 45, '3799', '10.331.225-9', 'resumen', 'detalle', '2022-10-11 09:32:54', '2022-10-11 23:35:58', 0, '2022-10-12 23:59:00', 'foco, detector de voltaje, ', 10000, 'EXTERNO', 'observacion', 'solicitud', '20.901.445-9', '2022-10-11 00:00:00', '2022-10-11 00:00:00', '20.901.445-9, 20.421.446-9, ', 3000, 1, 2, 13000);
 
 -- --------------------------------------------------------
 
@@ -265,7 +266,7 @@ ALTER TABLE `materiales`
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT de la tabla `ubicacion`

@@ -20,7 +20,7 @@ include "./recursos/conexion.php";
 
 <div class="fondo">
     <header>
-      <nav class="navbar navbar-light bg-light">
+      <nav class="navbar navbar-light bg-light rounded-bottom">
         <!-- Logo UTA -->
         <a class="navbar-brand" href="#">
           <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
@@ -59,7 +59,7 @@ include "./recursos/conexion.php";
         </div>
         
     </div>
-    <footer class="mt-5 py-5  text-muted text-center text-small bg-light">
+    <footer class="mt-5 py-5  text-muted text-center text-small bg-light rounded-top">
         <p class="mb-1 color-texto">Universidad de Tarapacá – Universidad del Estado de Chile</p>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="#">Privacy</a></li>

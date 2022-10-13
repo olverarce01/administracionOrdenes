@@ -27,9 +27,11 @@
 
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link Type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">
 
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
 
     <!-- fancyTable Js -->
     <script src="./js/fancyTable.js"></script>
@@ -37,230 +39,286 @@
     <script src="./js/actualizarGrafico.js"></script> 
     <script src="./js/categorias.js"></script> 
     <script src="./js/selectsDinamicos.js"></script> 
+    <script src="jquery/jquery-3.6.1.min.js"></script>
     
     <link rel="stylesheet" href="./css/index.css">
+    <link rel="stylesheet" rel="stylesheet" href="./css/estilos.css">
 
     <title>administracionOrdenes</title>
 </head>
-<body>
+<body class="fondo-index">
 
-<p>REPORTE</p>
-    <form>
-            Opciones Filtro:
-          <br>
-          <input type='hidden' value='' name='porFecha'>
+  <header>
+    <nav class="navbar navbar-light bg-header-index rounded-bottom">
+      <!-- Logo UTA -->
+      <a class="navbar-brand" href="#">
+        <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+      </a>
+    </nav>
+  </header>
 
-          <select name="fechaFiltro" id="fechaFiltro">
-            <option selected="selected" value="fechaCreacion">fechaCreacion</option>
-            <option value="fechaEdicion">fechaEdicion</option>
-          </select>
-          <br>
-          <label for="" id="rangoFecha">
-              Desde <input type="date" name="dateInicio" id="dateInicio"> <input type="time" name="timeInicio" id="timeInicio">
-              <br>
-              Hasta <input type="date" name="dateFin" id="dateFin"> <input type="time" name="timeFin" id="timeFin">
-          </label>
-          <br>
-
-          <br>
-          <button id="descargarCanvas" type="button">
-            Descargar PDF
-          </button>
-          <button id="verCanvas" type="button">
-            Ver PDF
-          </button>
-    </form>
-    <div id="chart-container">
-      <div id="divFrecuenciaCategorias">
-        <p>Cantidad de ordenes por categoria</p>
-        <canvas id="frecuenciaCategorias"></canvas>
-      </div>
-      <div id="divCostoMaterialesCategorias">
-      <p>Costo materiales por categoria</p>
-      <canvas id="costoMaterialesCategorias"></canvas>
-      </div>
-      <div id="divCostoFuncionariosEjecutivosCategorias">
-      <p>Costo funcionarios ejecutivos por categoria</p>
-      <canvas id="costoFuncionariosEjecutivosCategorias"></canvas>
-      </div>
-      <div id="divCostoTotalCategorias">
-      <p>Costo Total por categoria</p>
-      <canvas id="costoTotalCategorias"></canvas>
-      </div>
-      <div id="divFrecuenciaOrdenesPorHoras">
-      <p>Frecuencia de ordenes por Horas de trabajo</p>
-      <canvas id="frecuenciaOrdenesPorHoras"></canvas>
-      </div>
+  <div class="main-index">
+    <div class="mx-auto bg-reporte rounded mt-3" style="width: 400px;">
+      <form class="form-reporte mx-auto" style="width: 350px;">
+            <h1>REPORTE</h1>
+            <br>
+            <h2>Opciones de filtro</h2>
+            <input type='hidden' value='' name='porFecha'>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">porFecha</label>
+              </div>
+              <select class="custom-select" id="fechaFiltro" name="fechaFiltro">
+                <option selected="selected" value="fechaCreacion">fechaCreacion</option>
+                <option value="fechaEdicion">fechaEdicion</option>
+              </select>
+            </div>
+            <br>
+            <label for="" id="rangoFecha">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Desde/fecha/hora</span>
+                </div>
+                <input type="date" name="dateInicio" id="dateInicio" aria-label="First name" class="form-control">
+                <input type="time" name="timeInicio" id="timeInicio">
+              </div>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Hasta/fecha/hora</span>
+                </div>
+                <input type="date" name="dateFin" id="dateFin" aria-label="First name" class="form-control">
+                <input type="time" name="timeFin" id="timeFin">
+              </div>
+            </label>
+            <br>
+            <div class="input-group mb-3">
+              <div class="input-group-prepend" id="button-addon2">
+                <button class="btn btn-outline-secondary rounded" id="descargarCanvas" type="button">Descargar PDF</button>
+                <button class="btn btn-outline-secondary rounded" id="verCanvas" type="button">Ver PDF</button>
+              </div>
+            </div>
+      </form>
     </div>
-
-  <div id="container-cards">
-    <div class="card cardDashboard" style="width: 18rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=1";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
     
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-success'>".$row["contador"]." Terminadas</p>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+    <!-- Carrusel con los distintos graficos -->
+    <div id="carouselExampleFade" class="carousel slide mt-3" data-ride="carousel">
+      <div class="carousel-inner mx-auto" style="width: 900px;">
+        <div class="carousel-item active" id="divFrecuenciaCategorias" data-interval="3000">
+          <h3>Cantidad de ordenes por categoria</h3>
+          <canvas id="frecuenciaCategorias"></canvas>
+          <a href="" class="btn btn-lg btn-primary btn-block mt-4 btn-primary-carousel">Ver grafico en otra ventana</a>
+        </div>
+        <div class="carousel-item" id="divCostoMaterialesCategorias" data-interval="3000">
+          <h3>Costo materiales por categoria</h3>
+          <canvas id="costoMaterialesCategorias"></canvas>
+          <a href="" class="btn btn-lg btn-primary btn-block mt-4 btn-primary-carousel">Ver en otra ventana</a>
+        </div>
+        <div class="carousel-item" id="divCostoFuncionariosEjecutivosCategorias" data-interval="3000">
+          <h3>Costo funcionarios ejecutivos por categoria</h3>
+          <canvas id="costoFuncionariosEjecutivosCategorias"></canvas>
+          <a href="" class="btn btn-lg btn-primary btn-block mt-4 btn-primary-carousel">Ver en otra ventana</a>
+        </div>
+        <div class="carousel-item" id="divCostoTotalCategorias" data-interval="3000">
+          <h3>Costo Total por categoria</h3>
+          <canvas id="costoTotalCategorias"></canvas>
+          <a href="" class="btn btn-lg btn-primary btn-block mt-4 btn-primary-carousel">Ver en otra ventana</a>
+        </div>
+        <div class="carousel-item" id="divFrecuenciaOrdenesPorHoras" data-interval="3000">
+          <h3>Frecuencia de ordenes por Horas de trabajo</h3>
+          <canvas id="frecuenciaOrdenesPorHoras"></canvas>
+          <a href="" class="btn btn-lg btn-primary btn-block mt-4 btn-primary-carousel">Ver en otra ventana</a>
+        </div>
       </div>
+      <button class="carousel-control-prev" type="button" data-target="#carouselExampleFade" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-target="#carouselExampleFade" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </button>
     </div>
-
-
-    <div class="card cardDashboard" style="width: 18rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=0";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
     
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-warning'>".$row["contador"]." Pendientes</p>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509817.png" alt="" width="45" height="45">
-      </div>
-    </div>
+    <!-- targetas informativas de ordenes de trabajo -->
+    <div id="container-cards">
+      <div class="row mx-auto">
 
-    <div class="card cardDashboard" style="width: 18rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT count(*) as contador FROM ordenes WHERE prioridad=0";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
+        <div class="card cardDashboard col" style="width: 18rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=1";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-success'>".$row["contador"]." Terminadas</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+          </div>
+        </div>
+        
+        <div class="card cardDashboard col" style="width: 18rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT count(*) as contador FROM ordenes WHERE terminada=0";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-warning'>".$row["contador"]." Pendientes</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/8509/8509817.png" alt="" width="45" height="45">
+          </div>
+        </div>
+        
+        <div class="card cardDashboard col" style="width: 18rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT count(*) as contador FROM ordenes WHERE prioridad=0";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-danger'>".$row["contador"]." Urgentes</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+          </div>
+        </div>
+        
+      </div>
     
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-danger'>".$row["contador"]." Urgentes</p>";
-                }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
+      <div class="row mx-auto">
+
+        <div class="card cardDashboard col" style="width: 30rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT sum(costoTotal) as total FROM ordenes";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Ordenes</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/781/781902.png" alt="" width="45" height="45">
+          </div>
+        </div>
+
+        <div class="card cardDashboard col" style="width: 30rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT sum(precioMateriales) as total FROM ordenes";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Materiales</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/3371/3371713.png" alt="" width="45" height="45">
+          </div>
+        </div>
+
+        <div class="card cardDashboard col" style="width: 30rem;">
+          <div class="card-body cardDash">
+            <?php
+                $sql = "SELECT sum(precioFuncionariosEjecutores*horasHombre) as total FROM ordenes";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+        
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>ManoObra</p>";
+                    }
+                  } else {
+                    echo "0 resultados";
+                  }
+                ?>
+            <img src="https://cdn-icons-png.flaticon.com/512/7424/7424725.png" alt="" width="45" height="45">
+          </div>
+        </div>
+
       </div>
+
     </div>
 
-    <div class="card cardDashboard" style="width: 30rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT sum(costoTotal) as total FROM ordenes";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Ordenes</p>";
+    <table id="tablaOrdenes" class="table table-hover">
+      <thead>
+        <tr>
+          <th scope="col">NºOrden</th>
+          <th scope="col">Prioridad</th>
+          <th scope="col">Tipo de trabajo</th>
+          <th scope="col">Fecha de Asignacion</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+      <?php
+          //listar ordenes no terminadas
+          $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaAsignacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
+          $result = mysqli_query($conn, $sql);
+          if (mysqli_num_rows($result) > 0) {
+
+              while($row = mysqli_fetch_assoc($result)) {
+                echo "<tr>";
+                echo "<th scope='row' id='".$row["id"]."' class='tdOrdenes'>" . $row["id"]. "</th>";
+                if($row["prioridad"]==0){
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-danger'>Alta</span> </td>";
                 }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/781/781902.png" alt="" width="45" height="45">
-      </div>
-    </div>
-    <div class="card cardDashboard" style="width: 30rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT sum(precioMateriales) as total FROM ordenes";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Materiales</p>";
+                else if($row["prioridad"]==1){
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-warning'>Media Alta</span> </td>";
                 }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/3371/3371713.png" alt="" width="45" height="45">
-      </div>
-    </div>
-    <div class="card cardDashboard" style="width: 30rem;">
-      <div class="card-body cardDash">
-        <?php
-            $sql = "SELECT sum(precioFuncionariosEjecutores*horasHombre) as total FROM ordenes";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-    
-                while($row = mysqli_fetch_assoc($result)) {
-                  echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>ManoObra</p>";
+                else if($row["prioridad"]==2){
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-primary'>Media</span> </td>";
                 }
-              } else {
-                echo "0 resultados";
-              }
-            ?>
-        <img src="https://cdn-icons-png.flaticon.com/512/7424/7424725.png" alt="" width="45" height="45">
-      </div>
-    </div>
-  </div>
-    <table id="tablaOrdenes" class="container-ordenes" class="table table-striped sampleTable">
-    <thead>
-    <tr>
-      <th>NºOrden</th>
-      <th>Prioridad</th>
-      <th>Tipo de trabajo</th>
-      <th>Fecha de Asignacion</th>
-      <th>Estado</th>
-      <th>Accion</th>
+                else if($row["prioridad"]==3){
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-info'>Media Baja</span> </td>";
+                }else{
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-success'>Baja</span> </td>";
+                }
+                echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
+                echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaAsignacion"]. "</td>";
+                if($row["terminada"]==0){
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
+                  echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
 
-    </tr>
-    </thead>
-    <tbody>
-    <?php
-        //listar ordenes no terminadas
-        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaAsignacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
-        $result = mysqli_query($conn, $sql);
-        if (mysqli_num_rows($result) > 0) {
+                }
+                else{
+                  echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
+                  echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td> <br>";
 
-            while($row = mysqli_fetch_assoc($result)) {
-              echo "<tr>";
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["id"]. "</td>";
-              if($row["prioridad"]==0){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-danger'>Alta</span> </td>";
-              }
-              else if($row["prioridad"]==1){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-warning'>Media Alta</span> </td>";
-              }
-              else if($row["prioridad"]==2){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-primary'>Media</span> </td>";
-              }
-              else if($row["prioridad"]==3){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-info'>Media Baja</span> </td>";
-              }else{
-                echo "<td id='".$row["id"]."' class='tdOrdenes'> <span class='badge badge-success'>Baja</span> </td>";
-              }
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
-              echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaAsignacion"]. "</td>";
-              if($row["terminada"]==0){
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
-                echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td>";
-
-              }
-              else{
-                echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
-                echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button>Ver</button></a></td> <br>";
-
-              }
+                }
 
 
-              echo "</tr>";
+                echo "</tr>";
+              }
+            } else {
+              echo "0 resultados";
             }
-          } else {
-            echo "0 resultados";
-          }
-         
-    ?>
-    </tbody>
-</table>
-
+            
+      ?>
+      </tbody>
+    </table>
+    
+  </div>
    
    <?php    
         //listar ordenes frecuenciaCategorias
@@ -573,7 +631,17 @@
        
       
     </script>
-    <script src="./js/generacionPDF.js"></script> 
+<script src="./js/generacionPDF.js"></script> 
+
+<footer class="mt-5 py-5  text-muted text-center text-small bg-footer-index rounded-top">
+    <p class="mb-1 color-texto">Universidad de Tarapacá – Universidad del Estado de Chile</p>
+    <ul class="list-inline">
+        <li class="list-inline-item"><a href="#">Privacy</a></li>
+        <li class="list-inline-item"><a href="#">Terms</a></li>
+        <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+</footer>
+
 </body>
 </html>
 

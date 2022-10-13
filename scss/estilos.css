@@ -1,3 +1,70 @@
+@charset "UTF-8";
+.bg-primary {
+  background-color: #2e29b3 !important; }
 
+.bg-light {
+  background-color: #17286B !important; }
+
+.text-primary {
+  color: white !important; }
+
+.btn-primary {
+  background-color: #1F4DA0 !important;
+  border-color: #0e244b !important; }
+
+.btn-primary:hover {
+  background-color: #E59252 !important;
+  border-color: #0e244b !important; }
+
+.btn-outline-success {
+  color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+.btn-outline-success:hover {
+  color: white !important;
+  background-color: #DD8039 !important;
+  border-color: #DD8039 !important; }
+
+.nav-link:hover {
+  background-color: #7987c0;
+  border-bottom: 4px;
+  border-bottom-color: #2e29b3;
+  border-bottom-style: solid;
+  color: #2e29b3 !important;
+  font-weight: bold; }
+
+.nav-item {
+  width: max-content; }
+
+.card-title {
+  font-size: xx-large;
+  text-align: center;
+  border-bottom: 4px solid #2e29b3; }
+
+.card-body {
+  border-top: dotted 6px #243238; }
+
+.card-body:hover {
+  background: #eafdfd;
+  opacity: 0.8; }
+
+.card-text {
+  text-align: justify;
+  font-size: medium; }
+
+.tamaño-form-login {
+  height: 420px;
+  width: 300px;
+  color: white; }
+
+.form-login {
+  background-color: #E59252 !important;
+  opacity: 0.9; }
+
+.fondo {
+  background-image: url(../img/fondo.jpg), url(../img/fondo.jpg);
+  background-position: right bottom, left top;
+  background-repeat: no-repeat, repeat;
+  height: max-content; }
 
 /*# sourceMappingURL=estilos.css.map */

@@ -14,11 +14,13 @@
     font-family: monospace;
 
     position: relative;
-    background: #fff;
+    background: #000000;
     padding: 20px;
     width: 100%;
     box-shadow: 0 7px 25px rgb(0,0,0,0.08);
     border-radius: 20px;
+
+    opacity: 0.8;
 }
 /* #divFrecuenciaCategorias{
     width: 50%;

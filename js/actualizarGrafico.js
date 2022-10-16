@@ -37,15 +37,7 @@ function random_rgba() {
               borderWidth: 1
               }]
     },
-      options: {
-        scales: {
-          yAxes: {
-            ticks: {
-               stepSize: 1,
-            }
-          }
-        }
-      },
+      options: optionsChartfrecuenciaCategorias,
       plugins: [bgColor]
     });       
     });
@@ -79,15 +71,7 @@ function random_rgba() {
                 borderWidth: 1
                 }]
       },
-        options: {
-          scales: {
-            yAxes: {
-              ticks: {
-                 stepSize: 1,
-              }
-            }
-          }
-        },
+        options: optionsChartcostoMaterialesCategorias,
         plugins: [bgColor]
       });       
       });
@@ -121,15 +105,7 @@ function random_rgba() {
                   borderWidth: 1
                   }]
         },
-          options: {
-            scales: {
-              yAxes: {
-                ticks: {
-                   stepSize: 1,
-                }
-              }
-            }
-          },
+          options: optionsChartcostoFuncionariosEjecutivosCategorias,
           plugins: [bgColor]
         });       
         });
@@ -163,15 +139,7 @@ function random_rgba() {
                     borderWidth: 1
                     }]
           },
-            options: {
-              scales: {
-                yAxes: {
-                  ticks: {
-                     stepSize: 1,
-                  }
-                }
-              }
-            },
+            options: optionsChartcostoTotalCategorias,
             plugins: [bgColor]
           });       
         });
@@ -205,25 +173,21 @@ function random_rgba() {
                       backgroundColor: colores,
                       fill: {
                       target: 'origin',
-                      above: 'rgb(173,216,230)',   // Area will be red above the origin
-                      below: 'rgb(255, 0, 255)'    // And blue below the origin
+                      above: 'rgba(173,216,230,0.4)',
+                      below: 'rgba(255, 0, 255,1)'
                       },
                       borderWidth: 1,
                       pointRadius: 5
       
                   }]
               },
-              options: {
-                    yAxes: {
-                        ticks: {
-                           stepSize: 1,
-                        }
-                    }
-              }
-              
+              options: optionsChartfrecuenciaOrdenesPorHoras
               ,plugins: [bgColor]
           });       
         });
   });
 
   });  
+
+
+  

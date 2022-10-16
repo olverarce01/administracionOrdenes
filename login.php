@@ -20,7 +20,7 @@ include "./recursos/conexion.php";
 
 <div class="fondo">
     <header>
-      <nav class="navbar navbar-light bg-light rounded-bottom">
+      <nav class="navbar navbar-light bg-light">
         <!-- Logo UTA -->
         <a class="navbar-brand" href="#">
           <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
@@ -30,7 +30,7 @@ include "./recursos/conexion.php";
     
     <div class="main">
         <div class="form-signin mx-auto mt-5 pt-5 pb-5 form-login" style="width: 400px; height: 500px;">
-            <form class="form-signin tamaño-form-login mx-auto">
+            <form class="form-signin tamaño-form-login mx-auto" action="inicio.php" method="POST">
             
                 <div class="text-center mb-4">
                     <img class="mb-4" src="./img/utaHorizontal.png" alt="" width="213" height="72">
@@ -39,15 +39,14 @@ include "./recursos/conexion.php";
                 </div>
             
                 <div class="form-label-group">
-                    <input type="email" id="inputCorreo" class="form-control" placeholder="Direccion correo" required="" autofocus="">
+                    <input type="correo" id="inputCorreo" class="form-control" placeholder="Direccion correo" required="" autofocus="" name="correo">
                     <label for="inputCorreo">Direccion de correo</label>
                 </div>
             
                 <div class="form-label-group">
-                    <input type="password" id="inputContraseña" class="form-control" placeholder="Contraseña" required="">
+                    <input type="pass" id="inputContraseña" class="form-control" placeholder="Contraseña" required="" name="pass">
                     <label for="inputContraseña">Contraseña</label>
                 </div>
-            
                 <div class="checkbox mb-3">
                     <label>
                         <input type="checkbox" value="remember-me"> Acceso a sitema de Administrativo.
@@ -59,7 +58,7 @@ include "./recursos/conexion.php";
         </div>
         
     </div>
-    <footer class="mt-5 py-5  text-muted text-center text-small bg-light rounded-top">
+    <footer class="mt-5 py-5  text-muted text-center text-small bg-light">
         <p class="mb-1 color-texto">Universidad de Tarapacá – Universidad del Estado de Chile</p>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="#">Privacy</a></li>

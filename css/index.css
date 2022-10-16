@@ -3,10 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
-/* 
-#frecuenciaCategorias,#costoMaterialesCategorias,#costoFuncionariosEjecutivosCategorias,#costoTotalCategorias,#frecuenciaOrdenesPorHoras{
 
-} */
+.fondo-index{
+    background-color: white;
+}
+
 #divFrecuenciaCategorias,#divCostoMaterialesCategorias,#divCostoFuncionariosEjecutivosCategorias,#divCostoTotalCategorias,#divFrecuenciaOrdenesPorHoras{
     color: lightseagreen;
     font-weight: bolder;
@@ -22,42 +23,26 @@
 
     opacity: 0.8;
 }
-/* #divFrecuenciaCategorias{
-    width: 50%;
-}
-#divCostoMaterialesCategorias{
-    width: 50%;
-}
-#divCostoFuncionariosEjecutivosCategorias{
-    width: 50%;
-}
-#divCostoTotalCategorias{
-    width: 50%;
-}
-#divFrecuenciaOrdenesPorHoras{
-    width: 50%;
-} */
+
 .tdOrdenes{
-    margin: 0 10px;
+    margin: auto;
     padding: 10px;
     font-size: 20px;
-/*     background-color: lightslategray;
- */}
-/* .container-ordenes{
-    background-color: rgb(88, 100, 113);
-    color: white;
-} */
+}
+
 .cardDashboard{
     margin: 20px;
     border-radius: 15px;
     transition: all 0.3s;
+    background-color: rgb(245, 243, 243);
+    box-shadow: 0 7px 25px rgb(0,0,0,0.08);
+
 }
 
 .cardDashboard:hover{
-    background-color: rgb(229, 238, 254);
+    background-color: rgba(255, 255, 255, 1);
 }
-
-#container-cards{
+.container-cards{
     display: flex;
     flex-wrap: wrap;
     justify-content: baseline;
@@ -66,35 +51,19 @@
 .cardDash{
     display: flex;
     flex-wrap: wrap;
+    margin: 10px 20px;
 }
 .pDash{
     font-weight: bolder;
     font-size: 25px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 img{
     margin: auto;
 }
 
-#tablaOrdenes{
-    width: 60%;
-    margin: 0 auto;
-}
 
-#chart-container{
-    position: relative;
-    width: 100%;
-    padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px;
-    min-height: 200px;
-
-}
-.btn-light{
-    background-color: lightslategray;
-}
 button{
     color: white;
     border-style: none;
@@ -104,20 +73,77 @@ button{
     margin: 5px;
 }
 
-@media (max-width: 1000px) {
-    #divFrecuenciaCategorias{
-        width: 100%;
-    }
-    #divCostoMaterialesCategorias{
-        width: 100%;
-    }
-    #divCostoFuncionariosEjecutivosCategorias{
-        width: 100%;
-    }
-    #divCostoTotalCategorias{
-        width: 100%;
-    }
-    #divFrecuenciaOrdenesPorHoras{
-        width: 100%;
-    }
-  }
+
+
+#main-listaGraficos{
+    display: flex;
+    flex-wrap: wrap;
+}
+#main-infoOrdenes{
+    display: flex; 
+    justify-content: center;
+    margin: 50px auto;
+}
+#tablaOrdenes{
+    width: 800px;
+    padding: 40px;
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 7px 25px rgb(0,0,0,0.2);
+}
+
+
+#chart{
+    margin: 20px;
+}
+.apexcharts-canvas{
+    margin: auto;
+}
+
+#container-chart{
+    display: flex;
+    justify-content: center;
+    margin: 10px auto;
+}
+#info-chart{
+    margin: auto 0;
+}
+#container-graficos{
+    display: flex;
+    justify-content: center;
+    margin: 100px auto;
+}
+#formGrafico{
+    width: 350px;
+    background-color: rgba(255, 255, 255, 0.8);
+    margin: auto 0;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 7px 25px rgb(0,0,0,0.1);
+
+}
+#main-main-container-Graficos{
+    margin: auto 20px;
+    width: 750px;
+    border-radius: 20px;
+    padding: 10px;
+    box-shadow: 0 7px 25px rgb(0,0,0,0.1);
+    background-color: rgba(255, 255, 255, 1);
+
+
+}
+.container-Graficos{
+    width: 600px;
+} 
+
+
+#btnDescargar{
+    height: 50px;
+}
+
+#headerUser{
+    background-color: rgb(105, 170, 212);
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    padding: 20px;
+}

@@ -1,0 +1,38 @@
+#container-nav{
+  background-color: rgb(105, 170, 212);
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+
+  position: absolute;
+  top: 150px;
+  border-radius: 60px;
+  padding: 20px;
+  text-align: center;
+  margin-left: 5px;
+}
+
+.option-nav{
+  color: white;
+  font-size: 12px;
+  display: inline;
+  margin: 20px 0;
+  font-weight: bolder;
+  transition: all 0.5s;
+}
+.option-nav:hover{
+  background-color: rgb(139, 201, 241);
+  border-radius: 60px;
+}
+
+i{
+  font-size: 30px;
+}
+.option-nav:hover{
+  color: white;
+  text-decoration: none;
+}
+#container-option{
+  display: flex;
+  flex-direction: column;
+}

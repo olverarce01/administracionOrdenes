@@ -1,12 +1,20 @@
+<?php 
+    include "./recursos/conexion.php";   
+    include "./recursos/funcionesLogin.php";
+    $id=-1;
+    $DatosUsuario=ObtenerDatosBasicosUsuario();
+
+    if(!isset($DatosUsuario['nombre'])){
+      header('Location: /administracionOrdenes/login.php');
+      exit();
+    }
+?>
+
 <?php
     include "./recursos/conexion.php";
     if (isset($_POST['accion']) && $_POST['accion']=='crearOrden') {
         $ubicacion = $_POST['ubicacion'];
-        if(isset($_POST['anexo'])){
-          $anexo = $_POST['anexo'];
-        }else{
-          $anexo = 0;
-        }
+      
         $categoria = $_POST['categoria'];
         $prioridad = $_POST['prioridad'];
         $centroCosto = $_POST['centroCosto'];
@@ -17,7 +25,7 @@
 
 
         $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (ubicacion, anexo,idCategoria, prioridad, centroCosto, funcionarioContacto, resumen, detalle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'siiissss',$ubicacion, $anexo,$categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle);
+        mysqli_stmt_bind_param($stmt, 'ssiissss',$ubicacion, $DatosUsuario['run'],$categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle);
         echo "Se agrego correctamente: la orden a la base de datos";
         
         mysqli_stmt_execute($stmt);
@@ -32,40 +40,37 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
-
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-
-
+    <?php
+    libreriasCDN();
+    ?>
+ 
     <script src="multiselect-dropdown.js" ></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.8.1/chart.min.js" integrity="sha512-ymysWHuTOgC1h8/MdSMcEyWmmjtfSh/7PYIDCZYIjW9sfS5Lfs5VBGbkPYZSM11L+JzJ3+id+gXDF4ImKcnxgA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
 
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <!-- fancyTable Js -->
     <script src="./js/fancyTable.js"></script>
 
     <script src="./js/actualizarGrafico.js"></script> 
     <script src="./js/categorias.js"></script> 
     <script src="./js/selectsDinamicos.js"></script> 
 
+    <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/gestionGenerador.css">
+
 
     <title>Document</title>
 </head>
-<body>    
+<body>  
+    <header id="headerUser">
+    <?php
+        if(isset($DatosUsuario['nombre'])){
+            echo "<div>";
+            echo "<i class='fa-solid fa-user'></i>";
+            echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span>";
+            echo "</div>";
+            OpcionCerrarSesion();
+        }
+    ?>
+    </header>  
     <p id="tituloForm" class="text-info">GESTION GENERADOR DE ORDENES</p>
     <form action="./gestionGenerador.php" method="post" id="formOrdenes" class="m-5 p-3">
         <input type="hidden" name="accion" value="crearOrden">
@@ -87,24 +92,7 @@
                 ?>
             </select>
           </div>
-          <div class="form-group col-md-4">
-            <label for="">ANEXO: </label>
-            <select name="anexo" id="anexo">
-                <option value="0">-</option>
-                <?php
-                $sql = "SELECT id FROM ordenes";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-        
-                    while($row = mysqli_fetch_assoc($result)) {
-                      echo "<option value='".$row["id"]."'> ".$row["id"]." ".$row["nombre"]."</option>";
-                    }
-                  } else {
-                    echo "0 resultados";
-                  }
-                ?>
-            </select>
-          </div>
+
           <div class="col-md-4">
             <label for="">CENTRO DE COSTOS: </label>
             <select name="centroCosto" id="centroCosto" class="w-50">

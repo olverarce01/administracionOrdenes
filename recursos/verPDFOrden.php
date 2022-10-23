@@ -101,7 +101,6 @@ ob_start();
           }
          
 ?>
-<form action="./verOrden.php?ver=<?php echo $_GET['ver']?>" method="POST">
 <div class="orden">
           <div class="d-flex justify-content-between fila">
             <div>
@@ -281,7 +280,6 @@ ob_start();
           
           
 </div>
-</form>
 
 <?php
 $html=ob_get_clean();

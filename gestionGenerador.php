@@ -18,7 +18,7 @@
         $categoria = $_POST['categoria'];
         $prioridad = $_POST['prioridad'];
         $centroCosto = $_POST['centroCosto'];
-        $funcionarioEncargado=$_POST['funcionarioContacto'];
+        $funcionarioEncargado=  "".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."";
         $resumen = $_POST['resumen'];
         $detalle = $_POST['detalle'];
 
@@ -114,21 +114,12 @@
 
         <div class="form-row">
           <div class="col-md-4 my-3">
-          <label for="">FUNCIONARIO CONTACTO: </label>
-            <select name="funcionarioContacto" id="funcionarioContacto" class="js-example-basic-single">
+          <label for="">FUNCIONARIO CONTACTO: 
             <?php
-              $sql = "SELECT * FROM funcionarios";
-              $result = mysqli_query($conn, $sql);
-              if (mysqli_num_rows($result) > 0) {
-
-                  while($row = mysqli_fetch_assoc($result)) {
-                    echo "<option value='".$row['rut']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."</option>";
-                  }
-                } else {
-                  echo "0 resultados";
-                }
-              ?>
-          </select>
+            echo "<span>  ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span>";
+            ?>
+            </label>
+            
           </div>
           <div class="col-md-4 my-3">
             <label for="">PRIORIDAD:</label>

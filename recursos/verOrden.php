@@ -67,9 +67,7 @@ if (isset($_POST['dateRecepcion'])&&isset($_POST['timeRecepcion'])&&isset($_POST
   $cantidadPersonas= $_POST['cantidadPersonas'];
 
   $precioFuncionariosEjecutores= $_POST['precioFuncionariosEjecutores'];
-  $totalPrecioFuncionariosEjecutores = $precioFuncionariosEjecutores * $horasHombre;
-
-  $total= $precioMateriales + $totalPrecioFuncionariosEjecutores;
+  $total= $precioMateriales + $precioFuncionariosEjecutores * $horasHombre;
 
 
 $sql = "UPDATE ordenes SET fechaRecepcion= '".$dateTimeRecepcion."' 
@@ -84,7 +82,7 @@ $sql = "UPDATE ordenes SET fechaRecepcion= '".$dateTimeRecepcion."'
                         , horasHombre= '".$horasHombre."'  
                         , precioMateriales= '".$precioMateriales."'
                         , cantidadPersonasInvolucradas= '".$cantidadPersonas."'
-                        , precioFuncionariosEjecutores= '".$totalPrecioFuncionariosEjecutores."'
+                        , precioFuncionariosEjecutores= '".$precioFuncionariosEjecutores."'
                         , costoTotal= '".$total."'
                         WHERE id=".$_GET['ver']."";
 if (mysqli_query($conn, $sql)) {
@@ -166,10 +164,10 @@ echo "Error al Terminar: " . mysqli_error($conn);
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-            echo "<div id='".$row["id"]."' class='orden'>";
+            echo "<div id='".$_GET['ver']."' class='orden'>";
 
             echo "<div class='d-flex justify-content-between fila'>";
-            echo "<div> <span style='font-weight:bold;'>NºSolicitud:</span> " . $row["id"]. " </div>";
+            echo "<div> <span style='font-weight:bold;'>NºSolicitud:</span> " . $_GET['ver']. " </div>";
             echo "<div> <span style='font-weight:bold;'>Fecha Solicitud:</span> " . $row["fechaCreacion"]. " </div>";
             echo "</div>";
 
@@ -178,7 +176,7 @@ echo "Error al Terminar: " . mysqli_error($conn);
 
 
 
-            echo "<div> <span style='font-weight:bold;'>Anexo:</span> " .$row["run"]." ". $row["nombre"]." ".$row["apellido"]." ".$row["correo"]." ".$row["contacto"]. " </div>";
+            echo "<div> <span style='font-weight:bold;'>Anexo:</span>   ".$row["correo"]." ".$row["contacto"]. " </div>";
             echo "</div>";
 
             echo "<div> <span style='font-weight:bold;'>Centro de Costo:</span> " . $row["centroCosto"]. " </div>";

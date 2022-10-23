@@ -71,7 +71,7 @@ ob_start();
 <?php
         include "./conexion.php";
         $id= $_GET['id'];
-        $sql = "SELECT * FROM ordenes, categorias WHERE ordenes.id=".$id." && categorias.id=idCategoria";
+        $sql = "SELECT ordenes.*, categorias.categoria FROM ordenes, categorias WHERE ordenes.id=".$id." && categorias.id=idCategoria";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {

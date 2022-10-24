@@ -47,7 +47,7 @@ ob_start();
   
         $fechaFiltro = $_GET['fechaFiltro'];
 
-        $sql = "SELECT rs.*,categorias.categoria FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."')) as rs, categorias WHERE rs.idCategoria=categorias.id";
+        $sql = "SELECT rs.*,categorias.categoria FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."') AND ordenes.terminada=true) as rs, categorias WHERE rs.idCategoria=categorias.id";
         $result = mysqli_query($conn, $sql);
         //$datos = mysqli_fetch_all($result,MYSQLI_ASSOC); 
         //echo json_encode($datos);

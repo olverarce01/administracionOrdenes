@@ -30,7 +30,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>ManoObra</p>";
+                echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Mano de Obra</p>";
             }
         } else {
             echo "0 resultados";

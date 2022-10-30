@@ -2,14 +2,11 @@
     include "./conexion.php";
 if(isset($_GET['Terminar'])){
     $id= $_GET['ver'];
-
-
     $sql = "UPDATE ordenes SET terminada= NOT terminada  WHERE id=".$id."";
-
     if (mysqli_query($conn, $sql)) {
-      } else {
-        echo "Error al Terminar: " . mysqli_error($conn);
-      }
+    } else {
+      echo "Error al Terminar: " . mysqli_error($conn);
+    }
     
    /*  if($_GET['fechaTermino']){
         $sql = "UPDATE ordenes SET fechaTermino= CURRENT_TIMESTAMP  WHERE id=".$id."";
@@ -86,10 +83,9 @@ $sql = "UPDATE ordenes SET fechaRecepcion= '".$dateTimeRecepcion."'
                         , costoTotal= '".$total."'
                         WHERE id=".$_GET['ver']."";
 if (mysqli_query($conn, $sql)) {
-echo "Orden Actualizada";
+  echo "Orden Actualizada";
 } else {
-echo "Error al Terminar: " . mysqli_error($conn);
-
+  echo "Error al Terminar: " . mysqli_error($conn);
 }
 
 
@@ -138,25 +134,20 @@ echo "Error al Terminar: " . mysqli_error($conn);
   <title>Document</title>
 </head>
 <body>
-
-
-              <?php
-                $id= $_GET['ver'];
-
-                 $sql = "SELECT terminada FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
-                     while($row = mysqli_fetch_assoc($result)) {
-                       if($row["terminada"]){
-                        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p>';
-                       }else{
-                        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">No terminada</span></p>';
-                       }
-
-
-                     }
-                   }
-            ?> 
+  <?php
+    $id= $_GET['ver'];
+    $sql = "SELECT terminada FROM ordenes WHERE id='".$id."'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+        if($row["terminada"]){
+        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p>';
+      }else{
+        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">No terminada</span></p>';
+      }
+      }
+    }
+  ?> 
 <p>Formulario interno</p>
 
 <?php

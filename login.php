@@ -12,6 +12,7 @@ include "./recursos/conexion.php";
     <title>Document</title>
     <link Type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" rel="stylesheet" href="./css/estilos.css">
+    <!--     estilos bootstrap -->
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="jquery/jquery-3.6.1.min.js"></script>
@@ -30,6 +31,7 @@ include "./recursos/conexion.php";
     
     <div class="main">
         <div class="form-signin mx-auto mt-5 pt-5 pb-5 form-login" style="width: 400px; height: 500px;">
+            <!-- formulario -->
             <form class="form-signin tamaño-form-login mx-auto" action="inicio.php" method="POST">
             
                 <div class="text-center mb-4">
@@ -47,12 +49,13 @@ include "./recursos/conexion.php";
                     <input type="pass" id="inputContraseña" class="form-control" placeholder="Contraseña" required="" name="pass">
                     <label for="inputContraseña">Contraseña</label>
                 </div>
-                <div class="checkbox mb-3">
+                <!-- pediente -->
+                <!-- <div class="checkbox mb-3">
                     <label>
-                        <input type="checkbox" value="remember-me"> Acceso a sitema de Administrativo.
+                        <input type="checkbox" value="remember-me"> Acceso al sistema de Administrativo.
                     </label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                </div> -->
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Iniciar sesión</button>
             
             </form>
         </div>
@@ -61,9 +64,9 @@ include "./recursos/conexion.php";
     <footer class="mt-5 py-5  text-muted text-center text-small bg-light">
         <p class="mb-1 color-texto">Universidad de Tarapacá – Universidad del Estado de Chile</p>
         <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
+            <li class="list-inline-item"><a href="#">Privacidad</a></li>
+            <li class="list-inline-item"><a href="#">Terminos</a></li>
+            <li class="list-inline-item"><a href="#">Soporte</a></li>
         </ul>
     </footer>
 </div>

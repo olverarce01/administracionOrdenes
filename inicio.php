@@ -1,7 +1,6 @@
 <?php
         include "./recursos/conexion.php";
         
-        
         $user = !empty($_POST['correo']) ? $_POST['correo'] : 'correo';
         $password = !empty($_POST['pass']) ? $_POST['pass'] : 'pass';
         $buscar = "SELECT * FROM usuarios WHERE correo='$user' AND pass='$password'";

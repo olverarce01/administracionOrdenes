@@ -4,8 +4,14 @@
     box-sizing: border-box;
 }
 
-.fondo-index{
-    background-color: white;
+header, footer{
+    background-color: #17286B;
+    color: white;
+}
+
+#costos{
+    display: flex;
+    flex-wrap: nowrap;
 }
 
 #divFrecuenciaCategorias,#divCostoMaterialesCategorias,#divCostoFuncionariosEjecutivosCategorias,#divCostoTotalCategorias,#divFrecuenciaOrdenesPorHoras{
@@ -48,16 +54,7 @@
     justify-content: baseline;
 }
 
-.cardDash{
-    display: flex;
-    flex-wrap: wrap;
-    margin: 10px 20px;
-}
-.pDash{
-    font-weight: bolder;
-    font-size: 25px;
-    margin: 0 auto;
-}
+
 
 img{
     margin: auto;
@@ -85,52 +82,42 @@ button{
     margin: 50px auto;
 }
 #tablaOrdenes{
-    width: 800px;
-    padding: 40px;
+    width: 1100px;
+    padding: 5px;
     background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 7px 25px rgb(0,0,0,0.2);
 }
 
 
-#chart{
-    margin: 20px;
-}
-.apexcharts-canvas{
-    margin: auto;
-}
 
 #container-chart{
     display: flex;
     justify-content: center;
-    margin: 10px auto;
 }
 #info-chart{
     margin: auto 0;
 }
-#container-graficos{
-    display: flex;
-    justify-content: center;
-    margin: 100px auto;
-}
-#formGrafico{
-    width: 350px;
-    background-color: rgba(255, 255, 255, 0.8);
-    margin: auto 0;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 7px 25px rgb(0,0,0,0.1);
 
+
+
+#container-graficos{
+    justify-content: center;
+    display: flex;
+}
+
+#formGrafico{
+    margin: 10px auto;
+
+}
+.form{
+    display: flex;
 }
 #main-main-container-Graficos{
-    margin: auto 20px;
-    width: 750px;
-    border-radius: 20px;
-    padding: 10px;
-    box-shadow: 0 7px 25px rgb(0,0,0,0.1);
-    background-color: rgba(255, 255, 255, 1);
-
-
+    margin: auto;
+    width: 1180px;
+    padding: 0 5px;
 }
+
 .container-Graficos{
     width: 600px;
 } 
@@ -138,12 +125,8 @@ button{
 
 #btnDescargar{
     height: 50px;
+    display: block;
+
 }
 
-#headerUser{
-    background-color: rgb(105, 170, 212);
-    display: flex;
-    color: white;
-    justify-content: space-between;
-    padding: 20px;
-}
+

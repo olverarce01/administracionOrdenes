@@ -4,6 +4,7 @@
         $user = !empty($_POST['correo']) ? $_POST['correo'] : 'correo';
         $password = !empty($_POST['pass']) ? $_POST['pass'] : 'pass';
         $buscar = "SELECT * FROM usuarios WHERE correo='$user' AND pass='$password'";
+        $rol=$_POST['rol'];
         $resultados = mysqli_query($conn , $buscar);
         $filas = mysqli_num_rows($resultados);
         if($filas > 0){
@@ -18,18 +19,23 @@
             $_SESSION['rol'] = $row['rol'];
                     
             $idSession = session_id();
-            if($_SESSION['rol'] == 'Administrador')
-            {
-                header("Location: index.php"); 
+            if($rol == $row['rol']){
+                if($_SESSION['rol'] == 'Administrador')
+                {
+                    header("Location: index.php"); 
+                }
+                else
+                {
+                    header("Location: gestionGenerador.php"); 
+                }
+            }else{
+                header("Location: login.php?error=datosIncorrectos");
             }
-            else
-            {
-                header("Location: gestionGenerador.php"); 
-            }
+          
              
          }
         else{
-            header("Location: login.php");
+            header("Location: login.php?error=datosIncorrectos");
          }
         mysqli_free_result($resultados);
         mysqli_close($conn);

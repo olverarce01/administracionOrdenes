@@ -6,6 +6,15 @@
         }
         return null;
     }
+    function datosIncorrectos(){
+        if(isset($_GET['error'])&& $_GET['error']=='datosIncorrectos'){
+            echo '
+            <div class="alert alert-danger text-center" role="alert">
+                Datos incorrectos
+            </div>
+            ';
+        }
+    }
     function OpcionCerrarSesion(){
         echo '<form action="./recursos/cerrarsesion.php">
         <input type="submit" name="sesionDestroy" value="Cerrar sesion" class="btn btn-light"/>

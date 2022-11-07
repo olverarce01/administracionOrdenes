@@ -33,27 +33,38 @@
 </head>
 
 <body class="fondo-index">
-    <header id="headerUser">
-    <?php
-        /* consultaDatosUsuario */
-        if(isset($DatosUsuario['nombre'])){
-            echo "<div> <i class='fa-solid fa-user'></i>";
-            echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
-            OpcionCerrarSesion();
-        }
-    ?>
-    </header>   
+    <header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <a><?php obtenerCantidadOrdenesTerminadas();?></a>
+        <a><?php obtenerCantidadOrdenesNoTerminadas();?></a>
+        <a><?php obtenerCantidadOrdenesAltaPrioridad();?></a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+    </header>
     <!-- Barra de navegacion --> 
     <div id="container-nav">
         <a href="./index.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-house" style="color:white"></i>Inicio </div>  
+            <div id="container-option"> <i class="fa-solid fa-house" style="color:black"></i>Inicio </div>  
         </a>
         
         <a href="./estadistica.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:white"></i>Estadística </div>  
+            <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:black"></i>Estadística </div>  
         </a>
         <a href="./ordenesTrabajo.php" class="option-nav">
-          <div id="container-option"> <i class="fa-solid fa-list" style="color:white"></i>Ordenes de Trabajo </div>  
+          <div id="container-option"> <i class="fa-solid fa-list" style="color:#374da5"></i>Ordenes de Trabajo </div>  
         </a>
     </div>
     <!-- tabla de ordenes -->
@@ -66,7 +77,8 @@
                             <th class="th-sm">NºOrden</th>
                             <th class="th-sm">Prioridad</th>
                             <th class="th-sm">Tipo de trabajo</th>
-                            <th class="th-sm">Fecha de Creacion</th>
+                            <th class="th-sm">Fecha de Recepcion</th>
+                            <th class="th-sm">Fecha de Asignacion</th>
                             <th class="th-sm">Estado</th>
                             <th class="th-sm">Accion</th>
                         </tr>
@@ -74,7 +86,7 @@
                     <tbody>
                         <?php
                         //listar ordenes no terminadas
-                        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
+                        $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaAsignacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
                             while($row = mysqli_fetch_assoc($result)) {
@@ -96,13 +108,15 @@
                                 }
                                 echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["categoria"]. "</td>";
                                 echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaCreacion"]. "</td>";
+                                echo "<td id='".$row["id"]."' class='tdOrdenes'>" . $row["fechaAsignacion"]. "</td>";
+
                                 if($row["terminada"]==0){
                                     echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
-                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
+                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
                                 }
                                 else{
                                     echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
-                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td> <br>";
+                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
                                 }
                                 echo "</tr>";
                             }
@@ -127,25 +141,11 @@
                     </tfoot>
                 </table>
             </div>
-            <div>
-                <!-- consulta datos ordenes -->
-                <div class="card-body cardDash cardDashboard">
-                    <?php obtenerCantidadOrdenesTerminadas();?>
-                        <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
-                </div>
-                
-                <div class="card-body cardDash cardDashboard">
-                    <?php obtenerCantidadOrdenesNoTerminadas();?>
-                    <img src="https://cdn-icons-png.flaticon.com/512/8509/8509817.png" alt="" width="45" height="45">
-                </div>
-                
-                <div class="card-body cardDash cardDashboard">
-                    <?php obtenerCantidadOrdenesAltaPrioridad();?>
-                    <img src="https://cdn-icons-png.flaticon.com/512/8509/8509757.png" alt="" width="45" height="45">
-                </div>
-            </div>
         </div>
     </div>
+<footer class="mt-5 py-5  text-muted text-center text-small">
+  <p class="mb-1 color-texto text-white">Universidad de Tarapacá – Universidad del Estado de Chile</p>
+</footer>
 <script>
 /* opciones de tabla de ordenes */
 $(document).ready(function () {
@@ -165,7 +165,6 @@ $(document).ready(function () {
         }
     });
 });
-$("br").remove();
 </script>
 </body>
 

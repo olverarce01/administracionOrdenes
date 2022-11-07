@@ -5,7 +5,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-              echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Ordenes</p>";
+              echo "<h5 class='text-warning'>$".$row["total"]." <span class='text-white font-weight-light'>Ordenes<span></h5>";
             }
         } else {
             echo "0 resultados";
@@ -18,7 +18,7 @@
         if (mysqli_num_rows($result) > 0) {
 
             while($row = mysqli_fetch_assoc($result)) {
-              echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Materiales</p>";
+              echo "<h5 class='text-warning'>$".$row["total"]." <span class='text-white font-weight-light'>Materiales<span></h5>";
             }
         } else {
             echo "0 resultados";
@@ -30,7 +30,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo "<p class='pDash text-info'>$".$row["total"]."</p><p class='pDash'>Mano de Obra</p>";
+                echo "<h5 class='text-warning'>$".$row["total"]." <span class='text-white font-weight-light'>Mano de Obra<span></h5>";
             }
         } else {
             echo "0 resultados";
@@ -42,7 +42,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo "<p class='pDash text-success'>".$row["contador"]." Terminadas</p>";
+                echo "<h3> <span class='text-success badge badge-light'>".$row["contador"]." Terminadas</span></h3>";
             }
         } else {
             echo "0 resultados";
@@ -54,7 +54,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo "<p class='pDash text-warning'>".$row["contador"]." Pendientes</p>";
+                echo "<h3> <span class='text-warning badge badge-light'>".$row["contador"]." Pendientes</span></h3>";
             }
         } else {
             echo "0 resultados";
@@ -66,7 +66,7 @@
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             while($row = mysqli_fetch_assoc($result)) {
-                echo "<p class='pDash text-danger'>".$row["contador"]." Urgentes</p>";
+                echo "<h3> <span class='text-danger badge badge-light'>".$row["contador"]." Urgentes</span></h3>";
             }
         } else {
             echo "0 resultados";
@@ -90,7 +90,7 @@
                  foreach(array('r', 'g', 'b') as $color){
                    $rgbColor[$color] = mt_rand(0, 255);
                  }
-                 array_push($colores_frecuenciaCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].",0.7)");
+                 array_push($colores_frecuenciaCategorias, "rgba(".$rgbColor["r"].",".$rgbColor["g"].",".$rgbColor["b"].", 0.7)");
    
                }
                 return array($labels_frecuenciaCategorias, $cantidades_frecuenciaCategorias,$colores_frecuenciaCategorias);

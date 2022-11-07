@@ -14,7 +14,7 @@ ob_start();
     <?php
     libreriasCDN();
     ?>
-    <title>Document</title>
+    <title>OrdenesTrabajo</title>
     <!-- <style>
         th, td {
         border: 1px solid black;
@@ -22,14 +22,52 @@ ob_start();
     </style> -->
 </head>
 <body>
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+    </header>
+  <p class="text-center h1 font-weight-bold">Ordenes de trabajo</p>
+  
+  <?php if (isset($_GET['dateInicio'])&&isset($_GET['dateFin'])&&isset($_GET['timeInicio'])&&isset($_GET['timeFin'])): ?>
+
+  <span>
+    Filtro: 
+    <?php
+      echo $_GET['fechaFiltro'];
+    ?>
+  </span>
+  <span>
+    Fechas: 
+    <?php
+      echo $_GET['dateInicio'].' '.$_GET['timeInicio'].' | '.$_GET['dateFin'].' '.$_GET['timeFin'];
+    ?>
+  </span>
+  <?php endif ?>
+
+
 <table class="table table-hover">
   <thead>
     <tr>
       <th>NºOrden</th>
         <th scope="col">FechaAsignacion</th>
-        <th scope="col">CostoMateriales</th>
-        <th scope="col">CostoFuncionarios</th>
-        <th scope="col">CostoTotal</th>
+        <th scope="col">Prioridad</th>
+        <th scope="col">Co. Materiales</th>
+        <th scope="col">Co. Funcionarios</th>
+        <th scope="col">Co. Total</th>
     </tr>
   </thead>
   <tbody>
@@ -47,7 +85,7 @@ ob_start();
   
         $fechaFiltro = $_GET['fechaFiltro'];
 
-        $sql = "SELECT rs.*,categorias.categoria FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."') AND ordenes.terminada=true) as rs, categorias WHERE rs.idCategoria=categorias.id";
+        $sql = "SELECT CONVERT( rs.fechaAsignacion,DATE) as dateAsignacion,rs.*,categorias.categoria FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."') AND ordenes.terminada=true) as rs, categorias WHERE rs.idCategoria=categorias.id";
         $result = mysqli_query($conn, $sql);
         //$datos = mysqli_fetch_all($result,MYSQLI_ASSOC); 
         //echo json_encode($datos);
@@ -67,18 +105,34 @@ ob_start();
             $costoMateriales =$costoMateriales + $row['precioMateriales'];
             echo "<tr>";
             echo "<th scope='row'>".$row['id']."</th>";
-            echo "<td>".$row['fechaAsignacion']."</td>";
-            echo "<td>".$row['precioMateriales']."</td>";
-            echo "<td>".$row['precioFuncionariosEjecutores']*$row['horasHombre']."</td>";
-            echo "<td>".$row['costoTotal']."</td>";
+            echo "<td>".$row['dateAsignacion']."</td>";
+            if($row['prioridad']==0){
+              echo "<td><span class='badge badge-danger'>Alta</span></td>";
+            }elseif ($row['prioridad']==1){
+              echo "<td><span class='badge badge-warning'>Media Alta</span></td>";
+            }
+            elseif ($row['prioridad']==2){
+              echo "<td><span class='badge badge-primary'>Media</span></td>";
+            }elseif ($row['prioridad']==3){
+              echo "<td><span class='badge badge-info'>Media Baja</span></td>";
+            }elseif ($row['prioridad']==4){
+              echo "<td><span class='badge badge-success'>Baja</span></td>";
+            }
+            
+            
+            
+            echo "<td>$".$row['precioMateriales']."</td>";
+            echo "<td>$".$row['precioFuncionariosEjecutores']*$row['horasHombre']."</td>";
+            echo "<td>$".$row['costoTotal']."</td>";
             echo "</tr>";
         }
         echo "<tr>";
         echo "<th scope='row'>Totales</th>";
         echo "<td></td>";
-        echo "<td>Total: ".$costoMateriales."</td>";
-        echo "<td>Total: ".$costoFuncionarios."</td>";
-        echo "<td>Total: ".$costoTotal."</td>";
+        echo "<td></td>";
+        echo "<td>Total: $".$costoMateriales."</td>";
+        echo "<td>Total: $".$costoFuncionarios."</td>";
+        echo "<td>Total: $".$costoTotal."</td>";
         echo "</tr>";
 
     } else {
@@ -117,10 +171,10 @@ $dompdf->render();
 
 $reporte = $_GET['reporte'];
 if($reporte=='ver'){
-  $dompdf->stream("archivo.pdf", array("Attachment" =>false));  //ver
+  $dompdf->stream("OrdenesTrabajo.pdf", array("Attachment" =>false));  //ver
 }
 if($reporte=='descargar'){
-  $dompdf->stream("archivo.pdf", array("Attachment" =>true)); //descargar
+  $dompdf->stream("OrdenesTrabajo.pdf", array("Attachment" =>true)); //descargar
 }
 
 ?>

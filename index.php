@@ -31,58 +31,59 @@
 
 </head>
 <body class="fondo-index">
-  <header id="headerUser">
-  <?php
-        /* consultaDatosUsuario */
-        if(isset($DatosUsuario['nombre'])){
-            echo "<div> <i class='fa-solid fa-user'></i>";
-            echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
-            OpcionCerrarSesion();
-        }
-  ?>
+  <header>
+    <nav class="navbar">
+      <!-- Logo UTA -->
+      <a class="navbar-brand" href="#">
+        <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+      </a>
+      <a><?php obtenerTotalCosto();?></a>
+      <a><?php obtenerTotalMateriales();?></a>
+      <a><?php obtenerTotalFuncionarios();?></a>       
+     
+      <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+      </div>
+    </nav>
   </header>
+
   <!-- Barra de navegacion -->
   <div id="container-nav">
     <a href="./index.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-house" style="color:white"></i>Inicio </div>  
+      <div id="container-option"> <i class="fa-solid fa-house" style="color:#374da5"></i>Inicio </div>  
     </a>   
   
     <a href="./estadistica.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:white"></i> Estadística</div>  
+      <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:black"></i> Estadística</div>  
     </a>
   
     <a href="./ordenesTrabajo.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-list" style="color:white"></i>Ordenes de Trabajo </div>  
+      <div id="container-option"> <i class="fa-solid fa-list" style="color:black"></i>Ordenes de Trabajo </div>  
     </a>  
+
   </div>
 
 
   <div id="main">
     <div id="container-chart">
-      
       <div id="chart">
-        <button onclick="download_image('chart')" id="btnDescargar">Descargar</button>
       </div>
-    
-      <!-- consultas de datos ordenes -->
-      <div id="info-chart">
-
-        <div class="card-body cardDash cardDashboard">
-        <?php obtenerTotalCosto();?> <img src="https://cdn-icons-png.flaticon.com/512/781/781902.png" alt="" width="45" height="45">
-        </div>
-              
-        <div class="card-body cardDash cardDashboard">
-        <?php obtenerTotalMateriales();?> <img src="https://cdn-icons-png.flaticon.com/512/3371/3371713.png" alt="" width="45" height="45">
-        </div>
-        
-        <div class="card-body cardDash cardDashboard">
-        <?php obtenerTotalFuncionarios();?> <img src="https://cdn-icons-png.flaticon.com/512/7424/7424725.png" alt="" width="45" height="45">
-      
-      </div>
+    </div>
+    <div id="centrarBtn">
+      <button onclick="download_image('chart')" id="btnDescargar" class="mx-auto">Descargar</button>    
     </div>
   </div>
       
-
+<footer class="mt-5 py-5  text-muted text-center text-small">
+  <p class="mb-1 color-texto text-white">Universidad de Tarapacá – Universidad del Estado de Chile</p>
+</footer>
 <?php
   /* Consulta de los costos y fechas para el grafico principal */
   $costos=[];
@@ -106,12 +107,16 @@ var fechas = <?php echo json_encode($fechas); ?>;</script>
 /* opciones de grafico */
 var options = {
   series: [{ name: "Costo de orden", data: costos }],
-  chart: {type: 'area', height: 450, zoom: { enabled: true}, background: '#fff', width: '600px'},
-  
+  chart: {
+          type: 'area', 
+          height: 490, 
+          zoom: { enabled: true}, 
+          background: '#fff', 
+          width: '1120px',
+  },
 
   dataLabels: {enabled: false},
-  forecastDataPoints: {count: 1},
-  stroke: {curve: 'smooth', width: 5},
+  stroke: {curve: 'straight', width: 5},
   
   title: {text: 'Grafico de costos', align: 'left'},
   subtitle: {text: 'CostoOrden vs Tiempo', align: 'left'},
@@ -128,6 +133,7 @@ var chart = new ApexCharts(document.querySelector("#chart"), options);
 <script>
 /* descargar imagen del grafico principal */  
 function download_image(id){
+  $("#btnDescargar").toggle();
   html2canvas(document.querySelector("#chart")).then(canvas => {
   image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
   var link = document.createElement('a');
@@ -135,6 +141,7 @@ function download_image(id){
   link.href = image;
   link.click();
   });        
+  $("#btnDescargar").toggle();
 }
 </script>
 

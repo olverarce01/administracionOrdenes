@@ -1,5 +1,16 @@
 <?php
+    $terminada='';
+
     include "./conexion.php";
+    include "./funcionesLogin.php";
+    include "./funcionesConsultas.php";
+
+    $DatosUsuario=ObtenerDatosBasicosUsuario('Administrador');
+
+    if(!isset($DatosUsuario['nombre'])){ header('Location: /administracionOrdenes/login.php'); exit();}
+
+
+  
 if(isset($_GET['Terminar'])){
     $id= $_GET['ver'];
     $sql = "UPDATE ordenes SET terminada= NOT terminada  WHERE id=".$id."";
@@ -7,19 +18,6 @@ if(isset($_GET['Terminar'])){
     } else {
       echo "Error al Terminar: " . mysqli_error($conn);
     }
-    
-   /*  if($_GET['fechaTermino']){
-        $sql = "UPDATE ordenes SET fechaTermino= CURRENT_TIMESTAMP  WHERE id=".$id."";
-
-    }else{
-        $sql = "UPDATE ordenes SET fechaTermino= NULL   WHERE id=".$id."";
-    }
-    if (mysqli_query($conn, $sql)) {
-      echo "Orden Terminada";
-    } else {
-      echo "Error al Terminar: " . mysqli_error($conn);
-    } */
-  
 }
 if (isset($_POST['dateRecepcion'])&&isset($_POST['timeRecepcion'])&&isset($_POST['dateAsignacion'])&&isset($_POST['timeAsignacion'])) {
   
@@ -90,6 +88,7 @@ if (mysqli_query($conn, $sql)) {
 
 
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -130,20 +129,25 @@ if (mysqli_query($conn, $sql)) {
 
 
   <link rel="stylesheet" href="../css/verOrden.css">
+  <?php echo '<title>Orden '.$_GET['ver'].'</title>';?>
 
-  <title>Document</title>
+  <style>
+
+  </style>
 </head>
 <body>
+
   <?php
     $id= $_GET['ver'];
     $sql = "SELECT terminada FROM ordenes WHERE id='".$id."'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
       while($row = mysqli_fetch_assoc($result)) {
+        echo '<div class="d-flex mx-3 my-2"> <a href="../index.php"><img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="80" alt="Logo Uta"></a>';
         if($row["terminada"]){
-        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p>';
+        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p></div>';
       }else{
-        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">No terminada</span></p>';
+        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">Pendiente</span></p></div>';
       }
       }
     }
@@ -197,12 +201,12 @@ if (mysqli_query($conn, $sql)) {
    
                      while($row = mysqli_fetch_assoc($result)) {
                        echo "<span class='datosMuestra' >".$row["fechaRecepcion"]."</span>";
-                       echo '<input type="date" name="dateRecepcion" id="dateRecepcion" class="editando" value="'.$row["dateRecepcion"].'">';
-                       echo '<input type="time" name="timeRecepcion" id="timeRecepcion" class="editando" value="'.$row["timeRecepcion"].'">';
+                       echo '<input type="date" name="dateRecepcion" id="dateRecepcion" class="editando" value="'.$row["dateRecepcion"].'" required>';
+                       echo '<input type="time" name="timeRecepcion" id="timeRecepcion" class="editando" value="'.$row["timeRecepcion"].'" required>';
                      }
                 }else {
-                        echo '<input type="date" name="dateRecepcion" id="dateRecepcion" class="editando">';
-                        echo '<input type="time" name="timeRecepcion" id="timeRecepcion" class="editando">';
+                        echo '<input type="date" name="dateRecepcion" id="dateRecepcion" class="editando" required>';
+                        echo '<input type="time" name="timeRecepcion" id="timeRecepcion" class="editando" required>';
                 }
                 ?> 
                 
@@ -218,12 +222,12 @@ if (mysqli_query($conn, $sql)) {
    
                      while($row = mysqli_fetch_assoc($result)) {
                       echo "<span class='datosMuestra' >".$row["fechaAsignacion"]."</span>";
-                       echo '<input type="date" name="dateAsignacion" id="dateAsignacion" class="editando" value="'.$row["dateAsignacion"].'">';
-                       echo '<input type="time" name="timeAsignacion" id="timeAsignacion" class="editando" value="'.$row["timeAsignacion"].'">';
+                       echo '<input type="date" name="dateAsignacion" id="dateAsignacion" class="editando" value="'.$row["dateAsignacion"].'" required>';
+                       echo '<input type="time" name="timeAsignacion" id="timeAsignacion" class="editando" value="'.$row["timeAsignacion"].'" required>';
                      }
                   }else{
-                      echo '<input type="date" name="dateAsignacion" id="dateAsignacion" class="editando">';
-                      echo '<input type="time" name="timeAsignacion" id="timeAsignacion" class="editando">';
+                      echo '<input type="date" name="dateAsignacion" id="dateAsignacion" class="editando" required>';
+                      echo '<input type="time" name="timeAsignacion" id="timeAsignacion" class="editando" required>';
                   }
                 ?> 
             </div>
@@ -247,7 +251,7 @@ if (mysqli_query($conn, $sql)) {
             ?> 
             
             <label for="" class="editando">
-            <select name="funcionarioEncargado" id="funcionarioEncargado" class="js-example-basic-single">
+            <select name="funcionarioEncargado" id="funcionarioEncargado" class="js-example-basic-single" required>
               <?php
               $sql = "SELECT * FROM funcionarios";
               $result = mysqli_query($conn, $sql);
@@ -287,7 +291,7 @@ if (mysqli_query($conn, $sql)) {
                               ';
                        }else{
                         echo  '
-                                <select name="tipoTrabajo" id="tipoTrabajo" class="editando">
+                                <select name="tipoTrabajo" id="tipoTrabajo" class="editando" required>
                                 <option value="INTERNO">INTERNO</option>
                                 <option value="EXTERNO" selected>EXTERNO</option>
                                 </select>
@@ -316,7 +320,7 @@ if (mysqli_query($conn, $sql)) {
             ?> 
 
             <label for="" class="editando">
-            <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
+            <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
               <?php
                 $sql = "SELECT * FROM funcionarios";
                 $result = mysqli_query($conn, $sql);
@@ -347,14 +351,14 @@ if (mysqli_query($conn, $sql)) {
                      while($row = mysqli_fetch_assoc($result)) {
                       echo "<span class='datosMuestra' >".$row["fechaTermino"]."</span>";
                        echo '
-                          <input type="date" name="dateTermino" id="dateTermino" class="editando" value="'.$row['dateTermino'].'">
-                          <input type="time" name="timeTermino" id="timeTermino" class="editando" value="'.$row['timeTermino'].'">
+                          <input type="date" name="dateTermino" id="dateTermino" class="editando" value="'.$row['dateTermino'].'" required>
+                          <input type="time" name="timeTermino" id="timeTermino" class="editando" value="'.$row['timeTermino'].'" required>
                           ';
                      }
                   }else{
                     echo '
-                          <input type="date" name="dateTermino" id="dateTermino" class="editando">
-                          <input type="time" name="timeTermino" id="timeTermino" class="editando">
+                          <input type="date" name="dateTermino" id="dateTermino" class="editando" required>
+                          <input type="time" name="timeTermino" id="timeTermino" class="editando" required>
                           ';
                   }
               ?> 
@@ -418,12 +422,12 @@ if (mysqli_query($conn, $sql)) {
                      while($row = mysqli_fetch_assoc($result)) {
                       echo "<span class='datosMuestra' >".$row["horasHombre"]."</span>";
                        echo '
-                             <input type="number" name="horasHombre" id="horasHombre" class="editando" value="'.$row["horasHombre"].'">
+                             <input type="number" name="horasHombre" id="horasHombre" class="editando" value="'.$row["horasHombre"].'" required>
                             ';
                      }
                    }else{
                     echo '
-                          <input type="number" name="horasHombre" id="horasHombre" class="editando">
+                          <input type="number" name="horasHombre" id="horasHombre" class="editando" required>
                         ';
                    }
               ?> 
@@ -461,7 +465,7 @@ if (mysqli_query($conn, $sql)) {
               ?> 
 
               <label for="" class="editando">
-              <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4">
+              <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
                   <?php
                     $sql = "SELECT * FROM materiales";
                     $result = mysqli_query($conn, $sql);
@@ -487,7 +491,7 @@ if (mysqli_query($conn, $sql)) {
             
           <?php
             echo '
-            <a href="./verPDFOrden.php?id='.$id.'&reporte=ver" class="btn btn-danger" id="verPDF">
+            <a href="./verPDFOrden.php?id='.$id.'&reporte=ver" class="btn btn-danger" id="verPDF" target="_blank" rel="noopener noreferrer">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-pdf" viewBox="0 0 16 16">
             <path d="M4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4zm0 1h8a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1z"/>
             <path d="M4.603 12.087a.81.81 0 0 1-.438-.42c-.195-.388-.13-.776.08-1.102.198-.307.526-.568.897-.787a7.68 7.68 0 0 1 1.482-.645 19.701 19.701 0 0 0 1.062-2.227 7.269 7.269 0 0 1-.43-1.295c-.086-.4-.119-.796-.046-1.136.075-.354.274-.672.65-.823.192-.077.4-.12.602-.077a.7.7 0 0 1 .477.365c.088.164.12.356.127.538.007.187-.012.395-.047.614-.084.51-.27 1.134-.52 1.794a10.954 10.954 0 0 0 .98 1.686 5.753 5.753 0 0 1 1.334.05c.364.065.734.195.96.465.12.144.193.32.2.518.007.192-.047.382-.138.563a1.04 1.04 0 0 1-.354.416.856.856 0 0 1-.51.138c-.331-.014-.654-.196-.933-.417a5.716 5.716 0 0 1-.911-.95 11.642 11.642 0 0 0-1.997.406 11.311 11.311 0 0 1-1.021 1.51c-.29.35-.608.655-.926.787a.793.793 0 0 1-.58.029zm1.379-1.901c-.166.076-.32.156-.459.238-.328.194-.541.383-.647.547-.094.145-.096.25-.04.361.01.022.02.036.026.044a.27.27 0 0 0 .035-.012c.137-.056.355-.235.635-.572a8.18 8.18 0 0 0 .45-.606zm1.64-1.33a12.647 12.647 0 0 1 1.01-.193 11.666 11.666 0 0 1-.51-.858 20.741 20.741 0 0 1-.5 1.05zm2.446.45c.15.162.296.3.435.41.24.19.407.253.498.256a.107.107 0 0 0 .07-.015.307.307 0 0 0 .094-.125.436.436 0 0 0 .059-.2.095.095 0 0 0-.026-.063c-.052-.062-.2-.152-.518-.209a3.881 3.881 0 0 0-.612-.053zM8.078 5.8a6.7 6.7 0 0 0 .2-.828c.031-.188.043-.343.038-.465a.613.613 0 0 0-.032-.198.517.517 0 0 0-.145.04c-.087.035-.158.106-.196.283-.04.192-.03.469.046.822.024.111.054.227.09.346z"/>
@@ -518,13 +522,14 @@ if (mysqli_query($conn, $sql)) {
                  $result = mysqli_query($conn, $sql);
                  if (mysqli_num_rows($result) > 0) {
                      while($row = mysqli_fetch_assoc($result)) {
+                       $terminada=$row["terminada"];
                        if($row["terminada"]){
                         echo '    
-                        <a href="./verOrden.php?ver='.$id.'&Terminar=true"><button class="btn btn-warning" type="button" id="Terminar">Dejar Pendiente Orden</button></a> 
+                        <a href="./actualizarEstadoOrden.php?ver='.$id.'&Terminar=true"><button class="btn btn-warning" type="button" id="Terminar">Dejar Pendiente Orden</button></a> 
                         ';
                        }else{
                         echo '
-                        <a href="./verOrden.php?ver='.$id.'&Terminar=true"><button class="btn btn-success" type="button" id="Terminar">Terminar Orden</button></a>
+                        <a href="./actualizarEstadoOrden.php?ver='.$id.'&Terminar=true"><button class="btn btn-success" type="button" id="Terminar">Terminar Orden</button></a>
                         ';
                        }
 
@@ -532,11 +537,43 @@ if (mysqli_query($conn, $sql)) {
                      }
                    }
             ?> 
+
+
+<?php   
+  $sql = "SELECT * FROM ordenes WHERE id='".$id."'";
+  $result = mysqli_query($conn, $sql);
+
+  $ordenCompleta=1;
+  if (mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      if(
+        $row["fechaRecepcion"]!=null &&
+        $row["fechaAsignacion"]!=null &&
+        $row["funcionarioEncargado"]!=null &&
+        $row["tipoTrabajo"]!=null &&
+        $row["funcionariosEjecutores"]!=null &&
+        $row["fechaTermino"]!=null &&
+        $row["solicitudCompra"]!=null &&
+        $row["observacion"]!=null &&
+        $row["horasHombre"]!=null &&
+        $row["cantidadPersonasInvolucradas"]!=null &&
+        $row["materiales"]!=null
+        
+      )
+      { $ordenCompleta=0;
+      }
+
+    }
+  }
+?> 
 </div>
 </form>
 
 
 <script>
+
+
+
     let materiales = new Map();
     let funcionariosEjecutores = new Map();
 
@@ -550,8 +587,10 @@ if (mysqli_query($conn, $sql)) {
         $("#precioMateriales").val(precioTotal);
     }
 
-
-
+    if(<?php echo $ordenCompleta;?>){
+      $("#Terminar").css("display","none");
+      $("#Terminar").css("visibility","hidden");  
+    }
 
 
    $(document).ready(function() {
@@ -559,8 +598,19 @@ if (mysqli_query($conn, $sql)) {
     });
       
   $(function(){
+    
+    if(<?php echo $terminada;?>){
+      $("#Editar").css("display","none");
+      $("#Editar").css("visibility","hidden");
+    }
+
     $("#Editar").click(function(){
 
+      $("#verPDF").css("display","none");
+      $("#verPDF").css("visibility","hidden");
+      $("#descargarPDF").css("display","none");
+      $("#descargarPDF").css("visibility","hidden");
+      
       
       $(".datosMuestra").css("display","none");
       $(".datosMuestra").css("visibility","hidden");
@@ -573,7 +623,17 @@ if (mysqli_query($conn, $sql)) {
       $("#Terminar").css("visibility","hidden");
       
     });
+
+  
+
     $("#Cancelar").click(function(){
+
+      $("#verPDF").css("display","inline-block");
+      $("#verPDF").css("visibility","visible");
+      $("#descargarPDF").css("display","inline-block");
+      $("#descargarPDF").css("visibility","visible");
+    
+
       $("#Editar").css("display","inline");
       $("#Editar").css("visibility","visible");
       $(".editando, #Guardar, #Cancelar").css("display","none");

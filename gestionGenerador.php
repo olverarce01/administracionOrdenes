@@ -2,7 +2,7 @@
     include "./recursos/conexion.php";   
     include "./recursos/funcionesLogin.php";
 
-    $DatosUsuario=ObtenerDatosBasicosUsuario();
+    $DatosUsuario=ObtenerDatosBasicosUsuario('generador');
     if(!isset($DatosUsuario['nombre'])){ header('Location: /administracionOrdenes/login.php'); exit();}
 ?>
 
@@ -22,7 +22,6 @@
 
         $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (ubicacion, anexo,idCategoria, prioridad, centroCosto, funcionarioContacto, resumen, detalle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         mysqli_stmt_bind_param($stmt, 'ssiissss',$ubicacion, $DatosUsuario['run'],$categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle);
-        echo "Se agrego correctamente: la orden a la base de datos";
         
         mysqli_stmt_execute($stmt);
         mysqli_stmt_close($stmt);
@@ -47,17 +46,24 @@
     <title>GestionGenerador</title>
 </head>
 <body>  
-  <header id="headerUser">
-  <?php
-        if(isset($DatosUsuario['nombre'])){
-            echo "<div>";
-            echo "<i class='fa-solid fa-user'></i>";
-            echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span>";
-            echo "</div>";
-            OpcionCerrarSesion();
-        }
-  ?>
-  </header>  
+  <header>
+    <nav class="navbar">
+      <!-- Logo UTA -->
+      <a class="navbar-brand" href="#">
+        <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+      </a>
+      <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+      </div>
+    </nav>
+  </header>
     
   <p id="tituloForm" class="text-info">GESTION GENERADOR DE ORDENES</p>
   <form action="./gestionGenerador.php" method="post" id="formOrdenes" class="m-5 p-3">
@@ -166,8 +172,14 @@
     <input type="submit" value="CREAR ORDEN" class="btn btn-info">
   </form>   
 
+<footer class="mt-5 py-5  text-muted text-center text-small">
+  <p class="mb-1 color-texto text-white">Universidad de Tarapacá – Universidad del Estado de Chile</p>
+</footer>
 <script>
   $("#opcionesCategorias").hide();
+  $("#btnOpcionesCategorias").click(function(){
+    $("#opcionesCategorias").toggle();
+  });
 </script>
 
 

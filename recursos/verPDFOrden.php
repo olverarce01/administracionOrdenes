@@ -45,226 +45,229 @@ ob_start();
         display: none;
         visibility: hidden;
     }
-  </style>
-  <title>Document</title>
-</head>
-<body>
-  
-<p>SOLICITUD DE TRABAJO O SERVICIO DLO</p>
-<p>Formulario interno</p>
 
+  </style>
+  <?php echo '<title>Orden '.$_GET['id'].'</title>';?>
+
+</head>
+<body>  
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+  <p>SOLICITUD DE TRABAJO O SERVICIO DLO</p>
+  <p>Formulario interno</p>
+<?php 
+  echo "<div class='mx-3'>Fecha de archivo ".date("Y-m-d H:i:s")."</div>";
+?>
 <?php
-        include "./conexion.php";
-        $id= $_GET['id'];
-        $sql = "SELECT ordenes.*, categorias.categoria FROM ordenes, categorias WHERE ordenes.id=".$id." && categorias.id=idCategoria";
+  include "./conexion.php";
+  $id= $_GET['id'];
+  $sql = "SELECT ordenes.*, categorias.categoria FROM ordenes, categorias WHERE ordenes.id=".$id." && categorias.id=idCategoria";
+  $result = mysqli_query($conn, $sql);
+  if (mysqli_num_rows($result) > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      echo "<div id='".$row["id"]."' class='orden'>";
+      echo "<div class='d-flex justify-content-between'>";
+      echo "<div> <span style='font-weight:bold;'>NºSolicitud:</span> " . $row["id"]. " </div>";
+      echo "<div> <span style='font-weight:bold;'>Fecha Solicitud:</span> " . $row["fechaCreacion"]. " </div>";
+      echo "</div>";
+      echo "<div class='d-flex justify-content-between'>";
+      echo "<div> <span style='font-weight:bold;'>Ubicacion:</span> " . $row["ubicacion"]. " </div>";
+      echo "<div> <span style='font-weight:bold;'>Anexo:</span> " . $row["anexo"]. " </div>";
+      echo "</div>";
+      echo "<div> <span style='font-weight:bold;'>Centro de Costo:</span> " . $row["centroCosto"]. " </div>";
+      echo "<div> <span style='font-weight:bold;'>Funcionario Contacto:</span> " . $row["funcionarioContacto"]." </div>";
+      echo "<div> <span style='font-weight:bold;'>Tipo de Servicio:</span> " . $row["categoria"]." </div>";
+      echo "<div> <span style='font-weight:bold;'>Resumen:</span> " . $row["resumen"]." </div>";
+      echo "<div> <span style='font-weight:bold;'>Detalle:</span> " . $row["detalle"]." </div>";
+      echo "</div>";
+
+    }
+  } else {
+    echo "0 resultados";
+  }       
+?>
+
+<div class="orden">
+  <div class="d-flex justify-content-between">
+    <div>
+      <span style="font-weight:bold;">Fecha de recepción:</span>
+      <?php            
+        $sql = "SELECT fechaRecepcion FROM ordenes WHERE id='".$id."'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
-            while($row = mysqli_fetch_assoc($result)) {
-            echo "<div id='".$row["id"]."' class='orden'>";
-
-            echo "<div class='d-flex justify-content-between fila'>";
-            echo "<div> <span style='font-weight:bold;'>NºSolicitud:</span> " . $row["id"]. " </div>";
-            echo "<div> <span style='font-weight:bold;'>Fecha Solicitud:</span> " . $row["fechaCreacion"]. " </div>";
-            echo "</div>";
-
-            echo "<div class='d-flex justify-content-between fila'>";
-            echo "<div> <span style='font-weight:bold;'>Ubicacion:</span> " . $row["ubicacion"]. " </div>";
-            echo "<div> <span style='font-weight:bold;'>Anexo:</span> " . $row["anexo"]. " </div>";
-            echo "</div>";
-
-            echo "<div> <span style='font-weight:bold;'>Centro de Costo:</span> " . $row["centroCosto"]. " </div>";
-            echo "<div> <span style='font-weight:bold;'>Funcionario Contacto:</span> " . $row["funcionarioContacto"]." </div>";
-            echo "<div> <span style='font-weight:bold;'>Tipo de Servicio:</span> " . $row["categoria"]." </div>";
-            echo "<div> <span style='font-weight:bold;'>Resumen:</span> " . $row["resumen"]." </div>";
-            echo "<div> <span style='font-weight:bold;'>Detalle:</span> " . $row["detalle"]." </div>";
-
-            echo "</div>";
-
-            }
-          } else {
-            echo "0 resultados";
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span>".$row["fechaRecepcion"]."</span";
           }
-         
-?>
-<div class="orden">
-          <div class="d-flex justify-content-between fila">
-            <div>
-                <span style="font-weight:bold;">Fecha de recepción: 
-                </span>
-                <?php            
-                $sql = "SELECT fechaRecepcion FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["fechaRecepcion"]."</span";
-                          }
-                        }
-                ?> 
+        }
+      ?>      
+    </div>
+    
+    <div>
+      <span style="font-weight:bold;">Fecha de Asignación:</span>
+      <?php            
+        $sql = "SELECT fechaAsignacion FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span>".$row["fechaAsignacion"]."</span";
+          }
+        }
+      ?> 
+    </div>
+  </div>
 
-              
-            </div>
-            <div>
-                <span style="font-weight:bold;">Fecha de Asignación:
-                </span>
-                <?php            
-                $sql = "SELECT fechaAsignacion FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["fechaAsignacion"]."</span";
-                          }
-                        }
-                ?> 
-
-            </div>
-          </div>
-          <div>
-            <span style="font-weight:bold;">Funcionario Encargado:
-            </span>
-            <?php
-                 $funcionarioEncargado = '';
-
-                 $sql = "SELECT funcionarioEncargado FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
+  <div>
+    <span style="font-weight:bold;">Funcionario Encargado:</span>
+      <?php
+        $funcionarioEncargado = '';
+        $sql = "SELECT funcionarioEncargado FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span class='datosMuestra' >".$row["funcionarioEncargado"]."</span>";
+            $funcionarioEncargado = $row["funcionarioEncargado"];
+          }
+        }
+      ?> 
+  </div>
+  
+  <div>
+    <span style="font-weight:bold;">Tipo de Trabajo:</span>
+      <?php
+        $sql = "SELECT tipoTrabajo FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span class='datosMuestra' >".$row["tipoTrabajo"]."</span>";
+          }
+        }
+      ?>    
+  </div>
+  
+  <div>
+    <span style="font-weight:bold;">Funcionario Ejecutor:</span>
+    <?php       
+      $sql = "SELECT funcionariosEjecutores FROM ordenes WHERE id='".$id."'";
+      $result = mysqli_query($conn, $sql);
+      if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+          echo "<span class='datosMuestra' >".$row["funcionariosEjecutores"]."</span>";
+        }
+      }
+    ?> 
+  </div>
    
-                     while($row = mysqli_fetch_assoc($result)) {
-                       echo "<span class='datosMuestra' >".$row["funcionarioEncargado"]."</span>";
+  <div class="d-flex justify-content-between">
+    <div>
+      <span style="font-weight:bold;">Fecha de Término:</span>
+      <?php            
+        $sql = "SELECT fechaTermino FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span>".$row["fechaTermino"]."</span";
+          }
+        }
+      ?>   
+    </div>
 
-                       $funcionarioEncargado = $row["funcionarioEncargado"];
-                     }
-                   }
-            ?> 
-            
-          </div>
-          <div>
-            <span style="font-weight:bold;">Tipo de Trabajo:
-            </span>
-            <?php
-                 
-                 $sql = "SELECT tipoTrabajo FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
-   
-                     while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["tipoTrabajo"]."</span>";
-                     }
-                   }
-            ?> 
+    <div>
+      <span style="font-weight:bold;">Solicitud de Compra:</span>
+        <?php            
+          $sql = "SELECT solicitudCompra FROM ordenes WHERE id='".$id."'";
+          $result = mysqli_query($conn, $sql);
+          if (mysqli_num_rows($result) > 0) {
+            while($row = mysqli_fetch_assoc($result)) {
+              echo "<span>".$row["solicitudCompra"]."</span";
+            }
+          }
+        ?>           
+    </div>  
+  </div>
 
-           
-          </div>
-          <div>
-            <span style="font-weight:bold;">Funcionario Ejecutor:
-            </span>
-            <?php
-            
-                 $sql = "SELECT funcionariosEjecutores FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
-   
-                     while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["funcionariosEjecutores"]."</span>";
-                     }
-                   }
-            ?> 
+  <div>
+    <span style="font-weight:bold;">Observación:</span>
+    <?php            
+      $sql = "SELECT observacion FROM ordenes WHERE id='".$id."'";
+      $result = mysqli_query($conn, $sql);
+      if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+          echo "<span>".$row["observacion"]."</span";
+        }
+      }
+    ?>
+  </div>
+    
+  <div class="d-flex justify-content-between">
+    <div>
+      <span style="font-weight:bold;">Nº de Horas Hombre:</span>
+      <?php            
+        $sql = "SELECT horasHombre FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span>".$row["horasHombre"]."</span";
+          }
+        }
+      ?>             
+    </div>
+    
+    <div>
+      <span style="font-weight:bold;">Cantidad de personas involucradas:</span>
+      <?php
+        $sql = "SELECT cantidadPersonasInvolucradas FROM ordenes WHERE id='".$id."'";
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0) {
+          while($row = mysqli_fetch_assoc($result)) {
+            echo "<span class='datosMuestra' >".$row["cantidadPersonasInvolucradas"]."</span>";
+          }
+        }
+      ?> 
+    </div>  
+  </div>
 
-          </div>
-          <div class="d-flex justify-content-between fila">
-            <div>
-              <span style="font-weight:bold;">Fecha de Término:
-              </span>
-              <?php            
-                $sql = "SELECT fechaTermino FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["fechaTermino"]."</span";
-                          }
-                        }
-              ?>   
-            
-
-              
-            </div>
-            <div>
-              <span style="font-weight:bold;">Solicitud de Compra:
-              </span>
-              <?php            
-                $sql = "SELECT solicitudCompra FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["solicitudCompra"]."</span";
-                          }
-                        }
-              ?>           
-
-            </div>
-          </div>
-          <div>
-              <span style="font-weight:bold;">Observación:</span>
-              <?php            
-                $sql = "SELECT observacion FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["observacion"]."</span";
-                          }
-                        }
-              ?>
-
-          </div>
-          <div class="d-flex justify-content-between fila">
-            <div>
-              <span style="font-weight:bold;">Nº de Horas Hombre:
-              </span>
-              <?php            
-                $sql = "SELECT horasHombre FROM ordenes WHERE id='".$id."'";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0) {
-                          while($row = mysqli_fetch_assoc($result)) {
-                          echo "<span>".$row["horasHombre"]."</span";
-                          }
-                        }
-              ?>             
-
-            </div>
-            <div>
-              <span style="font-weight:bold;">Cantidad de personas involucradas:
-              </span>
-              <?php
-                 $sql = "SELECT cantidadPersonasInvolucradas FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
-   
-                     while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["cantidadPersonasInvolucradas"]."</span>";
-                     }
-                   }
-              ?> 
-
-            </div>
-          </div>
-          <div>
-              <span style="font-weight:bold;">Material utilizado:
-              </span>
-              <?php
-                 $sql = "SELECT materiales FROM ordenes WHERE id='".$id."'";
-                 $result = mysqli_query($conn, $sql);
-                 if (mysqli_num_rows($result) > 0) {
-   
-                     while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["materiales"]."</span>";
-                     }
-                   }
-              ?> 
-
-
-          </div>
-          
-          
+  <div>
+    <span style="font-weight:bold;">Material utilizado:</span>
+    <?php
+      $sql = "SELECT materiales FROM ordenes WHERE id='".$id."'";
+      $result = mysqli_query($conn, $sql);
+      if (mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+          echo "<span class='datosMuestra' >".$row["materiales"]."</span>";
+        }
+      }
+    ?> 
+  </div>          
 </div>
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div>
+  <p class="h5 my-3"> Conforme con la orden: ________________________</p>
+</div>
+
+</body>
 
 <?php
 $html=ob_get_clean();
@@ -286,10 +289,11 @@ $dompdf->render();
 
 $reporte = $_GET['reporte'];
 if($reporte=='ver'){
-  $dompdf->stream("archivo.pdf", array("Attachment" =>false));  //ver
+  $dompdf->stream("Orden ".$_GET['id'].".pdf", array("Attachment" =>false));  //ver
 }
 if($reporte=='descargar'){
-  $dompdf->stream("archivo.pdf", array("Attachment" =>true)); //descargar
+  $dompdf->stream("Orden ".$_GET['id'].".pdf", array("Attachment" =>true)); //descargar
 }
 
 ?>
+

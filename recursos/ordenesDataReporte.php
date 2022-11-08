@@ -39,7 +39,7 @@ ob_start();
         ?>
         </div>
         </nav>
-    </header>
+</header>
   <p class="text-center h1 font-weight-bold">Ordenes de trabajo</p>
   
   <?php if (isset($_GET['dateInicio'])&&isset($_GET['dateFin'])&&isset($_GET['timeInicio'])&&isset($_GET['timeFin'])): ?>

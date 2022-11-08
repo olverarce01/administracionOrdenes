@@ -3,8 +3,12 @@
     include "./recursos/funcionesLogin.php";
     include "./recursos/funcionesConsultas.php";
 
-    $DatosUsuario=ObtenerDatosBasicosUsuario();
-    if(!isset($DatosUsuario['nombre'])){ header('Location: /administracionOrdenes/login.php'); exit();}
+    $DatosUsuario=ObtenerDatosBasicosUsuario('Administrador');
+
+
+    if(!isset($DatosUsuario['nombre'])){ 
+        header('Location: /administracionOrdenes/login.php'); exit();
+    }
 
 ?>
 

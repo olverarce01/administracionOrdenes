@@ -2,7 +2,8 @@
     include "./recursos/conexion.php";   
     include "./recursos/funcionesLogin.php";
     include "./recursos/funcionesConsultas.php";
-    $DatosUsuario=ObtenerDatosBasicosUsuario();
+    $DatosUsuario=ObtenerDatosBasicosUsuario('Administrador');
+    
     if(!isset($DatosUsuario['nombre'])){header('Location: /administracionOrdenes/login.php'); exit();}
 ?>
 

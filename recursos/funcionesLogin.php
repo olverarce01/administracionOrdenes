@@ -1,7 +1,9 @@
 <?php
-    function ObtenerDatosBasicosUsuario(){
+    function ObtenerDatosBasicosUsuario($rolUsuario){
         session_start();
-        if(isset($_SESSION['nombre'])&&isset($_SESSION['apellido'])&&isset($_SESSION['run'])){
+        if(isset($_SESSION['nombre'])&&isset($_SESSION['apellido'])&&isset($_SESSION['run']) 
+            && $rolUsuario == $_SESSION['rol']
+        ){
             return $_SESSION;
         }
         return null;

@@ -1,14 +1,3 @@
-#container-nav{
-  display: flex;
-  flex-direction: column;
-  width: 90px;
-
-  position: absolute;
-  border-radius: 30px;
-  top: 150px;
-  text-align: center;
-}
-
 .option-nav{
   color: black;
   font-size: 12px;
@@ -28,4 +17,19 @@ i{
 #container-option{
   display: flex;
   flex-direction: column;
+}
+
+#container{
+  display: flex;
+}
+#container-nav{
+  display: flex;
+  flex-direction: column;
+  width: 10%;
+
+  top: 150px;
+  text-align: center;
+}
+#main{
+  width: 90%;
 }

@@ -48,6 +48,40 @@ if (isset($_POST['dateRecepcion'])&&isset($_POST['timeRecepcion'])&&isset($_POST
     $materiales .=$selectedOption.", ";
   }
 
+  $sql = "DELETE FROM funcionariosorden WHERE idOrden=".$_GET['ver'];
+  mysqli_query($conn, $sql);
+
+  foreach ($_POST['funcionariosEjecutores'] as $selectedOption)
+  {  
+    $stmt = mysqli_prepare($conn,"INSERT INTO funcionariosorden (idFuncionario,idOrden) VALUES (?, ?)");  
+    mysqli_stmt_bind_param($stmt, 'ii',$selectedOption,$_GET['ver']);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+  }
+
+  $sql = "DELETE FROM materialesorden WHERE idOrden=".$_GET['ver'];
+  mysqli_query($conn, $sql);
+
+  foreach ($_POST['materiales'] as $selectedOption)
+  {  
+    $stmt = mysqli_prepare($conn,"INSERT INTO materialesorden (idMaterial,idOrden) VALUES (?, ?)");  
+    mysqli_stmt_bind_param($stmt, 'ii',$selectedOption,$_GET['ver']);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+
+  }
+  foreach($_POST['materiales'] as $selectedOption)
+  {
+    $material=$selectedOption;
+    $cantidad=$_POST[$material];
+
+    $sql = "UPDATE materialesorden SET cantidad= '".$cantidad."'  WHERE idOrden=".$_GET['ver']." AND idMaterial=".$selectedOption."";
+    if (mysqli_query($conn, $sql)) {
+    } else {
+      echo "Error al Terminar: " . mysqli_error($conn);
+    }
+  }
+ 
   $dateTermino= $_POST['dateTermino'];
   $timeTermino= $_POST['timeTermino'];
   $dateTimeTermino = date('Y-m-d H:i:s', strtotime("$dateTermino $timeTermino"));
@@ -85,6 +119,9 @@ if (mysqli_query($conn, $sql)) {
 } else {
   echo "Error al Terminar: " . mysqli_error($conn);
 }
+
+
+
 
 
 }
@@ -145,14 +182,14 @@ if (mysqli_query($conn, $sql)) {
       while($row = mysqli_fetch_assoc($result)) {
         echo '<div class="d-flex mx-3 my-2"> <a href="../index.php"><img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="80" alt="Logo Uta"></a>';
         if($row["terminada"]){
-        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p></div>';
+        echo '<p class="titulos">SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-success">Terminada</span></p></div>';
       }else{
-        echo '<p>SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">Pendiente</span></p></div>';
+        echo '<p class="titulos">SOLICITUD DE TRABAJO O SERVICIO DLO <span class="badge badge-warning">Pendiente</span></p></div>';
       }
       }
     }
   ?> 
-<p>Formulario interno</p>
+<p class="titulos">Formulario interno</p>
 
 <?php
         $sql = "SELECT * FROM ordenes, categorias, usuarios WHERE ordenes.id=".$id." && categorias.id=idCategoria && ordenes.anexo=usuarios.run";
@@ -309,12 +346,12 @@ if (mysqli_query($conn, $sql)) {
             </span>
             <?php
             
-                 $sql = "SELECT funcionariosEjecutores FROM ordenes WHERE id='".$id."'";
+                 $sql = "SELECT rut, precioHora FROM funcionariosorden, funcionarios WHERE idOrden='".$id."' AND funcionariosorden.idFuncionario=funcionarios.id";
                  $result = mysqli_query($conn, $sql);
                  if (mysqli_num_rows($result) > 0) {
    
                      while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["funcionariosEjecutores"]."</span>";
+                      echo "<span class='datosMuestra mx-1' >".$row["rut"]." ($".$row["precioHora"]."/h)</span>";
                      }
                    }
             ?> 
@@ -322,16 +359,26 @@ if (mysqli_query($conn, $sql)) {
             <label for="" class="editando">
             <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
               <?php
-                $sql = "SELECT * FROM funcionarios";
+                $sql = "SELECT funcionarios.id as id, precioHora, rut, nombre FROM funcionarios, funcionariosorden WHERE funcionarios.id=funcionariosorden.idFuncionario AND funcionariosorden.idOrden=".$_GET['ver']."";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
 
                     while($row = mysqli_fetch_assoc($result)) {
-                      echo "<option value='".$row['rut']."' precioHora='".$row['precioHora']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."  precioHora: ".$row['precioHora']."</option>";
+                      echo "<option value='".$row['id']."' precioHora='".$row['precioHora']."' selected>rut: ".$row['rut']." nombre: ".$row['nombre']."  precioHora: ".$row['precioHora']."</option>";
                     }
-                  } else {
+                } else {
                     echo "0 resultados";
-                  }
+                }
+                $sql = "SELECT funcionarios.id as id, precioHora, rut, nombre FROM funcionarios LEFT JOIN funcionariosorden ON (funcionarios.id=funcionariosorden.idFuncionario) WHERE funcionariosorden.idFuncionario IS NULL";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row['id']."' precioHora='".$row['precioHora']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."  precioHora: ".$row['precioHora']."</option>";
+                    }
+                } else {
+                    echo "0 resultados";
+                }
               ?>
                 
             </select>
@@ -454,12 +501,14 @@ if (mysqli_query($conn, $sql)) {
               <span style="font-weight:bold;">Material utilizado:
               </span>
               <?php
-                 $sql = "SELECT materiales FROM ordenes WHERE id='".$id."'";
+
+                 $sql = "SELECT nombre, precioUnitario, cantidad FROM materialesorden, materiales WHERE idOrden='".$id."' AND materialesorden.idMaterial=materiales.id";
                  $result = mysqli_query($conn, $sql);
                  if (mysqli_num_rows($result) > 0) {
    
                      while($row = mysqli_fetch_assoc($result)) {
-                      echo "<span class='datosMuestra' >".$row["materiales"]."</span>";
+                      echo "<span class='datosMuestra mx-1' >".$row["nombre"]." ($".$row["precioUnitario"]." · ".$row["cantidad"].")</span>";
+
                      }
                    }
               ?> 
@@ -467,15 +516,27 @@ if (mysqli_query($conn, $sql)) {
               <label for="" class="editando">
               <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
                   <?php
-                    $sql = "SELECT * FROM materiales";
+                    $sql = "SELECT materiales.id as id, precioUnitario, nombre, cantidad FROM materiales, materialesorden  WHERE materiales.id=materialesorden.idMaterial AND materialesorden.idOrden=".$_GET['ver']."";
+
                     $result = mysqli_query($conn, $sql);
                     if (mysqli_num_rows($result) > 0) {
 
                         while($row = mysqli_fetch_assoc($result)) {
-                          echo "<option value='".$row['nombre']."' precio='".$row['precioUnitario']."'> id: ".$row['id']." nombre: ".$row['nombre']." precioUnit: ".$row['precioUnitario']."</option>";
+                          echo "<option value='".$row['id']."' precio='".$row['precioUnitario']."' cantidad='".$row['cantidad']."' selected> id: ".$row['id']." nombre: ".$row['nombre']." precioUnit: ".$row['precioUnitario']."</option>";
                         }
                       } else {
                         echo "0 resultados";
+                      }
+
+                    $sql = "SELECT materiales.id as id, precioUnitario, nombre, cantidad  FROM materiales LEFT JOIN materialesorden ON (materiales.id=materialesorden.idMaterial) WHERE materialesorden.idMaterial IS NULL";
+                    $result = mysqli_query($conn, $sql);
+                    if (mysqli_num_rows($result) > 0) {
+      
+                          while($row = mysqli_fetch_assoc($result)) {
+                            echo "<option value='".$row['id']."' precio='".$row['precioUnitario']."' cantidad='".$row['cantidad']."'> id: ".$row['id']." nombre: ".$row['nombre']." precioUnit: ".$row['precioUnitario']."</option>";
+                          }
+                      } else {
+                          echo "0 resultados";
                       }
                   ?>
               </select>
@@ -676,6 +737,42 @@ if (mysqli_query($conn, $sql)) {
     });
  
 </script>
+
+<script>
+  function initFuncionarios(){
+    precioTotal=0;
+    $("#selectFuncionariosEjecutores > option").each(function() {
+      if(this.selected){
+        funcionariosEjecutores.set(this.value, this.attributes.precioHora.value);
+
+      }
+    });
+    funcionariosEjecutores.forEach((values,keys)=>{
+      precioTotal+=parseInt(values);
+    });
+    $("#cantidadPersonas").val(funcionariosEjecutores.size);
+    $("#precioFuncionariosEjecutores").val(precioTotal);      
+  }initFuncionarios();
+</script>
+
+<script>
+  function initMateriales(){
+    precioTotal=0;
+    $("#selectMateriales > option").each(function() {
+      if(this.selected){
+        materiales.set(this.value, this.attributes.precio.value * this.attributes.cantidad.value);
+        $("#cantidadMateriales").append( `<div><p class="editando">${this.text} cantidad : <input type='number' value='${this.attributes.cantidad.value}' name='${this.value}' onChange='cantidadMaterial(value,${this.attributes.precio.value},"${this.value}")'/> </p></div>` );
+      }
+    });
+    materiales.forEach((values,keys)=>{
+              precioTotal+=parseInt(values);
+
+    });
+    $("#precioMateriales").val(precioTotal);
+    
+  }initMateriales();
+</script>
+
 <script src="../js/selectsDinamicos.js"></script> 
 
 </body>

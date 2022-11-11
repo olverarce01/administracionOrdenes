@@ -12,7 +12,7 @@
   
         $fechaFiltro = $_GET['fechaFiltro'];
 
-        $sql = "SELECT r.horasHombre as horasHombre , count(*) as frecuenciaHoras FROM (SELECT horasHombre FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."')) as r GROUP BY r.horasHombre";
+        $sql = "SELECT r.horasHombre as horasHombre , count(*) as frecuenciaHoras FROM (SELECT horasHombre FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."') AND terminada=1) as r GROUP BY r.horasHombre";
        
         $result = mysqli_query($conn, $sql);
         $datos = mysqli_fetch_all($result,MYSQLI_ASSOC); 

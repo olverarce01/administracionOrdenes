@@ -58,30 +58,39 @@
     </nav>
   </header>
 
-  <!-- Barra de navegacion -->
-  <div id="container-nav">
-    <a href="./index.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-house" style="color:#374da5"></i>Inicio </div>  
-    </a>   
-  
-    <a href="./estadistica.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:black"></i> Estadística</div>  
-    </a>
-  
-    <a href="./ordenesTrabajo.php" class="option-nav">
-      <div id="container-option"> <i class="fa-solid fa-list" style="color:black"></i>Ordenes de Trabajo </div>  
-    </a>  
+  <div id="container">
+    <!-- Barra de navegacion -->
+    <div id="container-nav">
+      <a href="./index.php" class="option-nav">
+        <div id="container-option"> <i class="fa-solid fa-house" style="color:#374da5"></i>Inicio </div>  
+      </a>   
+    
+      <a href="./estadistica.php" class="option-nav">
+        <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:black"></i> Estadística</div>  
+      </a>
+    
+      <a href="./ordenesTrabajo.php" class="option-nav">
+        <div id="container-option"> <i class="fa-solid fa-list" style="color:black"></i>Ordenes de Trabajo </div>  
+      </a>  
 
-  </div>
+      <a href="./funcionarios.php" class="option-nav">
+        <div id="container-option"> <i class="fa-solid fa-user-group" style="color:black"></i> Funcionarios </div>  
+      </a>  
 
+      <a href="./materiales.php" class="option-nav">
+        <div id="container-option"> <i class="fa-solid fa-screwdriver-wrench" style="color:black"></i> Materiales </div>  
+      </a>  
 
-  <div id="main">
-    <div id="container-chart">
-      <div id="chart">
-      </div>
     </div>
-    <div id="centrarBtn">
-      <button onclick="download_image('chart')" id="btnDescargar" class="mx-auto">Descargar</button>    
+          <!-- Main -->
+    <div id="main">
+      <div id="container-chart">
+        <div id="chart">
+        </div>
+      </div>
+      <div id="centrarBtn">
+        <button onclick="download_image('chart')" id="btnDescargar" class="mx-auto">Descargar</button>    
+      </div>
     </div>
   </div>
       
@@ -116,7 +125,7 @@ var options = {
           height: 490, 
           zoom: { enabled: true}, 
           background: '#fff', 
-          width: '1120px',
+          width: '1150px',
   },
 
   dataLabels: {enabled: false},

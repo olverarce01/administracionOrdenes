@@ -1,12 +1,11 @@
 <?php 
     include "./recursos/conexion.php";   
     include "./recursos/funcionesLogin.php";
-    include "./recursos/funcionesConsultas.php";
-    $DatosUsuario=ObtenerDatosBasicosUsuario('Administrador');
 
+    $DatosUsuario=ObtenerDatosBasicosUsuario('generador');
     if(!isset($DatosUsuario['nombre'])){ header('Location: /administracionOrdenes/login.php'); exit();}
+    $UsuarioRUN=$DatosUsuario['run'];
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +14,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <?php libreriasCDN();?>
-    
+
     <!-- bootstrap -->
     <link Type="text/css" rel="stylesheet" href="./css/bootstrap.min.css">
     <script src="js/bootstrap.bundle.min.js"></script>
@@ -23,28 +22,26 @@
     <script src="jquery/jquery-3.6.1.min.js"></script>
     <!-- jquerytable -->
     <script src="./js/jquery.dataTables.min.js" defer></script>
-    
-    <!-- estilos barra navegacion -->
+
+
+    <!-- Estilos NabBar -->
     <link rel="stylesheet" href="./css/navbar.css">
-    <script src="./js/navbar.js"></script>
-    <!-- estilos index -->
+
+    <!-- estilos index y gestion -->
     <link rel="stylesheet" href="./css/index.css">
-    
-    <title>Ordenes trabajo</title>
+    <link rel="stylesheet" href="./css/gestionGenerador.css">
 
+
+    <title>GestionGenerador</title>
 </head>
-
-<body class="fondo-index">
-    <header>
-        <nav class="navbar">
-        <!-- Logo UTA -->
-        <a class="navbar-brand" href="#">
-            <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
-        </a>
-        <a><?php obtenerCantidadOrdenesTerminadas();?></a>
-        <a><?php obtenerCantidadOrdenesNoTerminadas();?></a>
-        <a><?php obtenerCantidadOrdenesAltaPrioridad();?></a>
-        <div class="d-flex">  
+<body>  
+  <header>
+    <nav class="navbar">
+      <!-- Logo UTA -->
+      <a class="navbar-brand" href="#">
+        <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
+      </a>
+      <div class="d-flex">  
         <?php
             /* consultaDatosUsuario */
             if(isset($DatosUsuario['nombre'])){
@@ -53,43 +50,28 @@
                 OpcionCerrarSesion();
             }
         ?>
-        </div>
-        </nav>
-    </header>
-    <div id="container">
-    <!-- Barra de navegacion --> 
+      </div>
+    </nav>
+  </header>
+    
+  <div id="container">
     <div id="container-nav">
-        <a href="./index.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-house" style="color:black"></i>Inicio </div>  
+        <a href="./gestionGenerador.php" class="option-nav">
+          <div id="container-option"> <i class="fa-solid fa-house" style="color:black"></i>Inicio </div>  
+        </a>   
+        <a href="./misOrdenes.php" class="option-nav">
+          <div id="container-option"> <i class="fa-solid fa-folder-open" style="color:#374da5"></i> Mis ordenes</div>  
         </a>
-        
-        <a href="./estadistica.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-chart-column" style="color:black"></i>Estadística </div>  
+        <a href="./servicios.php" class="option-nav">
+          <div id="container-option"> <i class="fa-solid fa-truck-arrow-right" style="color:black"></i> Servicios</div>  
         </a>
-        <a href="./ordenesTrabajo.php" class="option-nav">
-          <div id="container-option"> <i class="fa-solid fa-list" style="color:#374da5"></i>Ordenes de Trabajo </div>  
-        </a>
-        <a href="./funcionarios.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-user-group" style="color:black"></i> Funcionarios </div>  
-        </a>  
-
-        <a href="./materiales.php" class="option-nav">
-            <div id="container-option"> <i class="fa-solid fa-screwdriver-wrench" style="color:black"></i> Materiales </div>  
-        </a>  
 
     </div>
-    <!-- tabla de ordenes -->
-    <div id="main">
-        <div class="mx-5 my-2 d-flex">
-            <span for="" class="my-auto">Prioridad:</span> 
-            <button type="button" class="btn btn-dark" id="filtroTodas">Todas</button>
-            <button type="button" class="btn btn-danger" id="filtroAlta">Alta</button>
-            <button type="button" class="btn btn-warning" id="filtroMediaAlta">Media Alta</button>
-            <button type="button" class="btn btn-primary" id="filtroMedia">Media</button>
-            <button type="button" class="btn btn-info" id="filtroMediaBaja">Media Baja</button>
-            <button type="button" class="btn btn-success" id="filtroBaja"> Baja</button>
 
-        </div>
+      <!-- tabla de ordenes -->
+      <div id="main">
+        <p id="tituloForm" class="text-info">Mis Ordenes Generadas</p>
+
         <div id="main-infoOrdenes">
             <div id="tablaOrdenes">
                 <table id="tablaO" class="table" cellspacing="0">
@@ -101,11 +83,11 @@
                             <th class="th-sm">Fecha de Recepcion</th>
                             <th class="th-sm">Fecha de Asignacion</th>
                             <th class="th-sm">Estado</th>
-                            <th class="th-sm">Accion</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
+                        //listar ordenes no terminadas
                         $sql = "SELECT ordenes.id, nombre, idCategoria, categorias.categoria as categoria, fechaCreacion, fechaAsignacion, fechaEdicion, terminada, fechaTermino, prioridad FROM ordenes, categorias WHERE categorias.id=idCategoria";
                         $result = mysqli_query($conn, $sql);
                         if (mysqli_num_rows($result) > 0) {
@@ -132,11 +114,9 @@
 
                                 if($row["terminada"]==0){
                                     echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-warning'>Pendiente</span></td>";
-                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
                                 }
                                 else{
                                     echo "<td id='".$row["id"]."' class='tdOrdenes'><span class='badge badge-success'>Terminada</span></td>";
-                                    echo "<td><a href='./recursos/verOrden.php?ver=".$row["id"]."' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>";
                                 }
                                 echo "</tr>";
                             }
@@ -163,19 +143,25 @@
             </div>
         </div>
     </div>
-    </div>
+  </div>
+
+ 
+
+
+
+
 <footer class="mt-5 py-5  text-muted text-center text-small">
   <p class="mb-1 color-texto text-white">Universidad de Tarapacá – Universidad del Estado de Chile</p>
 </footer>
+
 <script>
 /* opciones de tabla de ordenes */
 $(document).ready(function () {
     $('#tablaO').dataTable({
         initComplete: function () {
-        var contador=0
         this.api().columns().every( function () {
             var column = this;
-            var search = $(`<input class="form-control form-control-sm" type="text" placeholder="Buscar" id="col${contador}">`)
+            var search = $(`<input class="form-control form-control-sm" type="text" placeholder="Buscar">`)
                         .appendTo( $(column.footer()).empty() )
                         .on( 'change input', function () {
                         var val = $(this).val()
@@ -183,33 +169,12 @@ $(document).ready(function () {
                         .search( val ? val : '', true, false )
                         .draw();
                         } );
-            contador++;
         });
         }
     });
-
-    $("#filtroTodas").click(function(){
-        $("tbody").empty();
-        
-    });
-    $("#filtroAlta").click(function(){
-        $("tbody").empty();
-    });
-    $("#filtroMediaAlta").click(function(){
-        $("tbody").empty();
-    });
-    $("#filtroMedia").click(function(){
-        $("tbody").empty();
-    });
-    $("#filtroMediaBaja").click(function(){
-        $("tbody").empty();
-    });
-    $("#filtroBaja").click(function(){
-        $("tbody").empty();
-    });
 });
-
 </script>
-</body>
 
+
+</body>
 </html>

@@ -12,7 +12,7 @@
   
         $fechaFiltro = $_GET['fechaFiltro'];
 
-        $sql = "SELECT rss.categoria as categoria, sum(rss.costoTotal) as costoTotal FROM (SELECT categorias.categoria as categoria, costoTotal FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."')) as rs, categorias WHERE rs.idCategoria=categorias.id) as rss GROUP BY rss.categoria";
+        $sql = "SELECT rss.categoria as categoria, sum(rss.costoTotal) as costoTotal FROM (SELECT categorias.categoria as categoria, costoTotal FROM (SELECT * FROM ordenes WHERE (".$fechaFiltro." between '".$dateTimeInicio."' and '".$dateTimeFin."') AND terminada=1) as rs, categorias WHERE rs.idCategoria=categorias.id) as rss GROUP BY rss.categoria";
         $result = mysqli_query($conn, $sql);
         $datos = mysqli_fetch_all($result,MYSQLI_ASSOC); 
         echo json_encode($datos);

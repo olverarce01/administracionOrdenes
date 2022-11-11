@@ -3,23 +3,11 @@
     margin: 0;
     box-sizing: border-box;
 }
-body {
-    background-image: url('https://img.freepik.com/vector-premium/fondo-abstracto-blanco-estilo-papel-3d_23-2148403778.jpg?w=740');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;  
-}
 
-button{
-    border-style: none;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 3px;
 
-}
 .crossRotate{
     transform: rotate(360deg);
-    transition: transform 0.8s;
+    transition: transform 1s;
 }
 .crossRotate:active{
     transform: rotate(0deg);
@@ -31,13 +19,17 @@ button{
     border-radius: 10px;
     box-shadow: 0px 0px 15px 15px rgba(0, 0, 0, 0.08);
 }
-#opcionesCategorias{
-    position: absolute;
-    background-color: lightblue;
-    border-radius: 10px;
-}
 #tituloForm{
     font-size: 20px;
     font-weight: bolder;
     text-align: center;
 }
+
+#buscarCategoria{
+    width: 75%;
+    margin: 15px auto;
+}
+#nombreCategoria{
+    margin: 5px 0;
+}
+

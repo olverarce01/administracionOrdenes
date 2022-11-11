@@ -162,14 +162,16 @@ ob_start();
   
   <div>
     <span style="font-weight:bold;">Funcionario Ejecutor:</span>
-    <?php       
-      $sql = "SELECT funcionariosEjecutores FROM ordenes WHERE id='".$id."'";
-      $result = mysqli_query($conn, $sql);
-      if (mysqli_num_rows($result) > 0) {
-        while($row = mysqli_fetch_assoc($result)) {
-          echo "<span class='datosMuestra' >".$row["funcionariosEjecutores"]."</span>";
-        }
-      }
+    <?php
+            
+                 $sql = "SELECT rut, precioHora FROM funcionariosorden, funcionarios WHERE idOrden='".$id."' AND funcionariosorden.idFuncionario=funcionarios.id";
+                 $result = mysqli_query($conn, $sql);
+                 if (mysqli_num_rows($result) > 0) {
+   
+                     while($row = mysqli_fetch_assoc($result)) {
+                      echo "<span class='datosMuestra mx-1' >".$row["rut"]." ($".$row["precioHora"]."/h)</span>";
+                     }
+                   }
     ?> 
   </div>
    
@@ -245,11 +247,11 @@ ob_start();
   <div>
     <span style="font-weight:bold;">Material utilizado:</span>
     <?php
-      $sql = "SELECT materiales FROM ordenes WHERE id='".$id."'";
+      $sql = "SELECT nombre, precioUnitario, cantidad FROM materialesorden, materiales WHERE idOrden='".$id."' AND materialesorden.idMaterial=materiales.id";
       $result = mysqli_query($conn, $sql);
       if (mysqli_num_rows($result) > 0) {
         while($row = mysqli_fetch_assoc($result)) {
-          echo "<span class='datosMuestra' >".$row["materiales"]."</span>";
+          echo "<span class='datosMuestra mx-1' >".$row["nombre"]." ($".$row["precioUnitario"]." · ".$row["cantidad"].")</span>";
         }
       }
     ?> 

@@ -2,13 +2,29 @@ function randomNumber(min, max) {
   return Math.random() * (max - min) + min;
 } 
   $(function() {    
-
  
-  
 
   $("input[type='date'], input[type='time'], #fechaFiltro").on('change', function() {
+
+    if($("#timeFin").val()==""){
+    }else{
+      if($("#dateInicio").val()<=$("#dateFin").val()){
+      if(($("#dateInicio").val()==$("#dateFin").val() && $("#timeInicio").val()<$("#timeFin").val()) || ($("#dateInicio").val()!=$("#dateFin").val())){
+      }
+      else{
+        $("#dateFin").val("")
+        $("#timeFin").val("")
+      }
+      }
+      else{
+        $("#dateFin").val("")
+        $("#timeFin").val("")
+      }
+    }
+
     $.get(`./recursos/frecuenciaCategorias.php?dateInicio=${$("#dateInicio").val()}&dateFin=${$("#dateFin").val()}&timeInicio=${$("#timeInicio").val()}&timeFin=${$("#timeFin").val()}&fechaFiltro=${$("#fechaFiltro").val()}`, function(mensaje, estado){
-                  
+                    
+
     if(mensaje === []){
       return;
     }
@@ -203,8 +219,8 @@ function randomNumber(min, max) {
               },
               options: optionsChartfrecuenciaOrdenesPorHoras
               ,plugins: [bgColor]
-          });       
-        });
+            });       
+          });
   });
 
   });  

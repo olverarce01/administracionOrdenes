@@ -359,6 +359,21 @@ if (mysqli_query($conn, $sql)) {
             <label for="" class="editando">
             <select name="funcionariosEjecutores[]" id="selectFuncionariosEjecutores" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
               <?php
+                $sql = "(SELECT funcionarios.id, nombre, rut, precioHora FROM funcionariosorden, funcionarios WHERE idOrden!=".$_GET['ver']." AND funcionariosorden.idFuncionario=funcionarios.id) 
+                EXCEPT 
+                (SELECT funcionarios.id, nombre, rut, precioHora FROM funcionariosorden, funcionarios WHERE idOrden=".$_GET['ver']." AND funcionariosorden.idFuncionario=funcionarios.id);";
+                $result = mysqli_query($conn, $sql);
+                if (mysqli_num_rows($result) > 0) {
+
+                    while($row = mysqli_fetch_assoc($result)) {
+                      echo "<option value='".$row['id']."' precioHora='".$row['precioHora']."'>rut: ".$row['rut']." nombre: ".$row['nombre']."  precioHora: ".$row['precioHora']."</option>";
+                    }
+                } else {
+                    echo "0 resultados";
+                }
+
+                
+
                 $sql = "SELECT funcionarios.id as id, precioHora, rut, nombre FROM funcionarios, funcionariosorden WHERE funcionarios.id=funcionariosorden.idFuncionario AND funcionariosorden.idOrden=".$_GET['ver']."";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
@@ -369,6 +384,8 @@ if (mysqli_query($conn, $sql)) {
                 } else {
                     echo "0 resultados";
                 }
+
+
                 $sql = "SELECT funcionarios.id as id, precioHora, rut, nombre FROM funcionarios LEFT JOIN funcionariosorden ON (funcionarios.id=funcionariosorden.idFuncionario) WHERE funcionariosorden.idFuncionario IS NULL";
                 $result = mysqli_query($conn, $sql);
                 if (mysqli_num_rows($result) > 0) {
@@ -469,7 +486,7 @@ if (mysqli_query($conn, $sql)) {
                      while($row = mysqli_fetch_assoc($result)) {
                       echo "<span class='datosMuestra' >".$row["horasHombre"]."</span>";
                        echo '
-                             <input type="number" name="horasHombre" id="horasHombre" class="editando" value="'.$row["horasHombre"].'" required>
+                             <input type="number" name="horasHombre" id="horasHombre" min="1" class="editando" value="'.$row["horasHombre"].'" required>
                             ';
                      }
                    }else{
@@ -516,6 +533,21 @@ if (mysqli_query($conn, $sql)) {
               <label for="" class="editando">
               <select name="materiales[]" id="selectMateriales" multiple multiselect-search="true" multiselect-select-all="true" multiselect-max-items="4" required>
                   <?php
+                    $sql = "(SELECT materiales.id, precioUnitario, nombre, cantidad FROM materialesorden, materiales WHERE idOrden!=".$_GET['ver']." AND materiales.id=materialesorden.idMaterial) 
+                    EXCEPT 
+                    (SELECT materiales.id, precioUnitario, nombre, cantidad FROM materialesorden, materiales WHERE idOrden=".$_GET['ver']." AND materiales.id=materialesorden.idMaterial);";
+
+                    $result = mysqli_query($conn, $sql);
+                    if (mysqli_num_rows($result) > 0) {
+
+                        while($row = mysqli_fetch_assoc($result)) {
+                          echo "<option value='".$row['id']."' precio='".$row['precioUnitario']."' cantidad='".$row['cantidad']."'> id: ".$row['id']." nombre: ".$row['nombre']." precioUnit: ".$row['precioUnitario']."</option>";
+                        }
+                      } else {
+                        echo "0 resultados";
+                      }
+              
+
                     $sql = "SELECT materiales.id as id, precioUnitario, nombre, cantidad FROM materiales, materialesorden  WHERE materiales.id=materialesorden.idMaterial AND materialesorden.idOrden=".$_GET['ver']."";
 
                     $result = mysqli_query($conn, $sql);
@@ -761,7 +793,7 @@ if (mysqli_query($conn, $sql)) {
     $("#selectMateriales > option").each(function() {
       if(this.selected){
         materiales.set(this.value, this.attributes.precio.value * this.attributes.cantidad.value);
-        $("#cantidadMateriales").append( `<div><p class="editando">${this.text} cantidad : <input type='number' value='${this.attributes.cantidad.value}' name='${this.value}' onChange='cantidadMaterial(value,${this.attributes.precio.value},"${this.value}")'/> </p></div>` );
+        $("#cantidadMateriales").append( `<div><p class="editando">${this.text} cantidad : <input type='number' min='1' value='${this.attributes.cantidad.value}' name='${this.value}' onChange='cantidadMaterial(value,${this.attributes.precio.value},"${this.value}")'/> </p></div>` );
       }
     });
     materiales.forEach((values,keys)=>{
@@ -774,6 +806,50 @@ if (mysqli_query($conn, $sql)) {
 </script>
 
 <script src="../js/selectsDinamicos.js"></script> 
+
+<script>
+$(function(){
+  $("input[type='date'], input[type='time']").on('change', function() {
+
+
+    if($("#timeAsignacion").val()==""){
+    }else{
+      if($("#dateRecepcion").val()<=$("#dateAsignacion").val()){
+      if(($("#dateRecepcion").val()==$("#dateAsignacion").val() && $("#timeRecepcion").val()<$("#timeAsignacion").val()) || ($("#dateRecepcion").val()!=$("#dateAsignacion").val())){
+      }
+      else{
+        $("#dateAsignacion").val("")
+        $("#timeAsignacion").val("")
+      }
+      }
+      else{
+        $("#dateAsignacion").val("")
+        $("#timeAsignacion").val("")
+      }
+    }
+
+
+    if($("#timeTermino").val()==""){
+    }else{
+      if($("#dateAsignacion").val()<=$("#dateTermino").val()){
+      if(($("#dateAsignacion").val()==$("#dateTermino").val() && $("#timeAsignacion").val()<$("#timeTermino").val()) || ($("#dateAsignacion").val()!=$("#dateTermino").val())){
+      }
+      else{
+        $("#dateTermino").val("")
+        $("#timeTermino").val("")
+      }
+      }
+      else{
+        $("#dateTermino").val("")
+        $("#timeTermino").val("")
+      }
+    }
+
+
+
+  });
+});
+</script>
 
 </body>
 </html>

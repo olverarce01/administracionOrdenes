@@ -257,6 +257,7 @@
     list($labels_costoTotalCategorias, $cantidades_costoTotalCategorias,$colores_costoTotalCategorias) = obtenerDataGraficoCostoTotalVSTipoTrabajo();
     list($labels_frecuenciaOrdenesPorHoras, $cantidades_frecuenciaOrdenesPorHoras,$colores_frecuenciaOrdenesPorHoras) = obtenerDataGraficoFrecuenciaVSOrdenesPorHoras();
 ?>
+
 <script>
 window.jsPDF = window.jspdf.jsPDF;
 const bgColor ={
@@ -365,13 +366,7 @@ $('.main-gallery').flickity({
     prevNextButtons: false,
     autoPlay: true
 });   
-$('#verCanvas').click(function(){
-    window.open(`/administracionOrdenes/recursos/ordenesDataReporte.php?reporte=ver&dateInicio=${$('#dateInicio').val()}&dateFin=${$('#dateFin').val()}&timeInicio=${$('#timeInicio').val()}&timeFin=${$('#timeFin').val()}&fechaFiltro=${$('#fechaFiltro').val()}`);
-    //window.location.href = ;
-})
-$('#descargarCanvas').click(function(){
-    window.location.href = `/administracionOrdenes/recursos/ordenesDataReporte.php?reporte=descargar&dateInicio=${$('#dateInicio').val()}&dateFin=${$('#dateFin').val()}&timeInicio=${$('#timeInicio').val()}&timeFin=${$('#timeFin').val()}&fechaFiltro=${$('#fechaFiltro').val()}`;
-})      
+   
 </script>
 
 <script>
@@ -441,6 +436,31 @@ function download_image(Ncanvas){
 	}
     };
 
+    $('#verCanvas').click(function(){
+  
+    window.open(`/administracionOrdenes/recursos/ordenesDataReporte.php?
+        reporte=ver&
+        dateInicio=${$('#dateInicio').val()}&
+        dateFin=${$('#dateFin').val()}&
+        timeInicio=${$('#timeInicio').val()}&
+        timeFin=${$('#timeFin').val()}&
+        fechaFiltro=${$('#fechaFiltro').val()}
+        `);
+
+
+    })
+    $('#descargarCanvas').click(function(){
+   
+
+    window.location.href = `/administracionOrdenes/recursos/ordenesDataReporte.php?
+        reporte=descargar&
+        dateInicio=${$('#dateInicio').val()}&
+        dateFin=${$('#dateFin').val()}&
+        timeInicio=${$('#timeInicio').val()}&
+        timeFin=${$('#timeFin').val()}&
+        fechaFiltro=${$('#fechaFiltro').val()}
+        `;
+    })   
 
 
 $(function(){

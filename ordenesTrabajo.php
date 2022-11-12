@@ -98,7 +98,7 @@
                             <th class="th-sm">NºOrden</th>
                             <th class="th-sm">Prioridad</th>
                             <th class="th-sm">Tipo de trabajo</th>
-                            <th class="th-sm">Fecha de Recepcion</th>
+                            <th class="th-sm">Fecha de Creacion</th>
                             <th class="th-sm">Fecha de Asignacion</th>
                             <th class="th-sm">Estado</th>
                             <th class="th-sm">Accion</th>
@@ -190,22 +190,239 @@ $(document).ready(function () {
 
     $("#filtroTodas").click(function(){
         $("tbody").empty();
-        
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=-1`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+            JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+                
+            }
+
+        });
     });
     $("#filtroAlta").click(function(){
         $("tbody").empty();
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=0`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+                JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+            }
+        });
     });
     $("#filtroMediaAlta").click(function(){
         $("tbody").empty();
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=1`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+                JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+            }
+        });
     });
     $("#filtroMedia").click(function(){
         $("tbody").empty();
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=2`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+                JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+            }
+        });
     });
     $("#filtroMediaBaja").click(function(){
         $("tbody").empty();
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=3`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+                JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+            }
+        });
     });
     $("#filtroBaja").click(function(){
         $("tbody").empty();
+        $.get(`./recursos/ordenesPorPrioridad.php?prioridad=4`, function(mensaje, estado){      
+            if(mensaje === []){
+                return;
+            }else{
+                JSON.parse(mensaje).forEach(element => {
+                if(element.prioridad==0){
+                    var span=`<span class='badge badge-danger'>Alta</span>`;
+                }else if(element.prioridad==1){
+                    var span=`<span class='badge badge-warning'>Media Alta</span>`;
+                }else if(element.prioridad==2){
+                    var span=`<span class='badge badge-primary'>Media</span>`;
+                }else if(element.prioridad==3){
+                    var span=`<span class='badge badge-info'>Media Baja</span>`;
+                }else if(element.prioridad==4){
+                    var span=`<span class='badge badge-success'>Baja</span>`;
+                }
+                if(element.terminada==0){
+                    var estado=`<span class='badge badge-warning'>Pendiente</span>`;
+                }else{
+                    var estado=`<span class='badge badge-success'>Terminada</span>`;                    
+                }
+
+                $("tbody").append( `<tr>
+                <th scope='row' id=${element.id} class='tdOrdenes'>${element.id}</th>
+                <td id=${element.id} class='tdOrdenes'>${span}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.categoria}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaCreacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${element.fechaAsignacion}</td>
+                <td id=${element.id} class='tdOrdenes'>${estado}</td>
+                <td><a href='./recursos/verOrden.php?ver=${element.id}' target='_blank' rel='noopener noreferrer'><button class='btn btn-outline-secondary rounded'>Ver</button></a></td>
+
+                </tr>`);
+
+            });
+            }
+        });
     });
 });
 

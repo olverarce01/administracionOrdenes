@@ -91,7 +91,7 @@
         <p class="font-weight-bold">Agregar nuevo material</p>
         <form action="./recursos/agregarMaterial.php" method="POST">
           <span>Nombre: <input type="text" name="nombre" placeholder="nombre" required></span>
-          <span>Precio Unitario: <input type="number" name="precioUnitario" placeholder="precioUnitario" required></span>
+          <span>Precio Unitario: <input type="number" name="precioUnitario" min="0" placeholder="precioUnitario" required></span>
           <input type="submit" value="Agregar" class="btn btn-primary my-2">        
         </form>
       </div>

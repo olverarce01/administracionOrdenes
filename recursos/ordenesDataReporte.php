@@ -1,8 +1,10 @@
 <?php
 ob_start();
     include "./funcionesLogin.php";
+    include "./funcionesConsultas.php";
 
 ?>
+
 
 
 <!DOCTYPE html>
@@ -142,11 +144,142 @@ ob_start();
 
   
   </tbody>
-
-
-
 </table>
 
+<?php    
+    /* data para graficos */
+    list($labels_frecuenciaCategorias,$cantidades_frecuenciaCategorias,$colores_frecuenciaCategorias) = obtenerDataGraficoFrecuenciaVSTipoOrdenPDF($dateTimeInicio,$dateTimeFin,$fechaFiltro);
+    list($labels_costoMaterialesCategorias,$cantidades_costoMaterialesCategorias,$colores_costoMaterialesCategorias) = obtenerDataGraficoCostoMaterialesVSTipoTrabajoPDF($dateTimeInicio,$dateTimeFin,$fechaFiltro);
+    list($labels_costoFuncionariosEjecutivosCategorias, $cantidades_costoFuncionariosEjecutivosCategorias,$colores_costoFuncionariosEjecutivosCategorias) = obtenerDataGraficoCostoFuncionariosEjecutivosVSTipoTrabajoPDF($dateTimeInicio,$dateTimeFin,$fechaFiltro);
+    list($labels_costoTotalCategorias, $cantidades_costoTotalCategorias,$colores_costoTotalCategorias) = obtenerDataGraficoCostoTotalVSTipoTrabajoPDF($dateTimeInicio,$dateTimeFin,$fechaFiltro);
+    list($labels_frecuenciaOrdenesPorHoras, $cantidades_frecuenciaOrdenesPorHoras,$colores_frecuenciaOrdenesPorHoras) = obtenerDataGraficoFrecuenciaVSOrdenesPorHorasPDF($dateTimeInicio,$dateTimeFin,$fechaFiltro);
+?>
+
+<div class="d-flex" style="page-break-before: always;">
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+<span>Grafico de Frecuencia VS TipoOrden</span>
+<img src='https://quickchart.io/chart?c={type:"bar",data:{labels: <?php echo json_encode($labels_frecuenciaCategorias);?>, 
+  datasets:[{label:"Categorias",data: <?php echo json_encode($cantidades_frecuenciaCategorias);?>}]}}' width="700px">
+</div>
+
+
+
+<div class="d-flex" style="page-break-before: always;">
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+<span>Grafico de CostoMateriales VS TipoTrabajo</span>
+<img src='https://quickchart.io/chart?c={type:"bar",data:{labels: <?php echo json_encode($labels_costoMaterialesCategorias);?>, 
+  datasets:[{label:"Categorias",data: <?php echo json_encode($cantidades_costoMaterialesCategorias);?>}]}}' width="700px">
+</div>
+
+
+<div class="d-flex" style="page-break-before: always;">
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+<span>Grafico de CostoFuncionariosEjecutivos VS TipoTrabajo</span>
+<img src='https://quickchart.io/chart?c={type:"bar",data:{labels: <?php echo json_encode($labels_costoFuncionariosEjecutivosCategorias);?>, 
+  datasets:[{label:"Categorias",data: <?php echo json_encode($cantidades_costoFuncionariosEjecutivosCategorias);?>}]}}' width="700px">
+</div>
+
+
+
+<div class="d-flex" style="page-break-before: always;">
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+<span>Grafico de CostoTotal VS TipoTrabajo</span>
+<img src='https://quickchart.io/chart?c={type:"bar",data:{labels: <?php echo json_encode($labels_costoTotalCategorias);?>, 
+  datasets:[{label:"Categorias",data: <?php echo json_encode($cantidades_costoTotalCategorias);?>}]}}' width="700px">
+</div>
+
+
+<div class="d-flex" style="page-break-before: always;">
+<header>
+        <nav class="navbar">
+        <!-- Logo UTA -->
+        <a class="navbar-brand" href="#">
+            <img src="https://chitita.uta.cl/intranet/img/logo_uta_azul.png" width="300" height="70" class="d-inline-block align-top" alt="Logo Uta">
+        </a>
+        <div class="d-flex">  
+        <?php
+            /* consultaDatosUsuario */
+            if(isset($DatosUsuario['nombre'])){
+                echo "<div class='mx-3'> <i class='fa-solid fa-user'></i>";
+                echo "<span>  Usuario: ".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."</span> </div>";
+                OpcionCerrarSesion();
+            }
+        ?>
+        </div>
+        </nav>
+</header>
+<span>Grafico de Frecuencia VS OrdenesPorHoras</span>
+<img src='https://quickchart.io/chart?c={type:"line",data:{labels: <?php echo json_encode($labels_frecuenciaOrdenesPorHoras);?>, 
+  datasets:[{label:"Categorias",data: <?php echo json_encode($cantidades_frecuenciaOrdenesPorHoras);?>}]}}' width="700px">
+</div>
 
 </body>
 </html>

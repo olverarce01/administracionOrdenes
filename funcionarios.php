@@ -90,7 +90,7 @@
         <span>Rut: <input type="text" name="rut" placeholder="rut" required></span>
         <span>Nombre: <input type="text" name="nombre" placeholder="nombre" required></span>
         <span>Cargo: <input type="text" name="cargo" placeholder="cargo" required></span>
-        <span>Precio Hora <input type="number" name="precioHora" placeholder="precioHora" required></span>       
+        <span>Precio Hora <input type="number" name="precioHora" min="0" placeholder="precioHora" required></span>       
         <input type="submit" value="Agregar" class="btn btn-primary my-2">        
       </form>
     </div>

@@ -37,7 +37,7 @@
   <!-- Estilos index -->    
   <link rel="stylesheet" href="./css/index.css">
 
-  <title>Inicio</title>
+  <title>Materiales</title>
 
 </head>
 <body class="fondo-index">

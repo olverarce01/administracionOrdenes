@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2022 a las 00:59:49
+-- Tiempo de generación: 12-11-2022 a las 19:07:16
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -137,10 +137,38 @@ CREATE TABLE `funcionariosorden` (
 INSERT INTO `funcionariosorden` (`id`, `idFuncionario`, `idOrden`) VALUES
 (460, 2, 180),
 (461, 3, 180),
-(462, 1, 185),
-(463, 4, 185),
 (466, 5, 186),
-(467, 6, 186);
+(467, 6, 186),
+(469, 2, 187),
+(470, 3, 187),
+(471, 1, 187),
+(472, 4, 187),
+(473, 5, 187),
+(474, 6, 187),
+(475, 7, 187),
+(476, 8, 187),
+(477, 9, 187),
+(478, 10, 187),
+(479, 11, 187),
+(480, 12, 187),
+(481, 13, 187),
+(482, 14, 187),
+(483, 15, 187),
+(484, 2, 185),
+(485, 3, 185),
+(486, 5, 185),
+(487, 6, 185),
+(488, 7, 185),
+(489, 8, 185),
+(490, 9, 185),
+(491, 10, 185),
+(492, 11, 185),
+(493, 12, 185),
+(494, 13, 185),
+(495, 14, 185),
+(496, 15, 185),
+(497, 1, 185),
+(498, 4, 185);
 
 -- --------------------------------------------------------
 
@@ -190,11 +218,21 @@ CREATE TABLE `materialesorden` (
 INSERT INTO `materialesorden` (`id`, `idMaterial`, `idOrden`, `cantidad`) VALUES
 (148, 1, 180, 2),
 (149, 2, 180, 3),
-(150, 3, 185, 1),
-(151, 4, 185, 2),
 (155, 5, 186, 3),
 (156, 6, 186, 2),
-(157, 7, 186, 1);
+(157, 7, 186, 1),
+(160, 1, 187, 2),
+(161, 2, 187, 3),
+(162, 3, 187, 1),
+(163, 4, 187, 2),
+(164, 5, 187, 3),
+(165, 6, 187, 2),
+(166, 7, 187, 1),
+(167, 8, 187, 1),
+(168, 9, 187, 1),
+(169, 10, 187, 1),
+(170, 3, 185, 1),
+(171, 4, 185, 2);
 
 -- --------------------------------------------------------
 
@@ -237,9 +275,10 @@ CREATE TABLE `ordenes` (
 --
 
 INSERT INTO `ordenes` (`id`, `anexo`, `ubicacion`, `nombre`, `prioridad`, `idCategoria`, `centroCosto`, `funcionarioContacto`, `resumen`, `detalle`, `fechaCreacion`, `fechaEdicion`, `terminada`, `fechaTermino`, `materiales`, `precioMateriales`, `tipoTrabajo`, `observacion`, `solicitudCompra`, `funcionarioEncargado`, `fechaRecepcion`, `fechaAsignacion`, `funcionariosEjecutores`, `precioFuncionariosEjecutores`, `horasHombre`, `cantidadPersonasInvolucradas`, `costoTotal`) VALUES
-(180, '11.111.111-1', '1', '', 0, 66, '3794', 'Mauricio Antezana', 'res', 'et', '2022-11-06 10:31:19', '2022-11-11 17:32:28', 1, '2022-11-20 00:00:00', '1, 2, ', 16000, 'EXTERNO', 'd', 'no', '20.901.445-9', '2022-09-30 00:00:00', '2022-10-01 00:00:00', '2, 3, ', 3000, 1, 2, 19000),
-(185, '11.111.111-1', '1', '', 0, 66, '3794', 'Mauricio Antezana', 'oooooooooooooooo', 'oooooooooooo', '2022-10-01 17:11:06', '2022-11-11 19:11:56', 1, '2022-11-12 00:00:00', '3, 4, ', 5700, 'EXTERNO', 'NA', 'no', '20.901.445-9', '2022-11-11 00:00:00', '2022-11-12 00:00:00', '1, 4, ', 2800, 3, 2, 14100),
-(186, '44.444.444-4', '1', '', 2, 66, '3794', 'Olver  Arce', 'qwerty', 'qwerty', '2022-11-11 20:26:05', '2022-11-11 20:27:41', 1, '2022-12-02 00:00:00', '5, 6, 7, ', 12800, 'INTERNO', 'NA', 'no', '20.901.445-9', '2022-11-30 00:00:00', '2022-12-01 00:00:00', '5, 6, ', 2350, 1, 2, 15150);
+(180, '11.111.111-1', '1', '', 0, 66, '3794', 'Mauricio Antezana', 'res', 'et', '2022-11-06 10:31:19', '2022-11-12 14:30:18', 1, '2022-11-20 00:00:00', '1, 2, ', 16000, 'EXTERNO', 'd', 'no', '20.901.445-9', '2022-09-30 00:00:00', '2022-10-01 00:00:00', '2, 3, ', 3000, 1, 2, 19000),
+(185, '11.111.111-1', '1', '', 0, 66, '3794', 'Mauricio Antezana', 'oooooooooooooooo', 'oooooooooooo', '2022-10-01 17:11:06', '2022-11-12 14:25:47', 1, '2022-11-12 00:00:00', '3, 4, ', 5700, 'EXTERNO', 'NA', 'no', '20.901.445-9', '2022-11-11 00:00:00', '2022-11-12 00:00:00', '2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1, 4, ', 18040, 3, 15, 59820),
+(186, '44.444.444-4', '1', '', 2, 66, '3794', 'Olver  Arce', 'qwerty', 'qwerty', '2022-11-11 20:26:05', '2022-11-12 14:24:56', 1, '2022-12-02 00:00:00', '5, 6, 7, ', 12800, 'INTERNO', 'NA', 'no', '20.901.445-9', '2022-11-30 00:00:00', '2022-12-01 00:00:00', '5, 6, ', 2350, 1, 2, 15150),
+(187, '44.444.444-4', '2', '', 2, 70, '3796', 'Olver  Arce', '3', '2', '2022-10-11 00:00:00', '2022-11-12 14:42:36', 1, '2022-11-14 00:00:00', '1, 2, 3, 4, 5, 6, 7, 8, 9, 10, ', 44600, 'EXTERNO', 'obs', 'no', '20.901.445-9', '2022-11-12 00:00:00', '2022-11-13 00:00:00', '2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, ', 18040, 1, 15, 62640);
 
 -- --------------------------------------------------------
 
@@ -399,7 +438,7 @@ ALTER TABLE `funcionarios`
 -- AUTO_INCREMENT de la tabla `funcionariosorden`
 --
 ALTER TABLE `funcionariosorden`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=468;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=499;
 
 --
 -- AUTO_INCREMENT de la tabla `materiales`
@@ -411,13 +450,13 @@ ALTER TABLE `materiales`
 -- AUTO_INCREMENT de la tabla `materialesorden`
 --
 ALTER TABLE `materialesorden`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=158;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=172;
 
 --
 -- AUTO_INCREMENT de la tabla `ordenes`
 --
 ALTER TABLE `ordenes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=187;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
 
 --
 -- AUTO_INCREMENT de la tabla `ubicacion`

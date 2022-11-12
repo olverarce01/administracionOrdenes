@@ -32,7 +32,7 @@
     <link rel="stylesheet" href="./css/gestionGenerador.css">
 
 
-    <title>GestionGenerador</title>
+    <title>misOrdenes</title>
 </head>
 <body>  
   <header>

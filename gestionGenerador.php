@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="./css/index.css">
     <link rel="stylesheet" href="./css/gestionGenerador.css">
 
-    <title>GestionGenerador</title>
+    <title>Inicio</title>
 </head>
 <body>  
   <header>

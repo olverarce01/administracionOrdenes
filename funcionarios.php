@@ -35,7 +35,7 @@
   <!-- Estilos index -->    
   <link rel="stylesheet" href="./css/index.css">
 
-  <title>Inicio</title>
+  <title>Funcionarios</title>
 
 </head>
 <body class="fondo-index">

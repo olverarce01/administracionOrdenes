@@ -7,7 +7,7 @@
 
 
     if(!isset($DatosUsuario['nombre'])){ 
-        header('Location: /administracionOrdenes/login.php'); exit();
+        header('Location: login.php'); exit();
     }
 
 ?>

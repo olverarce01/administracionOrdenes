@@ -438,7 +438,7 @@ function download_image(Ncanvas){
 
     $('#verCanvas').click(function(){
   
-    window.open(`/administracionOrdenes/recursos/ordenesDataReporte.php?
+    window.open(`/recursos/ordenesDataReporte.php?
         reporte=ver&
         dateInicio=${$('#dateInicio').val()}&
         dateFin=${$('#dateFin').val()}&
@@ -452,7 +452,7 @@ function download_image(Ncanvas){
     $('#descargarCanvas').click(function(){
    
 
-    window.location.href = `/administracionOrdenes/recursos/ordenesDataReporte.php?
+    window.location.href = `/recursos/ordenesDataReporte.php?
         reporte=descargar&
         dateInicio=${$('#dateInicio').val()}&
         dateFin=${$('#dateFin').val()}&

@@ -3,32 +3,32 @@
     include "./recursos/funcionesLogin.php";
 
     $DatosUsuario=ObtenerDatosBasicosUsuario('generador');
-    if(!isset($DatosUsuario['nombre'])){ header('Location: /administracionOrdenes/login.php'); exit();}
+    if(!isset($DatosUsuario['nombre'])){ header('Location: /login.php'); exit();}
     $UsuarioRUN=$DatosUsuario['run'];
 ?>
 
 <?php
     include "./recursos/conexion.php";
     if (isset($_POST['accion']) && $_POST['accion']=='crearOrden') {
-        $ubicacion = $_POST['ubicacion'];
+      $ubicacion = $_POST['ubicacion'];
+      $categoria = $_POST['categoria'];
+      $prioridad = $_POST['prioridad'];
+      $centroCosto = $_POST['centroCosto'];
+      $funcionarioEncargado = isset($DatosUsuario['nombre']) ? $DatosUsuario['nombre'] : "";
+      $resumen = $_POST['resumen'];
+      $detalle = $_POST['detalle'];
+  
+      $stmt = mysqli_prepare($conn, "INSERT INTO ordenes (ubicacion, anexo, idCategoria, prioridad, centroCosto, funcionarioContacto, resumen, detalle, nombre, terminada, tipoTrabajo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, '')");
+      mysqli_stmt_bind_param($stmt, 'ssiisssss', $ubicacion, $DatosUsuario['run'], $categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle, $funcionarioEncargado);
       
-        $categoria = $_POST['categoria'];
-        $prioridad = $_POST['prioridad'];
-        $centroCosto = $_POST['centroCosto'];
-        $funcionarioEncargado=  "".$DatosUsuario['nombre']." ".$DatosUsuario['apellido']."";
-        $resumen = $_POST['resumen'];
-        $detalle = $_POST['detalle'];
-
-
-
-        $stmt = mysqli_prepare($conn,"INSERT INTO ordenes (ubicacion, anexo,idCategoria, prioridad, centroCosto, funcionarioContacto, resumen, detalle) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        mysqli_stmt_bind_param($stmt, 'ssiissss',$ubicacion, $DatosUsuario['run'],$categoria, $prioridad, $centroCosto, $funcionarioEncargado, $resumen, $detalle);
-        
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_close($stmt);
+      if (mysqli_stmt_execute($stmt)) {
+          echo "Orden creada exitosamente.";
+      } else {
+          echo "Error al crear la orden: " . mysqli_error($conn);
+      }
+  
+      mysqli_stmt_close($stmt);
     }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -27,7 +27,10 @@ include "./recursos/funcionesLogin.php";
         <a class="navbar-brand" href="#">
           <img src="./img/utaHorizontal.png" width="300" height="80" class="d-inline-block align-top" alt="Logo Uta">
         </a>
-      </nav>
+        <i class="text-white">usuario personal: olverarce01@gmail.com contraseña: 12345</i>
+        <i class="text-white">usuario generador: arceolver01@gmail.com contraseña: 12345</i>
+    </nav>
+    
     </header>
     <?php
     datosIncorrectos();
@@ -57,7 +60,6 @@ include "./recursos/funcionesLogin.php";
                     <label for="inputContraseña">Soy:<span>   </span><input type="radio" name="rol" value="generador" required/> Generador <span> | </span> <input type="radio" name="rol" value="Administrador"/></label> Personal Interno</label>
                     
                 </div>
-
                 <button class="btn btn-lg btn-primary btn-block my-2" type="submit">Iniciar sesión</button>
             
             </form>
